@@ -8,7 +8,7 @@ def send_otp_to_mobile(mobile_no):
 
     try:
         otp=random.randint(1000,9999)
-        url= f'https://2factor.in/API/V1/{settings.API_KEy}/SMS/{mobile_no}/{otp}/OTP1'
+        url= f'https://2factor.in/API/V1/{settings.API_KEY}/SMS/{mobile_no}/{otp}/OTP1'
         response = requests.get(url)
         return otp
 
