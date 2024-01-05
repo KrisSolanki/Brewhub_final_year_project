@@ -64,3 +64,47 @@ def send_otp(request):
     return Response({
         'status' : 200 , 'messsage' : 'Otp Sent'
     })
+
+
+
+
+
+
+
+
+
+@api_view(['POST']) #------------------- date : 5/01/2024--------------------
+def verify_otp(request):
+    data = request.data
+
+    if data.get('mobile_no') is None:   #---------if mobile_no is not received 
+        return Response({
+            'status':400,
+            'message':'key mobile_no is required'
+        })
+    if data.get('otp') is None:    #---------if otp is not received
+        return Response({
+            'status':400,
+            'message':'key otp is required'
+        })
+    
+    try:
+        user_obj = User.objects.get(mobile_no = data.get('mobile_no'))
+
+    except Exception as e:
+        return Response({
+            'status' : 400,
+            'message' : 'invalid mobile no '
+        }) 
+    if user_obj.otp == data.get('otp'):
+        user_obj.is_mobile_verified = True
+        user_obj.save()
+        return Response({
+            'status' : 200,
+            'message' : 'otp matched'
+        })
+
+    return Response({
+            'status' : 400,
+            'message' : 'invalid otp'
+        }) 

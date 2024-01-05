@@ -139,4 +139,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'account.User' #---------- to show that we are using our custom user model
 
-API_KEY = "f52019e2-aa6b-11ee-8cbb-0200cd936042"
+API_KEY = "3d739b9e-ab26-11ee-8cbb-0200cd936042" #"f52019e2-aa6b-11ee-8cbb-0200cd936042"
