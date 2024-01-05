@@ -16,5 +16,7 @@ urlpatterns = [
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('send_otp/',send_otp),
-    path('verify_otp/',verify_otp)
+    path('verify_otp/',verify_otp),
+    path('resend_otp/',resend_otp)
+
 ]

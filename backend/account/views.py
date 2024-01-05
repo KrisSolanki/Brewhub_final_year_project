@@ -9,6 +9,7 @@ from rest_framework.decorators import api_view #----- date : 3/01/2024--------- 
 from .otpapi import send_otp_to_mobile #---------- date : 3/01/2024--------
 # Create your views here.
 
+#===================== REGISTER ====================
 class RegisterView(APIView):
     def post(self,request):
         serializer = UserSerializer(data=request.data)
@@ -16,6 +17,7 @@ class RegisterView(APIView):
         serializer.save()
         return Response(serializer.data)
 
+#===================== LOGIN ====================
 class LoginView(APIView): #login feature
     def post(self,request):
         mobile_no = request.data['mobile_no']
@@ -34,7 +36,8 @@ class LoginView(APIView): #login feature
         return Response({
             'message':'Success'
         })
-    
+
+#===================== SEND OTP ====================    
 #---------- date : 3/01/2024----------otp
 @api_view(['POST'])
 def send_otp(request):
@@ -66,13 +69,7 @@ def send_otp(request):
     })
 
 
-
-
-
-
-
-
-
+#===================== VERIFY OTP ====================
 @api_view(['POST']) #------------------- date : 5/01/2024--------------------
 def verify_otp(request):
     data = request.data
@@ -108,3 +105,54 @@ def verify_otp(request):
             'status' : 400,
             'message' : 'invalid otp'
         }) 
+
+#===================== RESEND OTP ====================
+@api_view(['POST'])#-------------------------date:5/01/2024 --------------------
+def resend_otp(request):
+    data = request.data
+
+    if data.get('mobile_no') is None:
+        return Response({
+            'status': 400,
+            'message': 'key mobile_no is required'
+        })
+
+    try:
+        user_obj = User.objects.get(mobile_no=data.get('mobile_no'))
+    except User.DoesNotExist:
+        return Response({
+            'status': 400,
+            'message': 'Invalid mobile no'
+        })
+    
+    
+    #--------------------------------------------------------------------------------------------
+    # this block of code Checks if enough time has passed since the last OTP request
+    # -------------------------------------------------------------------------------------------
+    # current_time = datetime.now()
+    # if user_obj.last_otp_request_time:
+    #     time_difference = current_time - user_obj.last_otp_request_time
+    #     if time_difference < timedelta(seconds=10):
+    #         return Response({
+    #             'status': 400,
+    #             'message': 'Wait for 10 seconds before resending OTP'
+    #         })
+    #---------------------------------------------------------------------------------------------
+    # need to add an extra field in our user model 
+    # last_otp_request_time = models.DateTimeField(null=True, blank=True)
+    #---------------------------------------------------------------------------------------------
+
+    # send_otp_to_mobile is a function that sends OTP and returns it
+    otp = send_otp_to_mobile(data.get('mobile_no'))
+
+    # Update the existing user's OTP
+    user_obj.otp = otp
+    user_obj.save()
+
+    # Send the new OTP (implement your OTP sending logic here)
+    # For example, you can call your existing OTP sending function
+
+    return Response({
+        'status': 200,
+        'message': 'OTP Resent'
+    })
