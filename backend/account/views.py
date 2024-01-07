@@ -2,12 +2,12 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
-from .serializers import UserSerializer
+from .serializers import UserSerializer,MyTokenObtainPairSerializer
 from .models import User
 from rest_framework.decorators import api_view #----- date : 3/01/2024--------- for otp
 from .otpapi import send_otp_to_mobile #---------- date : 3/01/2024--------
 
-
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 # Create your views here.
 
@@ -43,6 +43,10 @@ class LoginView(APIView): #login feature
         return Response({
             'message':'Success'
         })
+    
+
+class MyTokenObtainPairView(TokenObtainPairView): #date : 7/01/2024
+    serializer_class = MyTokenObtainPairSerializer
 
 
 
@@ -138,7 +142,7 @@ def resend_otp(request):
             'status': 400,
             'message': 'Invalid mobile no'
         })
-
+    
     #--------------------------------------------------------------------------------------------
     # this block of code Checks if enough time has passed since the last OTP request
     # -------------------------------------------------------------------------------------------

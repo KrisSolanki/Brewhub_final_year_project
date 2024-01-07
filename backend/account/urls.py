@@ -1,13 +1,12 @@
 
 from django.urls import path,include
-from .views import RegisterView,LoginView
+from .views import RegisterView,LoginView,MyTokenObtainPairView
 from account.views import * #----------- date : 3/01/2024------------
 from django.contrib.auth import views as auth_views #----------------------date : 5/01/2024 for reset_password , * related to password
 from django.core.mail.backends.smtp import EmailBackend #------------date : 5/01/2024 for reset_password
 
 from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
+    TokenRefreshView
 )#date : 7/01/2024
 
 
@@ -15,7 +14,7 @@ urlpatterns = [
 
     path('register/',RegisterView.as_view(),name='register'),
     path('login/',LoginView.as_view(),name='login'),
-    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),#date : 7/01/2024
+    path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),#date : 7/01/2024
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),#date : 7/01/2024
     path('send_otp/',send_otp),
     path('verify_otp/',verify_otp),

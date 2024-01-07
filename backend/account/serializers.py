@@ -1,5 +1,8 @@
 from rest_framework import serializers
+from rest_framework_simplejwt.tokens import Token
 from .models import User
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer #date :7/01/2024
+from rest_framework_simplejwt.views import TokenObtainPairView
 #from backend.account.models import User
 
 class UserSerializer(serializers.ModelSerializer):
@@ -17,3 +20,17 @@ class UserSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance#-------------------End------------
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user) # super(): to ensure that any changes made in the future to the get_token method in the TokenObtainPairSerializer class will automatically be reflected in MyObtainPairSerializer without duplicating the code
+    
+        #Add custom claims
+        token['username'] = user.get_full_name()
+
+        return token
+    
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
