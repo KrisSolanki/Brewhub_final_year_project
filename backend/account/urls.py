@@ -8,15 +8,15 @@ from django.core.mail.backends.smtp import EmailBackend #------------date : 5/01
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
-)
+)#date : 7/01/2024
 
 
 urlpatterns = [
 
     path('register/',RegisterView.as_view(),name='register'),
     path('login/',LoginView.as_view(),name='login'),
-    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),#date : 7/01/2024
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),#date : 7/01/2024
     path('send_otp/',send_otp),
     path('verify_otp/',verify_otp),
     path('resend_otp/',resend_otp),

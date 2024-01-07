@@ -4,10 +4,15 @@ from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from .serializers import UserSerializer
 from .models import User
-
 from rest_framework.decorators import api_view #----- date : 3/01/2024--------- for otp
 from .otpapi import send_otp_to_mobile #---------- date : 3/01/2024--------
+
+
+
 # Create your views here.
+
+
+
 
 #===================== REGISTER ====================
 class RegisterView(APIView):
@@ -16,6 +21,8 @@ class RegisterView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
+
+
 
 #===================== LOGIN ====================
 class LoginView(APIView): #login feature
@@ -36,6 +43,8 @@ class LoginView(APIView): #login feature
         return Response({
             'message':'Success'
         })
+
+
 
 #===================== SEND OTP ====================    
 #---------- date : 3/01/2024----------otp
@@ -67,6 +76,8 @@ def send_otp(request):
     return Response({
         'status' : 200 , 'messsage' : 'Otp Sent'
     })
+
+
 
 
 #===================== VERIFY OTP ====================
@@ -106,6 +117,9 @@ def verify_otp(request):
             'message' : 'invalid otp'
         }) 
 
+
+
+
 #===================== RESEND OTP ====================
 @api_view(['POST'])#-------------------------date:5/01/2024 --------------------
 def resend_otp(request):
@@ -124,8 +138,7 @@ def resend_otp(request):
             'status': 400,
             'message': 'Invalid mobile no'
         })
-    
-    
+
     #--------------------------------------------------------------------------------------------
     # this block of code Checks if enough time has passed since the last OTP request
     # -------------------------------------------------------------------------------------------
