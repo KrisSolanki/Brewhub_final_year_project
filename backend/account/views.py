@@ -2,13 +2,14 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
+
+from backend.settings import EMAIL_HOST_USER
 from .serializers import UserSerializer,MyTokenObtainPairSerializer
 from .models import User
-from rest_framework.decorators import api_view #----- date : 3/01/2024--------- for otp
-from .otpapi import send_otp_to_mobile #---------- date : 3/01/2024--------
-
+from rest_framework.decorators import api_view # date:3/01 for otp
+from .otpapi import send_otp_to_mobile # date:3/01
 from rest_framework_simplejwt.views import TokenObtainPairView
-
+from django.core.mail import send_mail
 # Create your views here.
 
 
@@ -19,29 +20,54 @@ class RegisterView(APIView):
     def post(self,request):
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        user = serializer.save()
+
+        self.send_welcome_email(user.email, user.first_name, user.last_name)
+
         return Response(serializer.data)
+    
+    def send_welcome_email(self, email , first_name, last_name ):
+        subject = 'Welcome to Your App!'
+        message = (
+            f'Dear {first_name} {last_name},\n\n'
+            f'Thank you for registering with our App! We are excited to have you on board.\n'
+            f'Explore our platform and let us know if you have any questions or need assistance.\n\n'
+            f' Regards,\n -Shadow '
+        )
+        from_email = EMAIL_HOST_USER  # Update with your email
+        
+        send_mail(subject, message, from_email, [email])
+
+        # return Response({
+        #     'status': 200,
+        #     'message': 'Registration successful'
+        # })
 
 
 
 #===================== LOGIN ====================
-class LoginView(APIView): #login feature
+class LoginView(APIView): 
     def post(self,request):
         mobile_no = request.data['mobile_no']
-        #email = request.data['email']
         password = request.data['password']
 
-        user = User.objects.filter(mobile_no=mobile_no).first()#finding user
-       # user = User.objects.filter(email=email).first()#finding user 
+        user = User.objects.filter(mobile_no=mobile_no).first()#finding user 
 
         if user is None:
-            raise AuthenticationFailed('User not found!')
+            raise AuthenticationFailed('User not found! ')
         
-        if not user.check_password(password): #password check
-            raise AuthenticationFailed('Incorrect password!')
-        
+        if not user.check_password(password):
+            raise AuthenticationFailed('Incorrect password! \nPlease enter the correct password.')
+
+        # Generate and send OTP
+        otp = send_otp_to_mobile(mobile_no)
+        user.otp = otp
+        user.save()
+
         return Response({
-            'message':'Success'
+            'status': 200,
+            'message': 'Login successful. OTP sent for verification.',
+            'otp_status': 'sent'
         })
     
 
@@ -50,36 +76,35 @@ class MyTokenObtainPairView(TokenObtainPairView): #date : 7/01/2024
 
 
 
-#===================== SEND OTP ====================    
+#===================== SEND OTP ====================  delete this block  
 #---------- date : 3/01/2024----------otp
-@api_view(['POST'])
-def send_otp(request):
-    data = request.data
-
-    if data.get('mobile_no') is None:   #---------if mobile_no is not received 
-        return Response({
-            'status':400,
-            'message':'key mobile_no is required'
-        })
-    if data.get('password') is None:    #---------if password is not received
-        return Response({
-            'status':400,
-            'message':'key password is required'
-        })
+# @api_view(['POST'])
+# def send_otp(request):
+#     data = request.data
+#     if data.get('mobile_no') is None:   #---------if mobile_no is not received 
+#         return Response({
+#             'status':400,
+#             'message':'key mobile_no is required'
+#         })
+#     if data.get('password') is None:    #---------if password is not received
+#         return Response({
+#             'status':400,
+#             'message':'key password is required'
+#         })
     
-    #after creating otpapi.py
-  #  otp = send_otp_to_mobile(data.get('mobile_no'))
+#     #after creating otpapi.py
+#   #  otp = send_otp_to_mobile(data.get('mobile_no'))
 
-    user = User.objects.create( 
-        mobile_no = data.get('mobile_no'),
-        otp = send_otp_to_mobile(data.get('mobile_no'))
-        )
-    user.set_password = data.get('set_password')
-    user.save()
+#     user = User.objects.create( 
+#         mobile_no = data.get('mobile_no'),
+#         otp = send_otp_to_mobile(data.get('mobile_no'))
+#         )
+#     user.set_password(data.get('set_password'))
+#     user.save()
 
-    return Response({
-        'status' : 200 , 'messsage' : 'Otp Sent'
-    })
+#     return Response({
+#         'status' : 200 , 'messsage' : 'Otp Sent'
+#     })
 
 
 
@@ -118,7 +143,7 @@ def verify_otp(request):
 
     return Response({
             'status' : 400,
-            'message' : 'invalid otp'
+            'message' : 'Invalid otp'
         }) 
 
 
