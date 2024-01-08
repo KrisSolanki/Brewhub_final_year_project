@@ -38,10 +38,7 @@ class RegisterView(APIView):
         
         send_mail(subject, message, from_email, [email])
 
-        # return Response({
-        #     'status': 200,
-        #     'message': 'Registration successful'
-        # })
+        
 
 
 
