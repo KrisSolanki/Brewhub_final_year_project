@@ -4,7 +4,7 @@ from .views import RegisterView,LoginView,MyTokenObtainPairView
 from account.views import * #----------- date : 3/01/2024------------
 from django.contrib.auth import views as auth_views #----------------------date : 5/01/2024 for reset_password , * related to password
 from django.core.mail.backends.smtp import EmailBackend #------------date : 5/01/2024 for reset_password
-
+from django.conf import settings
 from rest_framework_simplejwt.views import (
     TokenRefreshView
 )#date : 7/01/2024
@@ -12,7 +12,9 @@ from rest_framework_simplejwt.views import (
 
 urlpatterns = [
 
-    path('register/',RegisterView.as_view(),name='register'),
+    path('register/customer/',RegisterView.as_view(),name='register-customer'),
+    path('register/manager/',RegisterView.as_view(),name='register-manager'),
+    path('register/delivery_person/',RegisterView.as_view(),name='register-dp'),
     path('login/',LoginView.as_view(),name='login'),
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),#date : 7/01/2024
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),#date : 7/01/2024
@@ -29,3 +31,6 @@ urlpatterns = [
 
 
 ]
+from django.conf.urls.static import static
+if settings.DEBUG:
+    urlpatterns += static(settings.PROFILE_MEDIA_URL,document_root=settings.PROFILE_MEDIA_ROOT)

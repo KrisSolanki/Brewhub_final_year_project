@@ -21,6 +21,20 @@ class CustomUserManager(BaseUserManager):
 
         return self.create_user(mobile_no, password, **extra_fields)
     
+#other models role date:9/01***********
+
+class Roles(models.Model):
+    RoleID = models.AutoField(primary_key=True) #,db_column='RoleID')
+    Role_Name = models.CharField(max_length=30,null=True)#unique=True,null=False
+
+    def __str__(self):
+        return f"{self.RoleID}: {self.Role_Name}"
+
+class Status(models.Model):
+    StatusID = models.AutoField(primary_key=True)
+    Status_name = models.CharField(max_length=30)
+    
+
 class User(AbstractUser):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
@@ -34,8 +48,14 @@ class User(AbstractUser):
     email = models.CharField(max_length=50,blank=True,null=True) 
     dob = models.DateField(null=True, blank=True)
     # is_admin = models.BooleanField(default=False)
-    
 
+    #Date : 9/01
+    Profile_Picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
+    Gender = models.CharField(max_length=15,null=True, choices=[('Male', 'Male'), ('Female', 'Female')])
+    Role = models.ForeignKey(Roles,on_delete=models.CASCADE,null=True)#null=False,db_column='Role')
+    Status = models.ForeignKey(Status,on_delete=models.CASCADE,null=True)
+    
+    
     USERNAME_FIELD = 'mobile_no'
     REQUIRED_FIELDS = []
 
@@ -43,3 +63,33 @@ class User(AbstractUser):
     def __str__(self):
         #return self.mobile_no
         return self.mobile_no
+    
+
+class State(models.Model):
+    StateID = models.AutoField(primary_key=True)#db_column='AddressID')
+    State=models.CharField(max_length=30,null = False)#null=False,db_column='State')
+
+    def __str__(self):
+        return self.StateID
+    
+
+class City(models.Model):
+    CityID = models.AutoField(primary_key=True)# db_column='CityID')
+    City = models.CharField(max_length=30 , null=True)#null=False,db_column='City')
+    State = models.ForeignKey(State,on_delete=models.CASCADE,null=True)#null=False,db_column='State')
+    
+    def __str__(self):
+        return self.CityID
+
+
+class Address(models.Model):
+    AddressID = models.AutoField(primary_key=True) #,db_column='AddressID')
+    Address = models.CharField(max_length=255,null=True) #null=False,db_column='Address')
+    Pincode = models.CharField(max_length=6,null=True)#null=False,db_column='Pincode')
+    City = models.ForeignKey(City,on_delete=models.CASCADE,null=True) #null=False,db_column='City')
+    User = models.ForeignKey(User,on_delete=models.CASCADE,null=True) #null=False,db_column='User')
+
+    def __str__(self):
+        return self.AddressID
+    
+    
