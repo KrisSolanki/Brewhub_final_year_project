@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User
+from .models import *
 from django.utils import timezone
 # Register your models here.
 
@@ -17,3 +17,8 @@ class UserAdmin(admin.ModelAdmin):#to display fields in user panel properly
         return diff.days
     
 admin.site.register(User, UserAdmin)
+admin.site.register(Roles)
+admin.site.register(Status)
+admin.site.register(State)
+admin.site.register(City)
+admin.site.register(Address)
