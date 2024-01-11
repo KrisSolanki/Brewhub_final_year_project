@@ -34,6 +34,8 @@ class Status(models.Model):
     StatusID = models.AutoField(primary_key=True)
     Status_name = models.CharField(max_length=30)
     
+    def __str__(self):
+        return self.Status_name
 
 class User(AbstractUser):
     first_name = models.CharField(max_length=30)
@@ -70,7 +72,7 @@ class State(models.Model):
     State=models.CharField(max_length=30,null = False)#null=False,db_column='State')
 
     def __str__(self):
-        return self.StateID
+        return self.State
     
 
 class City(models.Model):
@@ -79,7 +81,7 @@ class City(models.Model):
     State = models.ForeignKey(State,on_delete=models.CASCADE,null=True)#null=False,db_column='State')
     
     def __str__(self):
-        return self.CityID
+        return self.City
 
 
 class Address(models.Model):
@@ -90,6 +92,6 @@ class Address(models.Model):
     User = models.ForeignKey(User,on_delete=models.CASCADE,null=True) #null=False,db_column='User')
 
     def __str__(self):
-        return self.AddressID
+        return self.Address
     
     

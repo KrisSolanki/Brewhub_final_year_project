@@ -16,9 +16,21 @@ class UserAdmin(admin.ModelAdmin):#to display fields in user panel properly
         diff=timezone.now() - User.date_joined
         return diff.days
     
+class StatusAdmin(admin.ModelAdmin):
+    list_display = ("StatusID", "Status_name")
+class RoleAdmin(admin.ModelAdmin):
+    list_display = ("RoleID", "Role_Name")
+class StateAdmin(admin.ModelAdmin):
+    list_display = ("StateID", "State")
+class CityAdmin(admin.ModelAdmin):
+    list_display = ("CityID", "City", "State")
+class AddressAdmin(admin.ModelAdmin):
+    list_display = ("AddressID", "Address", "Pincode", "City", "User")
+
+
 admin.site.register(User, UserAdmin)
-admin.site.register(Roles)
-admin.site.register(Status)
-admin.site.register(State)
-admin.site.register(City)
-admin.site.register(Address)
+admin.site.register(Roles,RoleAdmin)
+admin.site.register(Status,StatusAdmin)
+admin.site.register(State,StateAdmin)
+admin.site.register(City,CityAdmin)
+admin.site.register(Address,AddressAdmin)
