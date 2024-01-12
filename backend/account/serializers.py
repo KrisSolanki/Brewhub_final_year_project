@@ -34,7 +34,8 @@ class UserSerializer(serializers.ModelSerializer):
     # Address = AddressSerializer(many = True)
     class Meta:
         model = User
-        fields = ['id','first_name','last_name','mobile_no','password','email','dob','Profile_Picture','Gender','Role','Status']
+        fields = '__all__'
+        # fields = ['id','first_name','last_name','mobile_no','password','email','dob','Profile_Picture','Gender','Role','Status']
         extra_kwargs = { #------------  to hide passw0rd inshort hashed 
             'password' : {'write_only': True}
         }#---------------------continue-----
@@ -89,38 +90,16 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 
 class AddressSerializer(serializers.ModelSerializer):
-    City = CitySerializer()
-    User = UserSerializer()
+    
     class Meta:
         model = Address
         fields = '__all__'
-    def create(self, validated_data):
-        print("Validated Data:", validated_data)
-        city_data = validated_data.pop("City",{})
-        state_data = city_data.pop("State",{}) # Extract State data from City data
-        user_data = validated_data.pop("User",{})
-        
-        user_instance = User.objects.create(User.id)
-        # user_id = user_data.get('id')
-        # try:
-        #     user_instance = User.objects.get(id=user_id)
-        # except User.DoesNotExist:
-        #     raise ValueError(f"User with id={user_instance} does not exist")
-        
-        state_instance = State.objects.create(**state_data)
-        city_instance = City.objects.create(State=state_instance,**city_data)
-        instance = Address.objects.create(City=city_instance,User=user_instance,**validated_data)
-        print("--------------------------------------------")
-        print(validated_data)
-        print("id",id)
-       
-        # print(validated_data)
-        # print("city_data",city_data)
-        # print("state_data",state_data)
-        # print("state_instance",state_instance)
-
-        
-
-
-        instance.save()
-        return instance
+    
+class AddressGetSerializer(serializers.ModelSerializer):
+    City_ID = serializers.PrimaryKeyRelatedField(source='City.CityID', read_only=True)
+    City_Name = serializers.CharField(source='City.City', read_only=True)
+    U_FName = serializers.CharField(source='User.first_name', read_only=True)
+    U_LName = serializers.CharField(source='User.last_name', read_only=True)
+    class Meta:
+        model = Address
+        fields = '__all__'

@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 
 from backend.settings import EMAIL_HOST_USER
-from .serializers import UserSerializer,MyTokenObtainPairSerializer,AddressSerializer
+from .serializers import *
 from .models import User, Roles, Status, Address, City, State
 from rest_framework.decorators import api_view # date:3/01 for otp
 from .otpapi import send_otp_to_mobile # date:3/01
@@ -52,6 +52,11 @@ class AddressView(APIView):
             'status': 200,
             'message': 'Address added succesfully '
         })
+    def get(self, request, *args, **kwargs):
+        address_obj = Address.objects.all()
+        serializer = AddressGetSerializer(address_obj, many=True)
+        return Response(serializer.data)
+  
 
 #===================== LOGIN ====================
 class LoginView(APIView): 
