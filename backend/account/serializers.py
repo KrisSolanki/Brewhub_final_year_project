@@ -59,7 +59,6 @@ class UserSerializer(serializers.ModelSerializer):
         # Extract or create the Status instance
         status_name = status_data.get('Status_Name')
         # status_instance = Status.objects.get(StatusID=status_id)
-        print(status_name)
         try:
             status_instance = Status.objects.get(Status_Name=status_name)
         except Status.DoesNotExist:
@@ -96,18 +95,21 @@ class AddressSerializer(serializers.ModelSerializer):
         model = Address
         fields = '__all__'
     def create(self, validated_data):
+        print("Validated Data:", validated_data)
         city_data = validated_data.pop("City",{})
         state_data = city_data.pop("State",{}) # Extract State data from City data
         user_data = validated_data.pop("User",{})
-        user_id = user_data.get('id')
-        try:
-            user_instance = User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            raise ValueError(f"User with id={user_instance} does not exist")
+        
+        user_instance = User.objects.create(User.id)
+        # user_id = user_data.get('id')
+        # try:
+        #     user_instance = User.objects.get(id=user_id)
+        # except User.DoesNotExist:
+        #     raise ValueError(f"User with id={user_instance} does not exist")
         
         state_instance = State.objects.create(**state_data)
         city_instance = City.objects.create(State=state_instance,**city_data)
-        instance = Address.objects.create(City=city_instance,**validated_data)
+        instance = Address.objects.create(City=city_instance,User=user_instance,**validated_data)
         print("--------------------------------------------")
         print(validated_data)
         print("id",id)
