@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 
 from backend.settings import EMAIL_HOST_USER
-from .serializers import UserSerializer,MyTokenObtainPairSerializer
+from .serializers import UserSerializer,MyTokenObtainPairSerializer,AddressSerializer
 from .models import User, Roles, Status, Address, City, State
 from rest_framework.decorators import api_view # date:3/01 for otp
 from .otpapi import send_otp_to_mobile # date:3/01
@@ -22,61 +22,13 @@ class RegisterView(APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
 
-        # Check the registration URL to determine the role
-        registration_url = request.get_full_path()
-
-        if 'manager' in registration_url:
-            # Set role to Mnger
-            try:
-                manager_role = Roles.objects.get(Role_Name='Manager')
-                user.Role = manager_role
-                user.save()
-            except Roles.DoesNotExist:
-                return Response({
-                    'status': '400',
-                    'message': 'Manager role not found.'
-                })
-        elif 'delivery_person' in registration_url:
-            # Set role to DP
-            try:
-                delivery_person_role = Roles.objects.get(Role_Name='Delivery Person')
-                user.Role = delivery_person_role
-                user.save()
-            except Roles.DoesNotExist:
-                return Response({
-                    'status': '400',
-                    'message': 'Delivery Person role not found.'
-                })
-        elif 'customer' in registration_url:
-            # Set role to Customer
-            try:
-                customer_role = Roles.objects.get(Role_Name='Customer')
-                user.Role = customer_role
-                user.save()
-            except Roles.DoesNotExist:
-                return Response({
-                    'status': '400',
-                    'message': 'Customer role not found.'
-                })
-        # else:
-        #     # Default role if URL doesn't match 'manager', 'delivery_person', 'customer'
-        #     return Response({
-        #         'status': '400',
-        #         'message': 'Invalid registration URL.'
-        #     })
-
-        # # Assign default status (adjust as needed)
-        # try:
-        #     default_status = Status.objects.get(Status_name='Default')
-        #     user.Status = default_status
-        #     user.save()
-        # except Status.DoesNotExist:
-        #     pass  # Handle the case where the status is not found (customize as needed)
-
-
         self.send_welcome_email(user.email, user.first_name, user.last_name)
 
-        return Response(serializer.data)
+        # return Response(serializer.data)
+        return Response({
+            'status': 200,
+            'message': 'Registration succesfully '
+        })
     
     def send_welcome_email(self, email , first_name, last_name ):
         subject = 'Welcome to Your App!'
@@ -90,9 +42,16 @@ class RegisterView(APIView):
         
         send_mail(subject, message, from_email, [email])
 
-        
-
-
+class AddressView(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = AddressSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        #serializer.save(user=request.user)
+        return Response({
+            'status': 200,
+            'message': 'Address added succesfully '
+        })
 
 #===================== LOGIN ====================
 class LoginView(APIView): 

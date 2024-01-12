@@ -16,7 +16,7 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_active', True)
-        #extra_fields.setdefault('is_admin', True)
+       
 
 
         return self.create_user(mobile_no, password, **extra_fields)
@@ -24,18 +24,37 @@ class CustomUserManager(BaseUserManager):
 #other models role date:9/01***********
 
 class Roles(models.Model):
-    RoleID = models.AutoField(primary_key=True) #,db_column='RoleID')
-    Role_Name = models.CharField(max_length=30,null=True)#unique=True,null=False
+    RoleID = models.AutoField(primary_key=True)
+    Role_Name = models.CharField(max_length=30,null=True)
 
     def __str__(self):
         return f"{self.RoleID}: {self.Role_Name}"
 
 class Status(models.Model):
     StatusID = models.AutoField(primary_key=True)
-    Status_name = models.CharField(max_length=30)
+    Status_Name = models.CharField(max_length=30)
     
     def __str__(self):
-        return self.Status_name
+        return self.Status_Name
+
+class State(models.Model):
+    StateID = models.AutoField(primary_key=True)
+    State=models.CharField(max_length=30,null = True)
+
+    def __str__(self):
+        return str(self.State)
+        # return self.State
+
+class City(models.Model):
+    CityID = models.AutoField(primary_key=True)
+    City = models.CharField(max_length=30 , null=True)
+    State = models.ForeignKey(State,on_delete=models.CASCADE,null=True)
+    
+    def __str__(self):
+        return str(self.City)
+
+
+
 
 class User(AbstractUser):
     first_name = models.CharField(max_length=30)
@@ -49,12 +68,11 @@ class User(AbstractUser):
     password = models.CharField(max_length=100)
     email = models.CharField(max_length=50,blank=True,null=True) 
     dob = models.DateField(null=True, blank=True)
-    # is_admin = models.BooleanField(default=False)
 
     #Date : 9/01
     Profile_Picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
     Gender = models.CharField(max_length=15,null=True, choices=[('Male', 'Male'), ('Female', 'Female')])
-    Role = models.ForeignKey(Roles,on_delete=models.CASCADE,null=True)#null=False,db_column='Role')
+    Role = models.ForeignKey(Roles,on_delete=models.CASCADE,null=True)
     Status = models.ForeignKey(Status,on_delete=models.CASCADE,null=True)
     
     
@@ -63,35 +81,22 @@ class User(AbstractUser):
 
     objects = CustomUserManager()
     def __str__(self):
-        #return self.mobile_no
         return self.mobile_no
     
-
-class State(models.Model):
-    StateID = models.AutoField(primary_key=True)#db_column='AddressID')
-    State=models.CharField(max_length=30,null = False)#null=False,db_column='State')
-
-    def __str__(self):
-        return self.State
-    
-
-class City(models.Model):
-    CityID = models.AutoField(primary_key=True)# db_column='CityID')
-    City = models.CharField(max_length=30 , null=True)#null=False,db_column='City')
-    State = models.ForeignKey(State,on_delete=models.CASCADE,null=True)#null=False,db_column='State')
-    
-    def __str__(self):
-        return self.City
-
-
 class Address(models.Model):
-    AddressID = models.AutoField(primary_key=True) #,db_column='AddressID')
-    Address = models.CharField(max_length=255,null=True) #null=False,db_column='Address')
-    Pincode = models.CharField(max_length=6,null=True)#null=False,db_column='Pincode')
-    City = models.ForeignKey(City,on_delete=models.CASCADE,null=True) #null=False,db_column='City')
-    User = models.ForeignKey(User,on_delete=models.CASCADE,null=True) #null=False,db_column='User')
+    AddressID = models.AutoField(primary_key=True) 
+    Address = models.CharField(max_length=255,null=True)
+    Pincode = models.CharField(max_length=6,null=True)
+    City = models.ForeignKey(City,on_delete=models.CASCADE,null=True) 
+    User = models.ForeignKey(User,on_delete=models.CASCADE,null=True) 
 
     def __str__(self):
-        return self.Address
+        # return f"AddressID: {self.AddressID}, Address: {self.Address}"
+        return str(self.Address)
+    
+
+
+
+
     
     

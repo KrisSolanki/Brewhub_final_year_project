@@ -3,27 +3,28 @@ from .models import *
 from django.utils import timezone
 # Register your models here.
 
-
+class StateAdmin(admin.ModelAdmin):
+    list_display = ("StateID", "State")
+class CityAdmin(admin.ModelAdmin):
+    list_display = ("CityID", "City", "State")
+    
 class UserAdmin(admin.ModelAdmin):#to display fields in user panel properly 
-    list_display = ("id","mobile_no","first_name","last_name","email","is_active","is_mobile_verified","days_since_joined","Profile_Picture")
+    list_display = ("id","mobile_no","first_name","last_name","email","is_active","is_mobile_verified","days_since_joined")
     #list_display = ["id","email", "name", "is_admin"]
     fieldsets = [
-        ('User Credentials', {"fields": ("email","mobile_no","otp", "password","Profile_Picture")}),
-        ("Personal info", {"fields": ("first_name","last_name","dob","date_joined")}),
-        ("Permissions", {"fields": ("is_active", "is_staff","is_mobile_verified")}),
+        ('User Credentials', {"fields": ("email","mobile_no","otp", "password")}),
+        ("Personal info", {"fields": ("first_name","last_name","dob","date_joined","Profile_Picture","Gender")}),
+        ("Permissions & Roles", {"fields": ("is_active", "is_staff","is_mobile_verified","Role","Status")}),
     ]
     def days_since_joined(self,User):#show diff between date_of_creation and today 
         diff=timezone.now() - User.date_joined
         return diff.days
     
 class StatusAdmin(admin.ModelAdmin):
-    list_display = ("StatusID", "Status_name")
+    list_display = ("StatusID", "Status_Name")
 class RoleAdmin(admin.ModelAdmin):
     list_display = ("RoleID", "Role_Name")
-class StateAdmin(admin.ModelAdmin):
-    list_display = ("StateID", "State")
-class CityAdmin(admin.ModelAdmin):
-    list_display = ("CityID", "City", "State")
+
 class AddressAdmin(admin.ModelAdmin):
     list_display = ("AddressID", "Address", "Pincode", "City", "User")
 
