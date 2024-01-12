@@ -14,6 +14,7 @@ urlpatterns = [
 
     path('register/',RegisterView.as_view(),name='register'),
     path('register/address/',AddressView.as_view(),name='register-address'),
+    path('register/address/<int:pk>/',AddressView.as_view(),name='register-address'),
     path('login/',LoginView.as_view(),name='login'),
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),#date : 7/01/2024
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),#date : 7/01/2024

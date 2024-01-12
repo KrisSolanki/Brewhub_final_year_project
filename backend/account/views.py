@@ -53,6 +53,12 @@ class AddressView(APIView):
             'message': 'Address added succesfully '
         })
     def get(self, request, *args, **kwargs):
+        user = self.request.query_params.get('user')
+        # a_id = kwargs.get('pk')
+        if user is not None:
+            users = Address.objects.filter(User=user)
+            serializer = AddressGetSerializer(users,many=True)
+            return Response(serializer.data)
         address_obj = Address.objects.all()
         serializer = AddressGetSerializer(address_obj, many=True)
         return Response(serializer.data)
