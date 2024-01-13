@@ -17,6 +17,15 @@ from django.core.mail import send_mail
 
 #===================== REGISTER ====================
 class RegisterView(APIView):
+    def get(self,request,*args,**kwargs):
+        user = self.request.query_params.get('user')
+        users = User.objects.filter(User=user)
+        serializer = UserSerializer(users,many=True)
+        
+        return Response(serializer.data)
+        
+
+    
     def post(self,request):
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -88,6 +97,13 @@ class LoginView(APIView):
             'message': 'Login successful. OTP sent for verification.',
             'otp_status': 'sent'
         })
+    
+    def get(self,request,*args,**kwargs):
+        user = self.request.query_params.get('user')
+        users = User.objects.filter(User=user)
+        serializer = UserSerializer(users,many=True)
+        
+        return Response(serializer.data)
     
 
 class MyTokenObtainPairView(TokenObtainPairView): #date : 7/01/2024

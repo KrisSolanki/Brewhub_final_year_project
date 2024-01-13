@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'account',
-    'rest_framework_simplejwt.token_blacklist'#date : 7/01/2024
+    'rest_framework_simplejwt', 
+    'cafe',
 ]
 
 #-------#date : 7/01/2024--------
@@ -198,8 +199,14 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'ktheking280@gmail.com'
-EMAIL_HOST_PASSWORD = 'tceg lvca spgl bnsr'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
 
 PROFILE_MEDIA_URL = '/media/profile'
 PROFILE_MEDIA_ROOT = BASE_DIR / "media/profile"
+
+LOGO_MEDIA_URL = '/media/cafe_logoimages'
+LOGO_MEDIA_ROOT = BASE_DIR / "media/cafe_logoimages"
+
+ITEM_MEDIA_URL = '/media/item_images'
+ITEM_MEDIA_ROOT = BASE_DIR/ "media/item_images"
