@@ -6,7 +6,14 @@ from .models import *
 # Create your views here.
 
 class CafeListView(APIView):
-    def get (self,request):
+    def get (self,request,*args,**kwargs):
+        cafe_id = kwargs.get('pk')
+        if cafe_id is not None:
+            cafes=Cafe.objects.get(pk=cafe_id)
+            serializer=CafeSerializer(cafes)
+            return Response(serializer.data)
+
+
         cafes=Cafe.objects.all()
         serializers=CafeSerializer(cafes,many=True)
         return Response(serializers.data)
