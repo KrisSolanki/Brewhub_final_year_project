@@ -22,6 +22,7 @@ class CafeListView(APIView):
         serializer = CafeSerializer(data = request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        return Response(serializer.data)
 
 class MenuListView(APIView):
     def get(self,request,*args,**kwargs):
@@ -46,3 +47,43 @@ class MenuListView(APIView):
         serializers = MenuSerializer(data = request.data)
         serializers.is_valid(raise_exception=True)
         serializers.save()
+        return Response(serializers.data)
+
+class CategoryView(APIView):
+    def post(self,request):
+        serializers=CategorySerializer(data = request.data)
+        serializers.is_valid(raise_exception=True)
+        serializers.save()
+        return Response(serializers.data)
+
+    def get(self,request,*args,**kwargs):
+        category_id = kwargs.get('pk')
+        if category_id is not None:
+            categories = Category.objects.get(pk=category_id)
+            serializer=CategorySerializer(categories)
+            return Response(serializer.data)
+
+        category_obj=Category.objects.all()
+        serializers=CategorySerializer(category_obj,many=True)
+        return Response(serializers.data)
+
+
+class SubCategoryView(APIView):
+    def post(self,request):
+        serializers=SubCategoryView(data = request.data)
+        serializers.is_valid(raise_exception=True)
+        serializers.save()
+        return Response(serializers.data)
+    
+    def get(self,request,*args,**kwargs):
+        subcategory_id= kwargs.get('pk')
+
+        if subcategory_id is not None:
+            subcategories = SubCategory.objects.get(pk=subcategory_id)
+            serializer=SubCategorySerializer(subcategories)
+            return Response(serializer.data)
+        
+        subcategory_obj=SubCategory.objects.all()
+        serializers=SubCategorySerializer(subcategory_obj)
+        return Response(serializers.data)
+    

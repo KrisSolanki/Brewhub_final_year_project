@@ -3,6 +3,8 @@ from .views import *
 urlpatterns = [
 
     path('cafelist/',CafeListView.as_view(),name='cafe-list'),
+    path('cafelist/<int:pk>/',CafeListView.as_view(),name='cafe-list'),
+
     path('menulist/',MenuListView.as_view(),name='menu-list'),
 
 ]

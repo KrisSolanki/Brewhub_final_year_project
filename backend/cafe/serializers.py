@@ -3,9 +3,9 @@ from .models import *
 from account.serializers  import *
 
 class CafeSerializer(serializers.ModelSerializer):
-    cafe_managerid = UserSerializer()
-    status = StatusSerializer()
-    address = AddressSerializer()
+    # cafe_managerid = UserSerializer()
+    # status = StatusSerializer()
+    # address = AddressSerializer()
 
     class Meta:
         model = Cafe
@@ -17,7 +17,7 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class SubCategorySerializer(serializers.ModelSerializer):
-    category = CategorySerializer()
+    #category = CategorySerializer()
     class Meta:
         model = SubCategory
         fields = '__all__'

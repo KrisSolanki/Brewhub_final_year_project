@@ -14,9 +14,9 @@ class Cafe(models.Model):
     verification_status = models.CharField(max_length=50,choices = [('pending','Pending'),('approved','Approved'),('rejected','Rejected')],blank=True,null=True)
     verification_documents = models.FileField(upload_to='verification_documents/',blank=True,null=True)
     LogoImage = models.ImageField(upload_to='cafe_logoimages/',blank=True,null=True)
-    status = models.ForeignKey(Status,on_delete=models.CASCADE)
+    status = models.ForeignKey(Status,on_delete=models.CASCADE,null=True)
     cafe_managerid = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
-    address = models.ForeignKey(Address,on_delete=models.CASCADE)
+    address = models.ForeignKey(Address,on_delete=models.CASCADE,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.CafeName
