@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'account',
     'rest_framework_simplejwt', 
     'cafe',
+    'order',
 ]
 
 #-------#date : 7/01/2024--------
