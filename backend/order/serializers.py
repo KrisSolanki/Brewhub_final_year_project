@@ -12,6 +12,9 @@ class ComplaintSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class Cart_DetailsSerializer(serializers.ModelSerializer):
+    # Offer_ID = OfferSerializer()
+    Offer_ID = serializers.PrimaryKeyRelatedField(queryset=Offer.objects.all(), allow_null=True, required=False)
+
     class Meta:
         model = Cart_Details
         fields = '__all__'
