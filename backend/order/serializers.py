@@ -17,7 +17,12 @@ class Cart_DetailsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cart_Details
-        fields = '__all__'
+        # fields = '__all__'
+        fields = ['CartDetailsID','ItemQuantity','Subtotal','Item_ID','Offer_ID','Cart_ID']
+
+
+
+
 
 class Cart_MSerializer(serializers.ModelSerializer):
     Cart_D = Cart_DetailsSerializer(many=True,read_only=True)

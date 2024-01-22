@@ -26,14 +26,17 @@ class CartDetailView(APIView):
     def get(self, request, *args, **kwargs):
         # Access the user making the request
         current_user = self.request.user
-
+        
         # Check if the user is logged in
         if current_user.is_authenticated:
             # Get or create the user's cart
             cart = self.get_cart_for_user(current_user)
             # Serialize the cart data
             serialized_cart = Cart_MSerializer(cart).data
+            cart_items = Cart_Details.objects.filter(Cart_ID=cart)
+            cart_items_serializer = Cart_DetailsSerializer(cart_items, many=True).data
 
+            print()
 
             offer = self.get_applicable_offer(cart)
             offer_serializer = OfferSerializer(offer) if offer else None
@@ -41,7 +44,8 @@ class CartDetailView(APIView):
             
             response_data = {
                 'cart': serialized_cart,
-                'offer': offer_serializer.data if offer_serializer else None,  # Check if offer_serializer is not None
+                #'offer': offer_serializer.data if offer_serializer else None,  # Check if offer_serializer is not None
+                'cart_items': cart_items_serializer,
                 'message': 'Cart retrieved successfully'
             }
 
@@ -56,6 +60,7 @@ class CartDetailView(APIView):
         # Add a new item to the cart
         serializer = Cart_DetailsSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        
 
         cart = Cart_M.objects.get(User_ID=self.request.user)
         item = serializer.validated_data['Item_ID']
@@ -112,4 +117,60 @@ class CartDetailView(APIView):
         }
 
         return Response(response_data, status=status.HTTP_201_CREATED)
+    
+    def put(self, request, *args, **kwargs):
+        # Update quantity or other details of a cart item
+        cart_item = Cart_Details.objects.get(pk=request.data.get('Cart_Item_ID'))
+        serializer = Cart_DetailsSerializer(cart_item, data=request.data,partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        print(f"Updated Subtotal in Database: {cart_item.Subtotal}")
+
+        # Update total price in the cart
+        cart = cart_item.Cart_ID
+        # cart.Total += cart_item.Subtotal - serializer.validated_data.get('Subtotal',0)
+        # cart.Total += cart_item.Subtotal - serializer.initial_data['Subtotal']
+        # cart.Total += cart_item.Subtotal - serializer.initial_data.get('Subtotal',0)
+
+        # Calculate the updated subtotal based on the updated 'ItemQuantity' or other relevant fields
+        updated_quantity = serializer.validated_data.get('ItemQuantity', cart_item.ItemQuantity)
+        updated_subtotal = cart_item.Item_ID.ItemPrice * updated_quantity
+        # print(cart.Total)
+        # print(cart_item.Subtotal)
+        # print(serializer.initial_data)
         
+       
+        cart_item.Subtotal = updated_subtotal
+        cart_item.save()
+
+        # tp =20000 
+        # Update total price in the cart
+        cart.Total += updated_subtotal - cart_item.Subtotal
+        cart.save()
+        print(f"Updated Quantity: {updated_quantity}")
+        print(f"Updated Subtotal: {updated_subtotal}")
+        print(f"Old Subtotal: {cart_item.Subtotal}")
+        print(f"Total: {cart.Total}")
+
+        updated_cart_item = Cart_Details.objects.get(pk=cart_item.pk)
+        updated_cart_item_serializer = Cart_DetailsSerializer(updated_cart_item).data
+
+        # return Response({'message': 'Cart item updated successfully'})
+        response_data = {
+            'message': 'Cart item updated successfully',
+            'updated_cart_item': updated_cart_item_serializer,
+        }
+        return Response(response_data)
+    
+    # def delete(self, request, *args, **kwargs):
+    #     # Delete a cart item
+    #     cart_item = Cart_Details.objects.get(pk=request.data.get('cart_item_id'))
+
+    #     # Update total price in the cart before deleting the cart item
+    #     cart = cart_item.Cart_ID
+    #     cart.Total -= cart_item.Subtotal
+    #     cart.save()
+
+    #     cart_item.delete()
+
+    #     return Response({'message': 'Cart item deleted successfully'})
