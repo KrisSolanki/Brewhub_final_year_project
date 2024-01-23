@@ -37,7 +37,7 @@ class CartDetailView(APIView):
             cart_items = Cart_Details.objects.filter(Cart_ID=cart)
             cart_items_serializer = Cart_DetailsSerializer(cart_items, many=True).data
 
-            print()
+            
 
             offer = self.get_applicable_offer(cart)
             offer_serializer = OfferSerializer(offer) if offer else None
