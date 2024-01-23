@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import render
 from .serializers import *
 from rest_framework.views import APIView
@@ -162,15 +163,22 @@ class CartDetailView(APIView):
         }
         return Response(response_data)
     
-    # def delete(self, request, *args, **kwargs):
-    #     # Delete a cart item
-    #     cart_item = Cart_Details.objects.get(pk=request.data.get('cart_item_id'))
+class CartDetailsDeleteView(APIView):
+    def delete(self, request, cart_item_id, *args, **kwargs):
+        # Delete a cart item
+        # cart_item = Cart_Details.objects.get(pk=request.data.get('cart_item_id'))
+        try:
+            # Attempt to retrieve the Cart_Details object
+            cart_item = Cart_Details.objects.get(pk=cart_item_id)
+        except Cart_Details.DoesNotExist:
+            # If the object doesn't exist, return a 404 response
+            raise Http404("Cart item does not exist")
+        # Update total price in the cart before deleting the cart item
+        cart = cart_item.Cart_ID
+        cart.Total -= cart_item.Subtotal
+        cart.save()
+        print(cart.Total)
+        print(cart_item.Subtotal)
+        cart_item.delete()
 
-    #     # Update total price in the cart before deleting the cart item
-    #     cart = cart_item.Cart_ID
-    #     cart.Total -= cart_item.Subtotal
-    #     cart.save()
-
-    #     cart_item.delete()
-
-    #     return Response({'message': 'Cart item deleted successfully'})
+        return Response({'message': 'Cart item deleted successfully'})
