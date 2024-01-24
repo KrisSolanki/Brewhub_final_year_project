@@ -182,3 +182,41 @@ class CartDetailsDeleteView(APIView):
         cart_item.delete()
 
         return Response({'message': 'Cart item deleted successfully'})
+    
+class OrderCreateView(APIView):
+    serializer_class = Order_MSerializer
+
+    def post(self, request, *args, **kwargs):
+       
+        user = self.request.user
+        new_order_data = {'OrderDate': timezone.now()}  
+        new_order_data.update(request.data)
+        serializer = Order_MSerializer(data=new_order_data)
+        serializer.is_valid(raise_exception=True)
+
+        
+
+        # Create a new order
+        new_order = serializer.save(User_ID=user)
+
+        # Retrieve items from the user's cart
+        cart_items = Cart_Details.objects.filter(Cart_ID__User_ID=user)
+
+        # Transfer cart items to order details
+        for cart_item in cart_items:
+            Order_Details.objects.create(
+                ItemQuantity=cart_item.ItemQuantity,
+                Subtotal=cart_item.Subtotal,
+                Item_ID=cart_item.Item_ID,
+                Order_ID=new_order,
+            )
+
+        # Update the total price of the order
+        new_order.Total = sum(cart_item.Subtotal for cart_item in cart_items)
+        new_order.save()
+
+        # Clear the user's cart
+        #cart_items.delete()
+
+        return Response({'message': 'Order created successfully'})
+

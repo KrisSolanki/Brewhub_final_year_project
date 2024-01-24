@@ -34,6 +34,9 @@ class Order_MSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order_M
         fields = '__all__'
+        extra_kwargs = {
+            'User_ID': {'required': False},
+        }
 
 class Order_DetailsSerializer(serializers.ModelSerializer):
     class Meta:
