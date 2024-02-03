@@ -1,5 +1,7 @@
 from django.http import Http404
 from django.shortcuts import render
+
+from cafe.models import Menu
 from .serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -182,18 +184,17 @@ class CartDetailsDeleteView(APIView):
         cart_item.delete()
 
         return Response({'message': 'Cart item deleted successfully'})
-    
+
 class OrderCreateView(APIView):
     serializer_class = Order_MSerializer
-
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs,):
        
         user = self.request.user
         new_order_data = {'OrderDate': timezone.now()}  
         new_order_data.update(request.data)
         serializer = Order_MSerializer(data=new_order_data)
         serializer.is_valid(raise_exception=True)
-
+        
         
 
         # Create a new order
@@ -203,20 +204,45 @@ class OrderCreateView(APIView):
         cart_items = Cart_Details.objects.filter(Cart_ID__User_ID=user)
 
         # Transfer cart items to order details
+       
         for cart_item in cart_items:
-            Order_Details.objects.create(
-                ItemQuantity=cart_item.ItemQuantity,
-                Subtotal=cart_item.Subtotal,
-                Item_ID=cart_item.Item_ID,
-                Order_ID=new_order,
-            )
+            if cart_item.Offer_ID is None:
+
+                Order_Details.objects.create(
+                    ItemQuantity=cart_item.ItemQuantity,
+                    Subtotal=cart_item.Subtotal,
+                    Item_ID=cart_item.Item_ID,
+                    Order_ID=new_order,
+
+                )
+            else:
+                    Order_Details.objects.create(
+                    ItemQuantity=cart_item.ItemQuantity,
+                    Subtotal=cart_item.Subtotal,
+                    Item_ID=cart_item.Item_ID,
+                    Order_ID=new_order,
+                    Offer_ID = cart_item.Offer_ID,               
+                )
+
 
         # Update the total price of the order
         new_order.Total = sum(cart_item.Subtotal for cart_item in cart_items)
         new_order.save()
 
         # Clear the user's cart
-        #cart_items.delete()
+        cart_items.delete()
 
         return Response({'message': 'Order created successfully'})
+    
+    def get(self, request, order_id=None, *args, **kwargs):
+        if order_id:
+            # Retrieve the specific order by ID
+            order = get_object_or_404(Order_M, OrderID=order_id)
+            serializer = Order_MSerializer(order)
+            return Response(serializer.data)
+        else:
+            # Retrieve a list of all orders
+            orders = Order_M.objects.all()
+            serializer = Order_MSerializer(orders, many=True)
+            return Response(serializer.data)
 

@@ -1,0 +1,87 @@
+Certainly! Let's integrate the described process into the Django DRF code for selecting a delivery person for a specific order:
+
+```python
+# models.py
+from django.db import models
+
+class DeliveryPerson(models.Model):
+    name = models.CharField(max_length=100)
+    availability = models.BooleanField(default=True)
+    # Add other fields as needed
+
+class Order(models.Model):
+    delivery_address = models.CharField(max_length=255)
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+    delivery_person = models.ForeignKey(DeliveryPerson, null=True, blank=True, on_delete=models.SET_NULL)
+    # Add other fields as needed
+```
+
+```python
+# serializers.py
+from rest_framework import serializers
+from .models import DeliveryPerson, Order
+
+class DeliveryPersonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DeliveryPerson
+        fields = '__all__'
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = '__all__'
+```
+
+```python
+# views.py
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import DeliveryPerson, Order
+from .serializers import DeliveryPersonSerializer, OrderSerializer
+
+class OrderAssignmentView(APIView):
+    def post(self, request, order_id):
+        try:
+            order = Order.objects.get(pk=order_id)
+            available_delivery_persons = DeliveryPerson.objects.filter(availability=True)
+
+            # Implement your selection logic here (e.g., proximity, workload, etc.)
+            selected_delivery_person = self.select_delivery_person(order, available_delivery_persons)
+
+            if selected_delivery_person:
+                # Update delivery person's workload or any other relevant fields
+                selected_delivery_person.availability = False
+                selected_delivery_person.save()
+
+                # Update the order with the assigned delivery person
+                order.delivery_person = selected_delivery_person
+                order.save()
+
+                # Notify the user and the selected delivery person
+                self.notify_user(order, selected_delivery_person)
+
+                # Serialize the assigned delivery person for the response
+                serializer = DeliveryPersonSerializer(selected_delivery_person)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response({'message': 'No available delivery persons'}, status=status.HTTP_404_NOT_FOUND)
+
+        except Order.DoesNotExist:
+            return Response({'message': 'Order not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    def select_delivery_person(self, order, available_delivery_persons):
+        # Implement your order assignment algorithm here
+        # Factors to consider: Distance, workload, historical data, preferences, etc.
+        # Return the selected delivery person
+        return available_delivery_persons.first()
+
+    def notify_user(self, order, delivery_person):
+        # Implement notification logic here
+        # Notify the user with details about the assigned delivery person, estimated delivery time, etc.
+        pass
+```
+
+In the `OrderAssignmentView` class, the `select_delivery_person` method is where you should implement the order assignment algorithm based on the provided factors. Additionally, the `notify_user` method can be expanded to handle the real-time updates and notifications to the user and the selected delivery person.
+
+This code provides a basic structure for incorporating the described process into the Django DRF code for selecting a delivery person for a specific order. Adjust and expand it based on your specific business rules and requirements.
