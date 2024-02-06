@@ -179,8 +179,8 @@ class CartDetailsDeleteView(APIView):
         cart = cart_item.Cart_ID
         cart.Total -= cart_item.Subtotal
         cart.save()
-        print(cart.Total)
-        print(cart_item.Subtotal)
+        # print(cart.Total)
+        # print(cart_item.Subtotal)
         cart_item.delete()
 
         return Response({'message': 'Cart item deleted successfully'})

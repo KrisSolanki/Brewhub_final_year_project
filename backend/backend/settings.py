@@ -211,3 +211,7 @@ LOGO_MEDIA_ROOT = BASE_DIR / "media/cafe_logoimages"
 
 ITEM_MEDIA_URL = '/media/item_images'
 ITEM_MEDIA_ROOT = BASE_DIR/ "media/item_images"
+
+STRIPE_PUBLIC_KEY = ''
+STRIPE_SECRET_KEY = ''
+STRIPE_WEBHOOK_SECRET = ''
