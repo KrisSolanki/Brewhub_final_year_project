@@ -246,3 +246,43 @@ class OrderCreateView(APIView):
             serializer = Order_MSerializer(orders, many=True)
             return Response(serializer.data)
 
+#date 6 feb
+import stripe
+from django.conf import settings
+from django.shortcuts import reverse
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+class CreateCheckoutSessionView(APIView):
+    def post(self,*args,**kwargs):
+        host = self.request.get_host()
+        
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types = ['card'],
+            line_items=[
+                {
+                    # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+                   'price_data': {
+                       'currency': 'inr',
+                       'unit_amount' : 1000,
+                       'product_data' : {
+                           'name' : 'codepieporder',
+                        #    'images'
+                       },                       
+                   },
+                   'quantity' : 1,
+                },
+            ],
+            mode='payment',
+            success_url="http://{}{}".format(host,reverse('order:payment-success')),
+            # cancel_url="http://{}{}".format(host,reverse('order:payment-success')),
+        )
+        
+        # return redirect(checkout_session.url, code=303)
+        return Response({'checkout_session_url': checkout_session.url}, status=status.HTTP_201_CREATED)
+
+def paymentSuccess(request):
+    context={
+            'payment_status':'success'
+
+    }
+    return Response(context)
