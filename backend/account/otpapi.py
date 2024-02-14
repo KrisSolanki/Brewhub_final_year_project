@@ -16,4 +16,17 @@ def send_otp_to_mobile(mobile_no):
     except Exception as e:
         return None
 
+from twilio.rest import Client
+
+account_sid = settings.TWILIO_ACCOUNT_SID
+auth_token = settings.TWILIO_AUTH_TOKEN
+client = Client(account_sid,auth_token)
+
+def send_sms(mobile_no):
+    
+    try:
+        otp1=random.randint(1000,9999)
+        return otp1
+    except Exception as e:
+        return None 
 

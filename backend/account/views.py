@@ -72,7 +72,7 @@ class AddressView(APIView):
         serializer = AddressGetSerializer(address_obj, many=True)
         return Response(serializer.data)
   
-
+from .otpapi import *
 #===================== LOGIN ====================
 class LoginView(APIView): 
     def post(self,request):
@@ -88,8 +88,17 @@ class LoginView(APIView):
             raise AuthenticationFailed('Incorrect password! \nPlease enter the correct password.')
 
         # Generate and send OTP
-        otp = send_otp_to_mobile(mobile_no)
-        user.otp = otp
+        # otp = send_otp_to_mobile(mobile_no)
+        # user.otp = otp
+        otp = send_sms(mobile_no)
+        message = client.messages \
+                        .create(
+                            from_ = '+15169732425',
+                            body = f"Your OTP is {otp} .",
+                            # body = f"Hello , to reset password click this link http://127.0.0.1:8000/api/register/ ",
+                            # to = '+91 90543 95987'
+                            to = '+91'+mobile_no
+                        )
         user.save()
 
         return Response({

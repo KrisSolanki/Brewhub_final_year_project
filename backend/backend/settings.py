@@ -190,7 +190,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'account.User' #---------- to show that we are using our custom user model
 
 import os 
-from .config import API_KEY,EMAIL_HOST_USER,EMAIL_HOST_PASSWORD,STRIPE_PUBLIC_KEY,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET 
+# from .config import API_KEY,EMAIL_HOST_USER,EMAIL_HOST_PASSWORD,STRIPE_PUBLIC_KEY,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET
+from .config import * 
 
 # API_KEY = "3d739b9e-ab26-11ee-8cbb-0200cd936042" #"f52019e2-aa6b-11ee-8cbb-0200cd936042"
 # API_KEY = os.environ.get('API_KEY')
@@ -204,14 +205,17 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = 'ktheking280@gmail.com'
-# EMAIL_HOST_PASSWORD = 'tceg lvca spgl bnsr'
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER',EMAIL_HOST_USER)
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD',EMAIL_HOST_PASSWORD)
 
 
+TWILIO_ACCOUNT_SID = os.environ.get('TWILIO_ACCOUNT_SID',TWILIO_ACCOUNT_SID) 
+TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN',TWILIO_AUTH_TOKEN)
+
 PROFILE_MEDIA_URL = '/media/profile'
 PROFILE_MEDIA_ROOT = BASE_DIR / "media/profile"
+# EMAIL_HOST_USER = 'ktheking280@gmail.com'
+# EMAIL_HOST_PASSWORD = 'tceg lvca spgl bnsr'
 
 LOGO_MEDIA_URL = '/media/cafe_logoimages'
 LOGO_MEDIA_ROOT = BASE_DIR / "media/cafe_logoimages"

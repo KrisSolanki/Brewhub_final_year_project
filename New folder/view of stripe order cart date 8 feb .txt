@@ -1,0 +1,248 @@
+this view only be called when payment method is COD
+ChatGPT
+If you want to conditionally call the OrderCreateView only when the payment method is Cash on Delivery (COD), you can include a check in the view itself. Here's an example:
+
+# views.py
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Order_M, Cart_Details, Payment_Mode
+from .serializers import Order_MSerializer
+from django.utils import timezone
+
+class OrderCreateView(APIView):
+    serializer_class = Order_MSerializer
+
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
+        new_order_data = {'OrderDate': timezone.now()}
+        new_order_data.update(request.data)
+        serializer = Order_MSerializer(data=new_order_data)
+        serializer.is_valid(raise_exception=True)
+
+        # Check if the payment method is Cash on Delivery (COD)
+        payment_method_id = request.data.get('payment_method_id')
+        payment_mode = None
+        if payment_method_id:
+            payment_mode = get_object_or_404(Payment_Mode, pk=payment_method_id)
+
+        if payment_mode and payment_mode.name == 'COD':
+            # Create a new order (without saving it to the database yet)
+            new_order = serializer.save(User_ID=user)
+
+            # Retrieve items from the user's cart
+            cart_items = Cart_Details.objects.filter(Cart_ID__User_ID=user)
+
+            # Check if the cart is not empty
+            if cart_items.exists():
+                # Transfer cart items to order details
+                for cart_item in cart_items:
+                    if cart_item.Offer_ID is None:
+                        Order_Details.objects.create(
+                            ItemQuantity=cart_item.ItemQuantity,
+                            Subtotal=cart_item.Subtotal,
+                            Item_ID=cart_item.Item_ID,
+                            Order_ID=new_order,
+                        )
+                    else:
+                        Order_Details.objects.create(
+                            ItemQuantity=cart_item.ItemQuantity,
+                            Subtotal=cart_item.Subtotal,
+                            Item_ID=cart_item.Item_ID,
+                            Order_ID=new_order,
+                            Offer_ID=cart_item.Offer_ID,
+                        )
+
+                # Update the total price of the order
+                new_order.Total = sum(cart_item.Subtotal for cart_item in cart_items)
+                new_order.save()
+
+                # Clear the user's cart
+                cart_items.delete()
+
+                return Response({'message': 'Order created successfully'}, status=status.HTTP_201_CREATED)
+            else:
+                # If the cart is empty, you might want to handle this case accordingly
+                return Response({'message': 'Cannot create an order with an empty cart'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            # Handle the case where the payment method is not COD
+            return Response({'message': 'Payment method is not Cash on Delivery (COD)'}, status=status.HTTP_400_BAD_REQUEST)
+
+In this example, the view checks if the selected payment method is Cash on Delivery (COD) before proceeding with the order creation logic. If the payment method is not COD, it returns a response indicating that the payment method is not supported for this operation. Adjust the conditions and responses based on your specific requirements.
+
+--------------------------------------------------------------------
+and if not cash on delivery then should use stripe 
+
+If you want to handle different payment methods (e.g., Cash on Delivery and Stripe) in your OrderCreateView, you can modify the view to conditionally process orders based on the selected payment method. Below is an example:
+-----------------------------------------------------
+
+# views.py
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Order_M, Cart_Details, Payment_Mode
+from .serializers import Order_MSerializer
+from django.utils import timezone
+from django.shortcuts import get_object_or_404
+import stripe
+from django.conf import settings
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+class OrderCreateView(APIView):
+    serializer_class = Order_MSerializer
+
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
+        new_order_data = {'OrderDate': timezone.now()}
+        new_order_data.update(request.data)
+        serializer = Order_MSerializer(data=new_order_data)
+        serializer.is_valid(raise_exception=True)
+
+        # Check if the payment method is Cash on Delivery (COD)
+        payment_method_id = request.data.get('payment_method_id')
+        payment_mode = None
+        if payment_method_id:
+            payment_mode = get_object_or_404(Payment_Mode, pk=payment_method_id)
+
+        if payment_mode and payment_mode.name == 'COD':
+            # Create a new order for Cash on Delivery (COD)
+            new_order = serializer.save(User_ID=user)
+
+            # ... (Same COD order creation logic as before)
+
+            return Response({'message': 'Order created successfully (COD)'}, status=status.HTTP_201_CREATED)
+        elif payment_mode and payment_mode.name == 'Stripe':
+            # Handle the payment through Stripe
+            stripe_session = self.create_stripe_session(user)
+            return Response({'stripe_session_id': stripe_session.id}, status=status.HTTP_200_OK)
+        else:
+            # Handle the case where the payment method is not supported
+            return Response({'message': 'Invalid or unsupported payment method'}, status=status.HTTP_400_BAD_REQUEST)
+
+    def create_stripe_session(self, user):
+        # Logic to create a Stripe checkout session for online payment
+        # Replace 'price_123' with the actual Price ID for your product
+        stripe_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[
+                {
+                    'price': 'price_123',
+                    'quantity': 1,
+                },
+            ],
+            mode='payment',
+            success_url='http://example.com/success/',  # Replace with your success URL
+            cancel_url='http://example.com/cancel/',  # Replace with your cancel URL
+        )
+        return stripe_session
+-------------------------------------------------------
+STRIPE WEBHOOK CODE BLOCK ----------
+-------------------------------------------------------
+Implementing webhooks is a crucial part of handling asynchronous events, such as payment success or failure, when using a payment gateway like Stripe. Below is an example of how you might implement webhooks in your Django application to handle Stripe events.
+
+**Step 1: Set up your Stripe webhook endpoint**
+
+1. In your `urls.py` file, create a URL endpoint for handling Stripe webhook events:
+
+```python
+# urls.py
+
+from django.urls import path
+from .views import StripeWebhookView
+
+urlpatterns = [
+    # ... Your other URL patterns
+    path('stripe/webhook/', StripeWebhookView.as_view(), name='stripe-webhook'),
+]
+```
+
+2. Create a view to handle Stripe webhook events:
+
+```python
+# views.py
+
+from django.http import JsonResponse
+from django.views import View
+from django.conf import settings
+import stripe
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+class StripeWebhookView(View):
+    def post(self, request, *args, **kwargs):
+        payload = request.body
+        sig_header = request.headers.get('Stripe-Signature')
+
+        endpoint_secret = settings.STRIPE_ENDPOINT_SECRET
+
+        try:
+            event = stripe.Webhook.construct_event(
+                payload, sig_header, endpoint_secret
+            )
+        except ValueError as e:
+            return JsonResponse({'error': str(e)}, status=400)
+        except stripe.error.SignatureVerificationError as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+        # Handle the specific Stripe event
+        if event['type'] == 'checkout.session.completed':
+            session = event['data']['object']
+            order_id = session.get('client_reference_id')
+
+            # Perform order creation and cart clearing logic
+            self.handle_successful_payment(order_id)
+
+        return JsonResponse({'status': 'success'})
+
+    def handle_successful_payment(self, order_id):
+        # Your logic for creating the order and clearing the cart
+        # This might involve creating Order_Details, updating order totals, clearing the user's cart, etc.
+        # Adjust this based on your specific implementation
+
+        # Example: Update the order status to 'Paid'
+        order = Order_M.objects.get(OrderID=order_id)
+        order.status = 'Paid'
+        order.save()
+
+        # Example: Send a confirmation email to the user
+        # ...
+
+        # Example: Clear the user's cart
+        Cart_Details.objects.filter(Cart_ID__User_ID=order.User_ID).delete()
+
+        # Optionally, you may want to send a confirmation email, update order status, etc.
+
+        # Optionally, return a response
+        return JsonResponse({'message': 'Order created and cart cleared successfully'}, status=200)
+```
+
+**Step 2: Configure your Stripe account**
+
+1. Set up your webhook endpoint in the Stripe dashboard:
+   - Log in to your Stripe account.
+   - Navigate to the "Developer" section.
+   - Click on "Webhooks."
+   - Click on "Add endpoint."
+   - Enter your endpoint URL (e.g., `http://example.com/stripe/webhook/`).
+   - Select the events you want to listen to (e.g., `checkout.session.completed`).
+   - Click on "Add endpoint."
+
+2. Retrieve your webhook endpoint secret from the Stripe dashboard:
+   - After adding the endpoint, you'll see a signing secret. This secret is used to validate incoming webhook requests.
+
+**Step 3: Configure Django settings**
+
+Add your Stripe endpoint secret to your Django settings:
+
+```python
+# settings.py
+
+STRIPE_ENDPOINT_SECRET = 'your_stripe_endpoint_secret'
+```
+
+Replace `'your_stripe_endpoint_secret'` with the actual secret you obtained from the Stripe dashboard.
+
+With these steps, your Django application should be set up to handle Stripe webhook events. Make sure to secure your webhook endpoint (use HTTPS) and handle events securely. The provided code is a basic example, and you may need to adjust it based on your specific requirements and implementation.

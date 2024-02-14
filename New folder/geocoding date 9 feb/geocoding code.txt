@@ -1,0 +1,120 @@
+now provide step by step implementation of Geocoding Service ,google maps ,in django drf, use above also
+------------------------------------------------
+Sure, let's step through the implementation of a geocoding service using the Google Maps Geocoding API in Django DRF, building on the models and views we discussed earlier.
+
+### 1. Get Google Maps API Key:
+https://developers.google.com/maps/documentation/javascript/get-api-key
+- Obtain a Google Maps API key by following the instructions in the Google Cloud documentation: [Get an API Key](https://developers.google.com/maps/documentation/javascript/get-api-key).
+
+### 2. Install Required Packages:
+
+- Install the `geopy` package for geocoding:
+
+  ```bash
+  pip install geopy
+  ```
+
+### 3. Update `Address` Model:
+
+- Add fields for latitude and longitude to your `Address` model:
+
+  ```python
+  # models.py
+  class Address(models.Model):
+      street = models.CharField(max_length=255)
+      city = models.ForeignKey(City, on_delete=models.CASCADE)
+      state = models.ForeignKey(State, on_delete=models.CASCADE)
+      latitude = models.FloatField(null=True, blank=True)
+      longitude = models.FloatField(null=True, blank=True)
+  ```
+
+### 4. Create a Utility Function for Geocoding:
+
+- Create a utility function to geocode an address using the `geopy` library. Add this function to your `utils.py` file:
+
+  ```python
+  # utils.py
+  from geopy.geocoders import GoogleV3
+
+  def geocode_address(api_key, street, city, state):
+      full_address = f"{street}, {city.name}, {state.name}"
+      geolocator = GoogleV3(api_key=api_key)
+      
+      location = geolocator.geocode(full_address)
+
+      if location:
+          return location.latitude, location.longitude
+      else:
+          return None, None
+  ```
+
+### 5. Update the `calculate_distance` View:
+
+- Modify the `calculate_distance` view to include geocoding. Update the `calculate_distance` view in your `views.py`:
+
+  ```python
+  # views.py
+  from .utils import geocode_address
+
+  @require_GET
+  def calculate_distance(request):
+      api_key = 'your_google_maps_api_key'  # Replace with your actual API key
+      restaurant_address_id = request.GET.get('restaurant_address_id')
+      user_address_id = request.GET.get('user_address_id')
+
+      try:
+          restaurant_address = Address.objects.get(id=restaurant_address_id)
+          user_address = Address.objects.get(id=user_address_id)
+
+          if not (restaurant_address.latitude and restaurant_address.longitude):
+              # Geocode the restaurant address if coordinates are missing
+              restaurant_address.latitude, restaurant_address.longitude = geocode_address(
+                  api_key,
+                  restaurant_address.street,
+                  restaurant_address.city.name,
+                  restaurant_address.state.name
+              )
+              restaurant_address.save()
+
+          if not (user_address.latitude and user_address.longitude):
+              # Geocode the user address if coordinates are missing
+              user_address.latitude, user_address.longitude = geocode_address(
+                  api_key,
+                  user_address.street,
+                  user_address.city.name,
+                  user_address.state.name
+              )
+              user_address.save()
+
+          if restaurant_address.latitude is not None and restaurant_address.longitude is not None \
+                  and user_address.latitude is not None and user_address.longitude is not None:
+
+              distance = calculate_haversine_distance(
+                  (restaurant_address.latitude, restaurant_address.longitude),
+                  (user_address.latitude, user_address.longitude)
+              )
+              
+              return JsonResponse({'distance': distance})
+
+          else:
+              return JsonResponse({'error': 'Missing coordinates for one or both addresses'}, status=400)
+
+      except Address.DoesNotExist:
+          return JsonResponse({'error': 'Address not found'}, status=400)
+  ```
+
+### 6. Test the Geocoding Service:
+
+- Start your Django development server:
+
+  ```bash
+  python manage.py runserver
+  ```
+
+- Test the geocoding service by making a request to the `/api/calculate_distance/` endpoint with the `restaurant_address_id` and `user_address_id` parameters.
+
+This example integrates geocoding into the distance calculation process. When coordinates are missing for an address, it attempts to geocode the address using the Google Maps Geocoding API and updates the `latitude` and `longitude` fields in the `Address` model.
+
+Ensure that you replace `'your_google_maps_api_key'` with your actual Google Maps API key in both the `geocode_address` function and the `calculate_distance` view. Additionally, handle API key security appropriately in a production environment.
+
+Remember that geocoding services may have usage limits or associated costs, so be mindful of the terms of service for the service you are using.

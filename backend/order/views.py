@@ -251,10 +251,12 @@ import stripe
 from django.conf import settings
 from django.shortcuts import reverse
 stripe.api_key = settings.STRIPE_SECRET_KEY
-
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
 class CreateCheckoutSessionView(APIView):
     def post(self,*args,**kwargs):
         host = self.request.get_host()
+
         
         checkout_session = stripe.checkout.Session.create(
             payment_method_types = ['card'],
@@ -286,3 +288,9 @@ def paymentSuccess(request):
 
     }
     return Response(context)
+
+@csrf_exempt
+def my_webhook_view(request):
+    payload = request.body
+    print(payload)
+    return HttpResponse(status=200)
