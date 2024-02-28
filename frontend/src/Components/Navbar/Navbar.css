@@ -15,8 +15,8 @@
     /* background: #5c4d3c; */
     /* background: #a9845a; */
     /* background: grey; */
-    background: white;
-    color: black;
+    background: black;
+    color: white;
     height: 8%;
     padding: 15px 20px;
     position: sticky;
@@ -26,7 +26,7 @@
 }
 
 
-.container.scrolled{
+/* .container.scrolled{
     background-color: white;
     opacity: 0.98;
 }
@@ -36,7 +36,7 @@
 
 .container.scrolled ul li a:hover{
     color: red;
-}
+} */
 
 /* .logo-img{
     width: 70px;
@@ -84,6 +84,7 @@
     /* margin-inline-start: 336px; */
     height: 50px;
     /* width: 30%; */
+    margin: 3px 12px;
 }
 
 .search-img{
@@ -157,15 +158,10 @@ ul li{
     
 }
 
-ul li span{
-    display: inline-flex;
-    align-items: center;
-    height: 30px;
-    width: 22px;
-}
+
 
 ul li a{
-    color: black;
+    color: white;
     text-decoration: none;
     transition: color 0.4s ease-in-out;
 }
@@ -190,4 +186,17 @@ ul li a:hover:after{
 body{
     background: grey;
     margin: 0;
+}
+.toggleBtn{
+    display: inline-block;
+    margin: 8px 21px ;
+    align-items: center;
+}
+
+.lst {
+    display: flex;
+    /* margin-inline-start: 320px; */
+    align-items: baseline;
+    justify-content: flex-end ;
+    width: 76%;
 }
