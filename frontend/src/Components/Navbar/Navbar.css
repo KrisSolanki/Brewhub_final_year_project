@@ -5,21 +5,39 @@
     font-family: sans-serif;
 }
 .container {
-/* width: 100vw; */
-/* min-height: 10vh; */
-display: flex;
-width: 100%;
-justify-content: space-between;
-align-items: center;
-/* background: #DED0B6; */
-/* background: #5c4d3c; */
-/* background: #a9845a; */
-background: white;
-color: black;
-height: 8%;
-padding: 15px 20px;
-/* border-radius: 0px 0px 20px 20px; */
+    /* width: 100vw; */
+    /* min-height: 10vh; */
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    /* background: #DED0B6; */
+    /* background: #5c4d3c; */
+    /* background: #a9845a; */
+    /* background: grey; */
+    background: white;
+    color: black;
+    height: 8%;
+    padding: 15px 20px;
+    position: sticky;
+    top: 0;
+    transition: background-color 0.4s ease-in-out;
+    /* border-radius: 0px 0px 20px 20px; */
 }
+
+
+.container.scrolled{
+    background-color: white;
+    opacity: 0.98;
+}
+.container.scrolled ul li a{
+    color:black;
+}
+
+.container.scrolled ul li a:hover{
+    color: red;
+}
+
 /* .logo-img{
     width: 70px;
     height: 70px;
@@ -30,58 +48,35 @@ padding: 15px 20px;
     border: none; 
     overflow: hidden; 
 } */
+
 .logo-img {
     width: 60px;
     height: 60px;
     display: flex;
     align-items: center;
     border-radius: 50%;
-    border: 2px solid transparent;
+    
 }
+
 .logostl{
     display: flex;
-border:none;
-border-radius: 50%;
-
-
+    background-color:grey;
+    border-radius: 50%;
 }
+
 .logo{
     display: flex;
     align-items: center;
     font-size: 30px;
 }
+
 .logo p{
     font-style: bold;
     font-size: 30px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     padding: 5px 20px ;
 }
-#btn1{
-    /* position: relative; */
-    display: flex;
-    align-items: center;
-    
-    cursor: pointer;
-    border-radius: 50%;
-    height: 40px;
-    
-    width: 40px;
-    border: none;
-    
-}
-ul{
-    flex: 1;
-    list-style: none;
-    text-align: center;
-}
-ul li{
-    display: inline-block;
-    font-size: 16px;
-    font-weight: bold;
-    margin: 10px 26px ;
-    /* font-size: 20px; */
-    cursor: pointer;
-}
+
 .searchbox{
     display: flex;
     align-items: center;
@@ -89,23 +84,110 @@ ul li{
     /* margin-inline-start: 336px; */
     height: 50px;
     /* width: 30%; */
-    
 }
+
 .search-img{
     height: 40px;
     width: 40px;
     border-radius: 50px;
     /* margin: 10px 10px; */
 }
-.searchbox input{
+
+/* .searchbox input{
     padding: 6px;
     background: white;
     border-radius: 50px;
     border: 1px solid black;
     outline : 0;
-    color : white;
+    color : black;
     font-size: 18px;
-    max-width: 300px;
-    
+    max-width: 300px;    
     transition: 0.4s ease;
+} */
+
+.searchbox input {
+    /* padding: 6px; */
+    background: white;
+    border-radius: 50px;
+    border: 1px solid black;
+    outline: 0;
+    color: black;
+    font-size: 18px;
+    /* max-width: 300px; */
+    transition: 0.4s ease;
+    width: 0;
+    border: none;
+}
+
+.searchbox:hover > .searchtxt{
+    
+    width: 200px;
+    border: 1px solid black;
+    padding:6px;
+    
+}
+
+#btn1{
+    /* position: relative; */
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 50%;
+    height: 40px;    
+    width: 40px;
+    border: none;
+
+}
+
+ul{
+    /* flex: 1; */
+    list-style: none;
+    display: inline-block;
+    /* text-align: center; */
+}
+
+ul li{
+    display: inline-block;
+    font-size: 18px;
+    margin: 8px 21px ;/*old value 10px 26px ,5px 20px*/
+    font-weight: bold;
+    /* font-size: 20px; */
+    cursor: pointer;
+    position: relative;
+    
+}
+
+ul li span{
+    display: inline-flex;
+    align-items: center;
+    height: 30px;
+    width: 22px;
+}
+
+ul li a{
+    color: black;
+    text-decoration: none;
+    transition: color 0.4s ease-in-out;
+}
+
+ul li a:hover
+{
+    color: red;
+    
+}
+
+ul li a:hover:after{
+    content: "";
+    width: 80%;
+    height: 2px;
+    background: red;
+    /* position: absol; */
+    position: absolute;
+    bottom : -10%;
+    left:20px;
+}
+
+body{
+    background: grey;
+    margin: 0;
 }
