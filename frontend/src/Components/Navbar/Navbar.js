@@ -57,11 +57,11 @@ const Navbar = () => {
         <div className="lst">
           {/* <ul className='srch'> */}
           {/* <li> */}
-          <div className="searchbox">
+          {/*<div className="searchbox">
             <input type="text" placeholder="Search" className='searchtxt' />
             {/* <button className="btn1" id="btn1" type="submit"><img src={Search} alt="search img" className='search-img' /></button> */}
-            <button className="btn1" id="btn1" type="submit"><IoSearchCircle /></button>
-          </div>
+           {/*} <button className="btn1" id="btn1" type="submit"><IoSearchCircle size='3rem' /></button>
+          </div> */}
           {/* </li> */}
           {/* </ul> */}
           <ul className='tgl'>

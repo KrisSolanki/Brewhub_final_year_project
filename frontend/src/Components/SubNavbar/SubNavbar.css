@@ -15,8 +15,8 @@
     /* background: #5c4d3c; */
     /* background: #a9845a; */
     /* background: grey; */
-    background: white;
-    color: black;
+    background: black;
+    color: white;
     height: 60px;
     padding: 7px 10px;
     position: sticky;
@@ -54,7 +54,7 @@
     padding:6px;
     
 }
-#btn1SubNav{
+/* #btn1SubNav{
     
     display: flex;
     align-items: center;
@@ -64,13 +64,36 @@
     width: 40px;
     border: none;
 
-}
-.btn1SubNav svg {
+} */
+/* .btn1SubNav svg {
     stroke: currentcolor;
     fill: currentColor; 
     stroke-width: 0;
-    height: 60px;
-    width: 60px;
+    /* height: 60px;
+    width: 60px; */
+    /* overflow:initial; */
+/* }
+.icon{
+    mix-blend-mode: multiply;
+} */
+
+.search-img{
+    height: 40px;
+    width: 40px;
+    border-radius: 50px;
+    /* margin: 10px 10px; */
+}
+
+.btn1SubNav{
+    
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 50%;
+    height: 40px;    
+    width: 40px;
+    border: none;
+
 }
 
 .lstSubNavbar {
@@ -96,7 +119,7 @@
     
 }
 .ygl1 li a{
-    color: black;
+    color: white;
     text-decoration: none;
     transition: color 0.4s ease-in-out;
     /* padding: 2px; */

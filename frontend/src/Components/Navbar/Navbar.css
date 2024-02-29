@@ -17,7 +17,7 @@
     /* background: grey; */
     background: white;
     color: black;
-    height: 85px;
+    height: 76px;
     padding: 15px 20px;
     position: sticky;
     top: 0;
@@ -78,14 +78,14 @@
     padding: 5px 20px ;
 }
 
-.searchbox{
+/*.searchbox{
     display: flex;
     align-items: center;
     /* margin-inline-end: -342px; */
     /* margin-inline-start: 336px; */
-    height: 50px;
+    /* height: 50px; */
     /* width: 30%; */
-    margin: 3px 12px;
+    /* margin: 3px 12px; 
 }
 
 .search-img{
@@ -93,7 +93,7 @@
     width: 40px;
     border-radius: 50px;
     /* margin: 10px 10px; */
-}
+/*}*/
 
 /* .searchbox input{
     padding: 6px;
@@ -107,29 +107,29 @@
     transition: 0.4s ease;
 } */
 
-.searchbox input {
+/*.searchbox input {
     /* padding: 6px; */
-    background: white;
+    /* background: white;
     border-radius: 50px;
     border: 1px solid black;
     outline: 0;
     color: black;
-    font-size: 18px;
+    font-size: 18px; */
     /* max-width: 300px; */
-    transition: 0.4s ease;
+    /* transition: 0.4s ease;
     width: 0;
     border: none;
-}
+} */
 
-.searchbox:hover > .searchtxt{
+/* .searchbox:hover > .searchtxt{
     
     width: 200px;
     border: 1px solid black;
     padding:6px;
     
-}
+} */
 
-#btn1{
+/* #btn1{
     
     display: flex;
     align-items: center;
@@ -139,15 +139,15 @@
     width: 40px;
     border: none;
 
-}
-.btn1 svg {
+} */
+/* .btn1 svg {
     stroke: currentcolor;
     fill: currentColor; 
     stroke-width: 0;
     height: 60px;
     width: 60px;
     mix-blend-mode: multiply;
-}
+} */
 /* .icon path {
     font-size: 24px
 } */
