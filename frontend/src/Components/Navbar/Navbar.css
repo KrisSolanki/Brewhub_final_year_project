@@ -15,13 +15,14 @@
     /* background: #5c4d3c; */
     /* background: #a9845a; */
     /* background: grey; */
-    background: black;
-    color: white;
-    height: 8%;
+    background: white;
+    color: black;
+    height: 85px;
     padding: 15px 20px;
     position: sticky;
     top: 0;
     transition: background-color 0.4s ease-in-out;
+    /* box-shadow: 0 15px 40px -20px rgba(2, 2, 3, 0.15); */
     /* border-radius: 0px 0px 20px 20px; */
 }
 
@@ -129,25 +130,41 @@
 }
 
 #btn1{
-    /* position: relative; */
+    
     display: flex;
     align-items: center;
     cursor: pointer;
     border-radius: 50%;
-    height: 40px;    
-    width: 40px;
+    height: 30px;    
+    width: 30px;
     border: none;
 
 }
+/* .icon {
+    stroke: currentcolor;
+    fill: currentColor; 
+    stroke-width: 0;
+    height: 50%;
+    width: 50%;
+} */
+/* .icon path {
+    font-size: 24px
+} */
 
-ul{
+/* ul{
+    flex: 1; 
+    list-style: none;
+    display: inline-block;
+    text-align: center; 
+} */
+.tgl{
     /* flex: 1; */
     list-style: none;
     display: inline-block;
-    /* text-align: center; */
+    
 }
 
-ul li{
+.tgl li{
     display: inline-block;
     font-size: 18px;
     margin: 8px 21px ;/*old value 10px 26px ,5px 20px*/
@@ -160,19 +177,19 @@ ul li{
 
 
 
-ul li a{
-    color: white;
+.tgl li a{
+    color: black;
     text-decoration: none;
     transition: color 0.4s ease-in-out;
 }
 
-ul li a:hover
+.tgl li a:hover
 {
     color: red;
     
 }
 
-ul li a:hover:after{
+.tgl li a:hover:after{
     content: "";
     width: 80%;
     height: 2px;
@@ -183,10 +200,10 @@ ul li a:hover:after{
     left:20px;
 }
 
-body{
+/* body{
     background: grey;
     margin: 0;
-}
+} */
 .toggleBtn{
     display: inline-block;
     margin: 8px 21px ;
