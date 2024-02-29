@@ -135,18 +135,19 @@
     align-items: center;
     cursor: pointer;
     border-radius: 50%;
-    height: 30px;    
-    width: 30px;
+    height: 40px;    
+    width: 40px;
     border: none;
 
 }
-/* .icon {
+.btn1 svg {
     stroke: currentcolor;
     fill: currentColor; 
     stroke-width: 0;
-    height: 50%;
-    width: 50%;
-} */
+    height: 60px;
+    width: 60px;
+    mix-blend-mode: multiply;
+}
 /* .icon path {
     font-size: 24px
 } */

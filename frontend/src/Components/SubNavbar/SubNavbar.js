@@ -1,14 +1,17 @@
 import React from 'react'
 import { IoSearchCircle } from "react-icons/io5";
 import './SubNavbar.css';
+import { MdDeliveryDining } from "react-icons/md";
+import { RiTakeawayFill } from "react-icons/ri";
+
 function SubNavbar() {
   return (
     <>
     <div className="subnavbar">
     <div className="lstSubNavbar">
           <ul className='ygl1'>
-            <li><a href="">Delivery</a></li>
-            <li><a href="">Takeaway</a></li>
+            <li><a href=""><MdDeliveryDining />Delivery</a></li>
+            <li><a href=""><RiTakeawayFill />Takeaway</a></li>
           </ul>
           <div className="searchboxSubNavbar">
             <input type="text" placeholder="Search" className='searchtxtSubNav' />

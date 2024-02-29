@@ -1,5 +1,6 @@
 // import React, { useState, useEffect } from 'react'; 
 import React from 'react';
+import './Navbar.css';
 
 import Logo from '../../Assets/NavbarImgs/test1.png';
 // import Search from '../../Assets/NavbarImgs/search.png';
@@ -59,7 +60,7 @@ const Navbar = () => {
           <div className="searchbox">
             <input type="text" placeholder="Search" className='searchtxt' />
             {/* <button className="btn1" id="btn1" type="submit"><img src={Search} alt="search img" className='search-img' /></button> */}
-            <button className="btn1" id="btn1" type="submit"><IoSearchCircle  className='icon'/></button>
+            <button className="btn1" id="btn1" type="submit"><IoSearchCircle /></button>
           </div>
           {/* </li> */}
           {/* </ul> */}
