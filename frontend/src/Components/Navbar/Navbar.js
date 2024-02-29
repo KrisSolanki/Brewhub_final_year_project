@@ -1,6 +1,7 @@
 // import React, { useState, useEffect } from 'react'; 
 import React from 'react';
 import './Navbar.css';
+import { NavLink } from 'react-router-dom';
 
 import Logo from '../../Assets/NavbarImgs/test1.png';
 // import Search from '../../Assets/NavbarImgs/search.png';
@@ -15,7 +16,7 @@ import { FaShoppingCart } from "react-icons/fa";
 
 import { FaCircleUser } from "react-icons/fa6";
 
-import { IoSearchCircle } from "react-icons/io5";
+// import { IoSearchCircle } from "react-icons/io5";
 
 // import { FaBars } from "react-icons/fa6";
 
@@ -65,23 +66,15 @@ const Navbar = () => {
           {/* </li> */}
           {/* </ul> */}
           <ul className='tgl'>
-            <li><a className='active' href='https://www.google.com/'><span><IoIosHome /></span>Home</a></li>
-            <li><a className='' href='www.youtube.com'><span><MdGroups /></span>About us</a></li>
-            <li><a className='' href='www.yahoo,com'><span><RiLoginBoxFill /></span>Sign in</a></li>
-            <li><a className='' href='www.facebook.com'><span><FaShoppingCart /></span>Cart</a></li>
-            <li><a className='' href='www.instagram.com'><span><FaCircleUser /></span>Profile</a></li>
+            <li><NavLink  to='/home'><span><IoIosHome /></span>Home</NavLink></li>
+            <li><NavLink  to='/aboutus'><span><MdGroups /></span>About us</NavLink></li>
+            <li><NavLink  to='www.yahoo,com'><span><RiLoginBoxFill /></span>Sign in</NavLink></li>
+            <li><NavLink  to='www.facebook.com'><span><FaShoppingCart /></span>{/*Cart*/}</NavLink></li>
+            <li><NavLink  to='www.instagram.com'><span><FaCircleUser /></span>{/*Profile*/}</NavLink></li>
           </ul>
         </div>
         {/* <div className="toggleBtn"><i><FaBars /></i></div> */}
-
-
-
       </div>
-      {/*<body>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Perferendis earum quisquam id dolor soluta perspiciatis alias dignissimos consequatur 
-        voluptatum possimus maiores rem, quas natus voluptatibus quidem? Quod officiis ut porro
-        
-  </body>*/}
     </>
   )
 }

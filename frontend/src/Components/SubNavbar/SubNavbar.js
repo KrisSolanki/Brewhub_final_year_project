@@ -1,11 +1,11 @@
 import React from 'react'
-import { IoSearchCircle } from "react-icons/io5";
+// import { IoSearchCircle } from "react-icons/io5";
 import './SubNavbar.css';
 import { MdDeliveryDining } from "react-icons/md";
 import { CiCoffeeCup } from "react-icons/ci";
 // import { RiTakeawayFill } from "react-icons/ri"; <RiTakeawayFill />
 import Search from '../../Assets/NavbarImgs/search.png';
-
+import { NavLink } from 'react-router-dom';
 
 function SubNavbar() {
   return (
@@ -13,8 +13,8 @@ function SubNavbar() {
     <div className="subnavbar">
     <div className="lstSubNavbar">
           <ul className='ygl1'>
-            <li><a href=""><MdDeliveryDining />Delivery</a></li>
-            <li><a href=""><CiCoffeeCup />Takeaway</a></li>
+            <li><NavLink to=""><MdDeliveryDining />Delivery</NavLink></li>
+            <li><NavLink to=""><CiCoffeeCup />Takeaway</NavLink></li>
           </ul>
           <div className="searchboxSubNavbar">
             <input type="text" placeholder="Search" className='searchtxtSubNav' />
