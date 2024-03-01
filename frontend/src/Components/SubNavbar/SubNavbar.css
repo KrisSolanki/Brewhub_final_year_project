@@ -15,15 +15,15 @@
     /* background: #5c4d3c; */
     /* background: #a9845a; */
     /* background: grey; */
-    background: black;
-    color: white;
+    background: white;
+    color: black;
     height: 45px;
     padding: 7px 10px;
     position: sticky;
     top: 0;
     transition: background-color 0.4s ease-in-out;
-    /* box-shadow: 0 15px 40px -20px rgba(2, 2, 3, 0.15); */
-    /* border-radius: 0px 0px 20px 20px; */
+    box-shadow: 0 15px 40px -6px rgba(0, 0, 0,0.15); 
+    /* border-radius: 0px 0px 20px 20px;  */
 }
 .searchboxSubNavbar{
     display: flex;
@@ -110,16 +110,17 @@
 }
 .ygl1 li{
     display: inline-block;
-    font-size: 14px;
+    font-size: 16px;
     margin: 10px 21px ;/*old value 10px 26px ,5px 20px*/
     font-weight: bold;
     /* font-size: 20px; */
     cursor: pointer;
     position: relative;
+    font: bold;
     
 }
 .ygl1 li a{
-    color: white;
+    color: black;
     text-decoration: none;
     transition: color 0.4s ease-in-out;
     /* padding: 2px; */
