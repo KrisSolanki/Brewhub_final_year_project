@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt', 
     'cafe',
     'order',
+    'corsheaders',
 ]
 
 #-------#date : 7/01/2024--------
@@ -101,6 +102,7 @@ SIMPLE_JWT = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -108,6 +110,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -189,6 +193,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'account.User' #---------- to show that we are using our custom user model
 
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+    'http://192.168.1.4:3000',
+]
 import os 
 # from .config import API_KEY,EMAIL_HOST_USER,EMAIL_HOST_PASSWORD,STRIPE_PUBLIC_KEY,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET
 from .config import * 
