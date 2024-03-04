@@ -20,7 +20,9 @@ class Offer(models.Model):
 class Cart_M(models.Model):
     CartID = models.AutoField(primary_key=True)
     User_ID = models.ForeignKey(User,on_delete=models.CASCADE)
+    Offer_ID=models.ForeignKey(Offer,on_delete=models.CASCADE,null=True,blank=True)
     Total = models.DecimalField(max_digits=10,decimal_places=2,default=0)
+
 
     def __str__(self):
         return f"{self.CartID} - {self.User_ID}"    
@@ -30,7 +32,7 @@ class Cart_Details(models.Model):
     ItemQuantity = models.IntegerField()
     Subtotal = models.DecimalField(max_digits=10,decimal_places=2,default=0,editable=True)
     Item_ID = models.ForeignKey(Menu,on_delete=models.CASCADE)
-    Offer_ID=models.ForeignKey(Offer,on_delete=models.CASCADE,null=True,blank=True)
+    # Offer_ID=models.ForeignKey(Offer,on_delete=models.CASCADE,null=True,blank=True)
     Cart_ID = models.ForeignKey(Cart_M,on_delete=models.CASCADE)
 
     def __str__(self):
@@ -45,7 +47,7 @@ class Order_M(models.Model):
     Rating = models.IntegerField(choices = [(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')])
     User_ID = models.ForeignKey(User,on_delete=models.CASCADE)
     Status_ID = models.ForeignKey(Status,on_delete=models.CASCADE)
-    
+    Offer_ID = models.ForeignKey(Offer,on_delete = models.SET_NULL,null=True,blank=True)
     #Payment_ID = models.ForeignKey(Payment_M,on_delete=models.CASCADE,null=True,blank=True)
 
     def __str__(self):
@@ -57,7 +59,7 @@ class Order_Details(models.Model):
     Subtotal = models.DecimalField(max_digits=10,decimal_places=2)
     Item_ID = models.ForeignKey(Menu,on_delete=models.CASCADE)
     Order_ID = models.ForeignKey(Order_M,on_delete=models.CASCADE)
-    Offer_ID = models.ForeignKey(Offer,on_delete = models.CASCADE,null=True,blank=True)
+    
 
     def __str__(self):
         return f"{self.Order_ID} - {self.Item_ID}"
