@@ -22,6 +22,7 @@ class RegisterView(APIView):
         users = User.objects.filter(User=user)
         serializer = UserSerializer(users,many=True)
         
+        
         return Response(serializer.data)
         
 
@@ -30,6 +31,22 @@ class RegisterView(APIView):
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
+        #-------------- using 2factor --------------
+        # Generate and send OTP
+        # otp = send_otp_to_mobile(mobile_no)
+        # user.otp = otp
+        #--------------- using twilio --------------
+        # otp = send_sms(mobile_no)
+        # message = client.messages \
+        #                 .create(
+        #                     from_ = '+15169732425',
+        #                     body = f"Your OTP is {otp} .",
+        #                     # body = f"Hello , to reset password click this link http://127.0.0.1:8000/api/register/ ",
+        #                     # to = '+91 90543 95987'
+        #                     to = '+91'+mobile_no
+        #
+        mobile_no = request.data['mobile_no']
+        
 
         self.send_welcome_email(user.email, user.first_name, user.last_name)
 
@@ -78,6 +95,7 @@ class LoginView(APIView):
     def post(self,request):
         mobile_no = request.data['mobile_no']
         password = request.data['password']
+        
 
         user = User.objects.filter(mobile_no=mobile_no).first()#finding user 
 
@@ -86,19 +104,22 @@ class LoginView(APIView):
         
         if not user.check_password(password):
             raise AuthenticationFailed('Incorrect password! \nPlease enter the correct password.')
-
+        #-------------- using 2factor --------------
         # Generate and send OTP
         # otp = send_otp_to_mobile(mobile_no)
         # user.otp = otp
-        otp = send_sms(mobile_no)
-        message = client.messages \
-                        .create(
-                            from_ = '+15169732425',
-                            body = f"Your OTP is {otp} .",
-                            # body = f"Hello , to reset password click this link http://127.0.0.1:8000/api/register/ ",
-                            # to = '+91 90543 95987'
-                            to = '+91'+mobile_no
-                        )
+        #--------------- using twilio --------------
+        # otp = send_sms(mobile_no)
+        # message = client.messages \
+        #                 .create(
+        #                     from_ = '+15169732425',
+        #                     body = f"Your OTP is {otp} .",
+        #                     # body = f"Hello , to reset password click this link http://127.0.0.1:8000/api/register/ ",
+        #                     # to = '+91 90543 95987'
+        #                     to = '+91'+mobile_no
+        #                 )
+        
+
         user.save()
 
         return Response({
@@ -242,3 +263,35 @@ def resend_otp(request):
         'status': 200,
         'message': 'OTP Resent'
     })
+
+
+
+class ChangePasswordView(APIView):
+    # permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        serializer = ChangePasswordSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            user = request.user
+            user.set_password(serializer.validated_data['new_password'])
+            user.save()
+            return Response({"message": "Password changed successfully"})
+        
+class ForgetPasswordView(APIView):
+    def post(self,request):
+        serializer = ForgetPasswordSerializer(data=request.data,context={'request': request})
+        if serializer.is_valid():
+            mobileno = serializer.validated_data['mobileno']
+            try:
+                user = User.objects.get(mobile_no=mobileno)
+            except User.DoesNotExist:
+                return Response({"message": "User not found"})
+            
+            if serializer.validated_data['new_password'] != serializer.validated_data['confirm_password']:
+                return Response({"message": "New passwords must match"})
+
+            user.set_password(serializer.validated_data['new_password'])
+            user.save()
+            return Response({"message": "Password (forget)changed successfully"})
+        else:
+            return Response(serializer.errors)

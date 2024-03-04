@@ -29,4 +29,6 @@ def send_sms(mobile_no):
         return otp1
     except Exception as e:
         return None 
+    
+
 

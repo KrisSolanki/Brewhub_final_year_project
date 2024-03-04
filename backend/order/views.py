@@ -69,7 +69,8 @@ class CartDetailView(APIView):
         item = serializer.validated_data['Item_ID']
         quantity = serializer.validated_data['ItemQuantity']
         subtotal = item.ItemPrice * quantity
-
+        # we have to make channges in model ,have to add offerid in cart_m and order m
+        #else there are minr changes 
          # Check if an offer is selected 
         selected_offer_id = request.data.get('Offer_ID')
         print("Selected Offer ID:", selected_offer_id)
@@ -185,6 +186,7 @@ class CartDetailsDeleteView(APIView):
 
         return Response({'message': 'Cart item deleted successfully'})
 
+
 class OrderCreateView(APIView):
     serializer_class = Order_MSerializer
     def post(self, request, *args, **kwargs,):
@@ -247,50 +249,50 @@ class OrderCreateView(APIView):
             return Response(serializer.data)
 
 #date 6 feb
-import stripe
-from django.conf import settings
-from django.shortcuts import reverse
-stripe.api_key = settings.STRIPE_SECRET_KEY
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse
-class CreateCheckoutSessionView(APIView):
-    def post(self,*args,**kwargs):
-        host = self.request.get_host()
+# import stripe
+# from django.conf import settings
+# from django.shortcuts import reverse
+# stripe.api_key = settings.STRIPE_SECRET_KEY
+# from django.views.decorators.csrf import csrf_exempt
+# from django.http import HttpResponse
+# class CreateCheckoutSessionView(APIView):
+#     def post(self,*args,**kwargs):
+#         host = self.request.get_host()
 
         
-        checkout_session = stripe.checkout.Session.create(
-            payment_method_types = ['card'],
-            line_items=[
-                {
-                    # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-                   'price_data': {
-                       'currency': 'inr',
-                       'unit_amount' : 1000,
-                       'product_data' : {
-                           'name' : 'codepieporder',
-                        #    'images'
-                       },                       
-                   },
-                   'quantity' : 1,
-                },
-            ],
-            mode='payment',
-            success_url="http://{}{}".format(host,reverse('order:payment-success')),
-            # cancel_url="http://{}{}".format(host,reverse('order:payment-success')),
-        )
+#         checkout_session = stripe.checkout.Session.create(
+#             payment_method_types = ['card'],
+#             line_items=[
+#                 {
+#                     # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+#                    'price_data': {
+#                        'currency': 'inr',
+#                        'unit_amount' : 1000,
+#                        'product_data' : {
+#                            'name' : 'codepieporder',
+#                         #    'images'
+#                        },                       
+#                    },
+#                    'quantity' : 1,
+#                 },
+#             ],
+#             mode='payment',
+#             success_url="http://{}{}".format(host,reverse('order:payment-success')),
+#             # cancel_url="http://{}{}".format(host,reverse('order:payment-success')),
+#         )
         
-        # return redirect(checkout_session.url, code=303)
-        return Response({'checkout_session_url': checkout_session.url}, status=status.HTTP_201_CREATED)
+#         # return redirect(checkout_session.url, code=303)
+#         return Response({'checkout_session_url': checkout_session.url}, status=status.HTTP_201_CREATED)
 
-def paymentSuccess(request):
-    context={
-            'payment_status':'success'
+# def paymentSuccess(request):
+#     context={
+#             'payment_status':'success'
 
-    }
-    return Response(context)
+#     }
+#     return Response(context)
 
-@csrf_exempt
-def my_webhook_view(request):
-    payload = request.body
-    print(payload)
-    return HttpResponse(status=200)
+# @csrf_exempt
+# def my_webhook_view(request):
+#     payload = request.body
+#     print(payload)
+#     return HttpResponse(status=200)
