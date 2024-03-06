@@ -14,11 +14,17 @@ class ComplaintSerializer(serializers.ModelSerializer):
 class Cart_DetailsSerializer(serializers.ModelSerializer):
     # Offer_ID = OfferSerializer()
     Offer_ID = serializers.PrimaryKeyRelatedField(queryset=Offer.objects.all(), allow_null=True, required=False)
-
+    # def create(self, validated_data):
+    #     # Ensure Subtotal is set to the default value if not provided
+    #     subtotal = validated_data.get('Subtotal', 0)
+    #     print(f"Subtotal before setting: {subtotal}")
+    #     validated_data['Subtotal'] = subtotal
+    #     print(f"Subtotal after setting: {validated_data['Subtotal']}")
+    #     return super().create(validated_data)
     class Meta:
         model = Cart_Details
-        # fields = '__all__'
-        fields = ['CartDetailsID','ItemQuantity','Subtotal','Item_ID','Offer_ID','Cart_ID']
+        fields = '__all__'
+        # fields = ['CartDetailsID','ItemQuantity','Subtotal','Item_ID','Offer_ID','Cart_ID']
 
 
 
@@ -26,6 +32,15 @@ class Cart_DetailsSerializer(serializers.ModelSerializer):
 
 class Cart_MSerializer(serializers.ModelSerializer):
     Cart_ID = Cart_DetailsSerializer(many=True,read_only=True)
+    
+    # def create(self, validated_data):
+    #     # Ensure Subtotal is set to the default value if not provided
+    #     subtotal = validated_data.get('Subtotal', 0)
+    #     print(f"Subtotal before setting: {subtotal}")
+    #     validated_data['Subtotal'] = subtotal
+    #     print(f"Subtotal after setting: {validated_data['Subtotal']}")
+    #     return super().create(validated_data)
+
     class Meta:
         model = Cart_M
         fields = '__all__'

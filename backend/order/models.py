@@ -20,8 +20,10 @@ class Offer(models.Model):
 class Cart_M(models.Model):
     CartID = models.AutoField(primary_key=True)
     User_ID = models.ForeignKey(User,on_delete=models.CASCADE)
-    Offer_ID=models.ForeignKey(Offer,on_delete=models.CASCADE,null=True,blank=True)
+    Offer_ID=models.ForeignKey(Offer,on_delete=models.SET_NULL,null=True,blank=True)
     Total = models.DecimalField(max_digits=10,decimal_places=2,default=0)
+    Subtotal = models.DecimalField(max_digits=10,decimal_places=2,default=0,editable=True)
+
 
 
     def __str__(self):
@@ -35,6 +37,11 @@ class Cart_Details(models.Model):
     # Offer_ID=models.ForeignKey(Offer,on_delete=models.CASCADE,null=True,blank=True)
     Cart_ID = models.ForeignKey(Cart_M,on_delete=models.CASCADE)
 
+    # class Meta:
+    #     constraints = [
+    #         models.UniqueConstraint(fields=['Cart_ID', 'Item_ID'], name='unique_cart_item')
+    #     ]
+    
     def __str__(self):
         return f"{self.Cart_ID} - {self.Item_ID} - {self.CartDetailsID}"
 
