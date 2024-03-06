@@ -12,5 +12,6 @@ urlpatterns = [
     # path('webhook/stripe/', my_webhook_view , name='webhook-stripe'),
 
     path('order/', OrderCreateView.as_view(), name='order-create'),
+    path('complete/', CompetePaymentView.as_view(), name='payment-complete'),
     path('order/<int:order_id>/', OrderCreateView.as_view(), name='order-detail'),    
 ]

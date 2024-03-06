@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Offer, Cart_M, Cart_Details, Order_M, Order_Details, Complaint
+from .models import *
 
 class OfferSerializer(serializers.ModelSerializer):
     class Meta:
@@ -56,4 +56,9 @@ class Order_MSerializer(serializers.ModelSerializer):
 class Order_DetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order_Details
+        fields = '__all__'
+
+class Payment_MSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment_M
         fields = '__all__'

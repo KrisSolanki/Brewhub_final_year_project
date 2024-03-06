@@ -6,6 +6,7 @@ import { BrowserRouter as Router,Routes,Route } from "react-router-dom";
 import React , { useState } from 'react';
 import Home from './Pages/Home';
 import Aboutus from './Pages/Aboutus';
+import Cart from './Pages/Cart';
 import LoadingBar from 'react-top-loading-bar'
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
       <SubNavbar/>
       <Routes>
         
+        <Route path='/cart' element={<Cart setProgress = {setProgress} />} />
         <Route path='/home' element={<Home setProgress = {setProgress} />} />
         <Route path='/aboutus' element={<Aboutus setProgress = {setProgress} />} />
 

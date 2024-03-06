@@ -1,5 +1,6 @@
 from django.http import Http404
 from django.shortcuts import render
+from .models import Payment_M
 
 from cafe.models import Menu
 from account.models import User
@@ -11,6 +12,8 @@ from django.utils import timezone
 from django.shortcuts import get_object_or_404
 # Create your views here.
 from django.db.models import Sum
+# from .utils import *
+from .utils import *
 
 class CartDetailView(APIView):
     def get_cart_for_user(self, user):
@@ -644,11 +647,21 @@ class OrderCreateView(APIView):
         # if offer_applied:
         #     new_order.Offer_ID = offer
         new_order.save()
+        payment = Payment_M.objects.create(OrderID=new_order)
+        razorpay_order_id = create_razorpay_order(new_order)
+        print(razorpay_order_id)
+        payment.razorpay_order_id = razorpay_order_id
+        payment.save()
+
+        # payment = Payment_M.objects.create(OrderID=order)
 
         # Clear the user's cart
         # cart_items.delete()
 
-        return Response({'message': 'Order created successfully'})
+        return Response({
+            'message': 'Order created successfully',
+            'RAZORPAY_ORDER_ID:':razorpay_order_id
+            })
     
     def get(self, request, order_id=None, *args, **kwargs):
         if order_id:
@@ -712,4 +725,27 @@ class OrderCreateView(APIView):
 #     return HttpResponse(status=200)
         
 
-
+class CompetePaymentView(APIView):
+    def post(self,request):
+        transaction = Payment_MSerializer
+        data=request.data
+        if transaction.is_valid():
+            rapy_client=verify_payment(
+                razorpay_order_id= Payment_MSerializer.validated_data.get("razorpay_order_id"),
+                razorpay_payment_id= Payment_MSerializer.validated_data.get("razorpay_payment_id"),
+                razorpay_signature= Payment_MSerializer.validated_data.get("razorpay_signature")
+            )
+            transaction.save()
+            response = {
+                "status_code:":status.HTTP_201_CREATED,
+                "message":"transaction created"
+            }
+            return Response(response,status=status.HTTP_201_CREATED)
+        else:
+            response = {
+                "statuc_code:":status.HTTP_201_CREATED,
+                "message:":"bad request",
+                "error":transaction.error
+            }
+            return Response(response,status=status.HTTP_400_BAD_REQUEST)
+ 
