@@ -222,6 +222,15 @@ TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN',TWILIO_AUTH_TOKEN)
 
 MSG91_AUTH_KEY = os.environ.get('MSG91_AUTH_KEY',MSG91_AUTH_KEY)
 
+
+from pathlib import Path 
+import os
+
+BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 PROFILE_MEDIA_URL = '/media/profile'
 PROFILE_MEDIA_ROOT = BASE_DIR / "media/profile"
 # EMAIL_HOST_USER = 'ktheking280@gmail.com'

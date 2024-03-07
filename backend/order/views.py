@@ -2,11 +2,13 @@ from django.http import Http404
 from django.shortcuts import render
 from .models import Payment_M
 
+
 from cafe.models import Menu
 from account.models import User
 from .serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
+# from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
@@ -33,36 +35,37 @@ class CartDetailView(APIView):
     
     def get(self, request, *args, **kwargs):
         # Access the user making the request
+        # current_user = 73
         current_user = self.request.user
         
         # Check if the user is logged in
-        if current_user.is_authenticated:
+        # if current_user.is_authenticated:
             # Get or create the user's cart
-            cart = self.get_cart_for_user(current_user)
+        cart = self.get_cart_for_user(current_user)
             # Serialize the cart data
-            serialized_cart = Cart_MSerializer(cart).data
-            cart_items = Cart_Details.objects.filter(Cart_ID=cart)
-            cart_items_serializer = Cart_DetailsSerializer(cart_items, many=True).data
+        serialized_cart = Cart_MSerializer(cart).data
+        cart_items = Cart_Details.objects.filter(Cart_ID=cart)
+        cart_items_serializer = Cart_DetailsSerializer(cart_items, many=True).data
 
             
 
-            offer = self.get_applicable_offer(cart)
-            offer_serializer = OfferSerializer(offer) if offer else None
+        # offer = self.get_applicable_offer(cart)
+        # offer_serializer = OfferSerializer(offer) if offer else None
 
             
-            response_data = {
+        response_data = {
                 'cart': serialized_cart,
                 #'offer': offer_serializer.data if offer_serializer else None,  # Check if offer_serializer is not None
                 'cart_items': cart_items_serializer,
                 'message': 'Cart retrieved successfully'
             }
 
-            return Response(response_data)
+        return Response(response_data)
         
 
-        else:
-            # The user is not logged in, handle accordingly
-            return Response({'message': 'User is not logged in'}, status=status.HTTP_401_UNAUTHORIZED)
+        # else:
+        #     # The user is not logged in, handle accordingly
+        #     return Response({'message': 'User is not logged in'}, status=status.HTTP_401_UNAUTHORIZED)
 
     # def post(self, request, *args, **kwargs):
     #     # Add a new item to the cart

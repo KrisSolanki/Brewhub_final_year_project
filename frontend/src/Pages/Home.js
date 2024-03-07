@@ -1,4 +1,5 @@
 import React , { useEffect } from 'react'
+import CafeList from '../Components/CafeList/CafeList';
 
 function Home({setProgress}) {
  
@@ -11,7 +12,9 @@ function Home({setProgress}) {
 
   return (
     <div>
-      <h1>HomePage</h1>
+      {/* <h1>HomePage</h1> */}
+      <div className=""><CafeList /></div>
+
     </div>
   )
 }
