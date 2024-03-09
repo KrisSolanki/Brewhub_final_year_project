@@ -82,6 +82,15 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     
         #Add custom claims
         token['username'] = user.get_full_name()
+        # token['Role'] = user.Role.name
+        if hasattr(user, 'Role'):
+            # If 'Role' is a model instance, you might want to serialize it to a string
+            # or a dictionary. Here, we're assuming it has a 'name' attribute.
+            token['Role'] = user.Role.Role_Name if user.Role else None
+        else:
+            # If 'Role' is not an attribute of the user, handle accordingly
+            token['Role'] = None
+        
 
         return token
     

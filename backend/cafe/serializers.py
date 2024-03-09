@@ -2,10 +2,15 @@ from rest_framework import serializers
 from .models import *
 from account.serializers  import *
 
+# class RatingSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Rating
+#         fields = '__all__'
+
 class CafeSerializer(serializers.ModelSerializer):
-    # cafe_managerid = UserSerializer()
-    # status = StatusSerializer()
-    # address = AddressSerializer()
+    # Rating = RatingSerializer(many=True, read_only=True)
+    # average_rating = serializers.SerializerMethodField()
+    
 
     class Meta:
         model = Cafe

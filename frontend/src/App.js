@@ -8,7 +8,11 @@ import Home from './Pages/Home';
 import Aboutus from './Pages/Aboutus';
 import Cart from './Pages/Cart';
 import LoadingBar from 'react-top-loading-bar'
-import CafeList from './Components/CafeList/CafeList';
+import TypeDelivery from './Pages/TypeDelivery';
+import TypeTakeaway from './Pages/TypeTakeaway';
+import MenuList from './Pages/MenuList';
+// import CafeList from './Components/CafeList/CafeList';
+// import FiltDelivery from './Components/CafeList/FiltDelivery';
 
 function App() {
   
@@ -30,10 +34,15 @@ function App() {
       <SubNavbar/>
       <Routes>
         
-        <Route path='/' element={<Cart setProgress = {CafeList} />} />
+        <Route path='/' element={<Cart setProgress = {setProgress} />} />
         <Route path='/cart' element={<Cart setProgress = {setProgress} />} />
         <Route path='/home' element={<Home setProgress = {setProgress} />} />
         <Route path='/aboutus' element={<Aboutus setProgress = {setProgress} />} />
+        <Route path='/TypeDelivery' element={<TypeDelivery setProgress = {setProgress} />} />
+        <Route path='/TypeTakeAway' element={<TypeTakeaway setProgress = {setProgress} />} />
+        <Route path='/CafeList/:CafeID/' element={<MenuList setProgress = {setProgress} />} />
+          
+        {/* <Route path='/TypeDelivery' element={<FiltDelivery />} /> */}
 
       </Routes>
     </div>

@@ -1,28 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import React,{ useState , useEffect } from 'react'
 import './CafeList.css';
+import axios from 'axios';
 import { NavLink } from 'react-router-dom';
-
-// const CafeList = ({ setFilteredData }) => {
-const CafeList = () => {
-
+const FiltDelivery = () => {
   const [data, setData] = useState([])
-  
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get("http://127.0.0.1:8000/api/cafelist/");
-        setData(response.data)
-
-        // const deliveryCafes = response.data.filter(cafe => cafe.Delivery === true);
+        const deliveryCafes = response.data.filter(cafe => cafe.Delivery === true);
+        // setData(response.data)
+        setData(deliveryCafes)
         // console.log("deliveryCafes",deliveryCafes)
-        // setFilteredData(deliveryCafes);
-        // if (typeof setFilteredData === 'function') {
-        //   const deliveryCafes = response.data.filter(cafe => cafe.Delivery === true);
-        //   setFilteredData(deliveryCafes);
-        // }
-
-
       } catch (error) {
         console.error('Error:', error);
       }
@@ -30,17 +19,14 @@ const CafeList = () => {
     fetchData();
   }, []);
   console.log("data:",data);
-  // console.log("-----------------------------")
-  // console.log("Filtered:"); // Log the filtered data
 
   return (
     <>
-      <div>
+        <div>
         <h1>Cafe List</h1>
         <div className="container_C">
           {data.map((cafe) => (
-            <NavLink to={`/CafeList/${cafe.CafeID}`} className="nav-linkP">
-
+            <NavLink to="/MenuList" className="nav-linkP">
             <div key={cafe.CafeID} className="product">
               <div className="img">
               <img src={`http://127.0.0.1:8000/api${cafe.LogoImage}`} alt={cafe.CafeName} />
@@ -59,12 +45,13 @@ const CafeList = () => {
               </div>
 
             </div>
-          </NavLink>
+            </NavLink>
           ))}
         </div>
       </div>
-      </>
+    
+    </>
   )
 }
 
-export default CafeList
+export default FiltDelivery

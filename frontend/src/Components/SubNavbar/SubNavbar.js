@@ -13,8 +13,8 @@ function SubNavbar() {
     <div className="subnavbar">
     <div className="lstSubNavbar">
           <ul className='ygl1'>
-            <li><NavLink to=""><MdDeliveryDining />Delivery</NavLink></li>
-            <li><NavLink to=""><CiCoffeeCup />Takeaway</NavLink></li>
+            <li><NavLink className='navLink_s' to="/TypeDelivery"><MdDeliveryDining />Delivery</NavLink></li>
+            <li><NavLink className='navLink_s' to="/TypeTakeaway"><CiCoffeeCup />Takeaway</NavLink></li>
           </ul>
           <div className="searchboxSubNavbar">
             <input type="text" placeholder="Search" className='searchtxtSubNav' />

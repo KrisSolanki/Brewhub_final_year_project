@@ -141,7 +141,7 @@
     bottom : 0;
     left:0px;
 }
-.ygli li a.active {
+.navLink_s.active {
     /* Styles for the active link */
     color:red;
     

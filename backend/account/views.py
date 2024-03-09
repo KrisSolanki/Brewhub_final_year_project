@@ -31,10 +31,11 @@ class RegisterView(APIView):
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
+        # mobile_no = request.data['mobile_no']
         #-------------- using 2factor --------------
         # Generate and send OTP
-        otp = send_otp_to_mobile(mobile_no)
-        user.otp = otp
+        # otp = send_otp_to_mobile(mobile_no)
+        # user.otp = otp
         #--------------- using twilio --------------
         # otp = send_sms(mobile_no)
         # message = client.messages \
@@ -45,7 +46,6 @@ class RegisterView(APIView):
         #                     # to = '+91 90543 95987'
         #                     to = '+91'+mobile_no
         #
-        mobile_no = request.data['mobile_no']
         
 
         self.send_welcome_email(user.email, user.first_name, user.last_name)
@@ -93,7 +93,8 @@ from .otpapi import *
 #===================== LOGIN ====================
 class LoginView(APIView): 
     def post(self,request):
-        mobile_no = request.data['mobile_ no']
+        mobile_no = request.data['mobile_no']
+        # mobile_no = request.data['mobile_no']
         password = request.data['password']
         
 

@@ -1,6 +1,8 @@
 from django.db import models
 from account.models import *
 # Create your models here.
+
+
 class Cafe(models.Model):
     CafeID = models.AutoField(primary_key=True)
     CafeName = models.CharField(max_length=30,null=False)
@@ -20,6 +22,19 @@ class Cafe(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.CafeName
+
+
+# class Rating(models.Model):
+#     RatingID = models.AutoField(primary_key=True)
+#     Cafe_ID = models.ForeignKey(Cafe, on_delete=models.CASCADE, related_name='ratings')
+#     User_ID = models.ForeignKey(User, on_delete=models.CASCADE)
+#     Review = models.TextField()
+#     Rating = models.IntegerField(choices = [(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')])
+#     Created_at = models.DateTimeField(auto_now_add=True)
+
+#     def __str__(self):
+#         return str(self.RatingID)
+    
 
 class Category(models.Model):
     CategoryID=models.AutoField(primary_key=True)
