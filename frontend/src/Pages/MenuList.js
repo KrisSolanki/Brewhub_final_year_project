@@ -11,6 +11,8 @@ import React from 'react'
 const MenuList = ({ setProgress }) => {
 
   const [data, setData] = useState([])
+  // const [cartStates, setCartStates] = useState({});
+
   const { CafeID } = useParams();
 
   useEffect(() => {
@@ -19,7 +21,7 @@ const MenuList = ({ setProgress }) => {
         const response = await axios.get("http://127.0.0.1:8000/api/menulist/");
         // setData(response.data)
         // console.log(response.data)
-        const Items = response.data.filter(item => item.cafe.CafeID == CafeID);
+        const Items = response.data.filter(item => String(item.cafe.CafeID) === CafeID);
         setData(Items)
         // const deliveryCafes = response.data.filter(cafe => cafe.Delivery === true);
         // console.log("deliveryCafes",deliveryCafes)
@@ -38,24 +40,57 @@ const MenuList = ({ setProgress }) => {
   }, [CafeID]);
   console.log(data)
 
-  const [cartCount, setCartCount] = useState(0);
-  const [showCart, setShowCart] = useState(false);
+  const [cartCounts, setCartCounts] = useState(0);
+  const [showCarts, setShowCarts] = useState(false);
 
-  const handleAddToCart = () => {
-    setCartCount(1);
-    setShowCart(true);
+  // const handleAddToCart = () => {
+  //   setCartCount(1);
+  //   setShowCart(true);
+  // };
+
+  // const handleIncrement = () => {
+  //   setCartCount(prevCount => prevCount + 1);
+  // };
+
+  // const handleDecrement = () => {
+  //   setCartCount(prevCount => prevCount > 0 ? prevCount - 1 : 0);
+  //   if (cartCount === 1) {
+  //     setShowCart(false);
+  //   }
+  // };
+
+  const handleAddToCart = (itemId) => {
+    setCartCounts(prevCounts => ({
+      ...prevCounts,
+      [itemId]: 1,
+    }));
+
+    setShowCarts(prevShowCarts => ({
+      ...prevShowCarts,
+      [itemId]: true,
+    }));
   };
 
-  const handleIncrement = () => {
-    setCartCount(prevCount => prevCount + 1);
+  const handleIncrement = (itemId) => {
+    setCartCounts(prevCounts => ({
+      ...prevCounts,
+      [itemId]: (prevCounts[itemId] || 0) + 1,
+    }));
   };
 
-  const handleDecrement = () => {
-    setCartCount(prevCount => prevCount > 0 ? prevCount - 1 : 0);
-    if (cartCount === 1) {
-      setShowCart(false);
-    }
+  const handleDecrement = (itemId) => {
+    setCartCounts(prevCounts => ({
+      ...prevCounts,
+      [itemId]: Math.max(0, (prevCounts[itemId] || 0) - 1),
+    }));
+
+    setShowCarts(prevShowCarts => ({
+      ...prevShowCarts,
+      [itemId]: cartCounts[itemId] > 1,
+    }));
   };
+
+
 
   console.log("data:", data);
 
@@ -96,7 +131,8 @@ const MenuList = ({ setProgress }) => {
           {data.length > 0 && (
             <div className="cafe-details">
               <div className="cafe-logo">
-                <img src="{`http://127.0.0.1:8000/api${cafe.LogoImage}`}" alt="" srcset="" />
+                {/* <img src="{`http://127.0.0.1:8000/api${cafe.LogoImage}`}" alt="" srcset="" /> */}
+                <p>img</p>
               </div>
               <div className="cafe-name">
                 {/* <p>{Items.cafe.CafeName}</p> */}
@@ -131,14 +167,15 @@ const MenuList = ({ setProgress }) => {
                 <p>Price: {Items.ItemPrice}</p>
               </div>
               <div className="item-add-to-card-btn">
-                {showCart ? (
-                  < div className="cart-controls">
-                <button onClick={handleDecrement}>-</button>
-                <span>{cartCount}</span>
-                <button onClick={handleIncrement}>+</button>
-              </div>
+                {showCarts[Items.ItemID] ? (
+                 <div className="cart-controls">
+                 <button onClick={() => handleDecrement(Items.ItemID)}>-</button>
+                 <span>{cartCounts[Items.ItemID]}</span>
+                 <button onClick={() => handleIncrement(Items.ItemID)}>+</button>
+               </div>
               ) : (
-                <button onClick={handleAddToCart}>Add to Cart</button>
+                // <button className="button" onClick={handleAddToCart(Items.ItemID)}>Add to Cart</button>
+                <button className="button" onClick={() => handleAddToCart(Items.ItemID)}>Add to Cart</button>
                 )}
                 </div>
 

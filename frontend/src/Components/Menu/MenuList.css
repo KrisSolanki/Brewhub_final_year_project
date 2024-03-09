@@ -71,7 +71,28 @@
     font-size: 16px;
 }
 
+
 .cart-controls span {
     font-size: 18px;
     font-weight: bold;
 }
+
+.button {
+    background-color: #1b1f38; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    margin: 4px 2px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+   }
+   
+   .button:hover {
+    background-color: #cfd0d1;
+    color: black;
+   }
+   
