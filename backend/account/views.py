@@ -31,8 +31,11 @@ class RegisterView(APIView):
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        # mobile_no = request.data['mobile_no']
-        #-------------- using 2factor --------------
+        
+        mobile_no = request.data['mobile_no']
+        print("*******************************")
+        print(mobile_no)
+        # -------------- using 2factor --------------
         # Generate and send OTP
         # otp = send_otp_to_mobile(mobile_no)
         # user.otp = otp
