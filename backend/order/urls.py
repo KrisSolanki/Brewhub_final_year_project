@@ -5,6 +5,13 @@ urlpatterns = [
 
     path('cart/',CartDetailView.as_view(),name='cart-list'),
     # path('cart/',CartDetailView1.as_view(),name='cart-list'),
+
+    # path('carts/', CartListCreateView.as_view(), name='cart-list-create'),
+    # path('carts/<int:pk>/', CartRetrieveUpdateDestroyView.as_view(), name='cart-retrieve-update-destroy'),
+    # path('cart-details/', CartDetailsListCreateView.as_view(), name='cart-details-list-create'),
+    # path('cart-details/<int:pk>/', CartDetailsRetrieveUpdateDestroyView.as_view(), name='cart-details-retrieve-update-destroy'),
+
+
     path('cart/<int:cart_item_id>/',CartDetailsDeleteView.as_view(),name='cart-details-delete'),
     
     # path('create-checkout-session/', CreateCheckoutSessionView.as_view(), name='create-checkout-session'),

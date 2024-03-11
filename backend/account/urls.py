@@ -21,6 +21,9 @@ urlpatterns = [
     path('verify_otp/',verify_otp),
     path('resend_otp/',resend_otp),
 
+    path('verify-otp/', verify_otp_view_register, name='verify_otp'),
+    path('send-otp/', send_otp_to_mobile_view, name='send-otp'),
+
     
     #-------------- date : 5/01/2024 ---- reset password -----
     path('reset_password/',auth_views.PasswordResetView.as_view(),name='reset_password'), #Submit email form  //PasswordResetView.as_view()

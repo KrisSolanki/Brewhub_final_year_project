@@ -10,6 +10,8 @@ from rest_framework.decorators import api_view # date:3/01 for otp
 from .otpapi import send_otp_to_mobile # date:3/01
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.core.mail import send_mail
+from rest_framework import status
+from django.http import HttpRequest
 # Create your views here.
 
 
@@ -126,10 +128,23 @@ class LoginView(APIView):
 
         user.save()
 
+        # django_request = HttpRequest()
+        # django_request.method = request.method
+        # django_request.POST = {'mobile_no': mobile_no, 'password': password}
+
+        # token_obtain_pair_view = MyTokenObtainPairView.as_view()
+        # token_response = token_obtain_pair_view(django_request)
+        # print("********************************************")
+        # print("Token Response Data:", token_response.data)
+
+        # # token = token_response.data['access']
+        # token = token_response.data['token']['access']
+
         return Response({
             'status': 200,
             'message': 'Login successful. OTP sent for verification.',
             'otp_status': 'sent'
+            # 'access_token': token
         })
     
     def get(self,request,*args,**kwargs):
@@ -150,6 +165,7 @@ class MyTokenObtainPairView(TokenObtainPairView): #date : 7/01/2024
 # @api_view(['POST'])
 # def send_otp(request):
 #     data = request.data
+    #mobile_no = request.data['mobile_no']
 #     if data.get('mobile_no') is None:   #---------if mobile_no is not received 
 #         return Response({
 #             'status':400,
@@ -175,9 +191,84 @@ class MyTokenObtainPairView(TokenObtainPairView): #date : 7/01/2024
 #         'status' : 200 , 'messsage' : 'Otp Sent'
 #     })
 
+#--------------------------------------------------------------------
+    #send otp endpoint
+# @api_view(['POST'])
+# def send_otp(request):
+#     user = UserSerializer(data=request.data)
+#     data = request.data
+#     mobile_no = request.data['mobile_no']
+#     if data.get('mobile_no') is None:   #---------if mobile_no is not received 
+#         return Response({
+#             'status':400,
+#             'message':'key mobile_no is required'
+#         })
+#     otp = send_otp_to_mobile(mobile_no)
+#     user.otp = otp
+    #----------------------------------===================
+# @api_view(['POST'])
+# def send_otp_to_mobile_view(request):
+#     serializer = MobileNumberSerializer(data=request.data)
+
+#     if serializer.is_valid():
+#         mobile_no = serializer.validated_data['mobile_no']
+#         otp = send_otp_to_mobile(mobile_no)
+
+#         if otp is not None:
+#             serializer.validated_data['otp'] = otp
+#             return Response({'otp': otp}, status=status.HTTP_200_OK)
+#         else:
+#             return Response({'error': 'Failed to send OTP'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+#     else:
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+
+@api_view(['POST'])
+def send_otp_to_mobile_view(request):
+    serializer = MobileNumberSerializer(data=request.data)
+
+    if serializer.is_valid():
+        mobile_no = serializer.validated_data['mobile_no']
+        otp = send_otp_to_mobile(mobile_no)
+        serializer.data.otp = otp  # Store the OTP in the serializer
+
+        if otp is not None:
+            return Response(serializer.validated_data, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Failed to send OTP'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# @api_view(['POST'])
+# def verify_otp_view_register(request):
+#     serializer = MobileNumberSerializer(data=request.data)
 
+#     if serializer.is_valid():
+#         mobile_no = serializer.validated_data['mobile_no']
+#         otp = serializer.validated_data['otp']
+#         entered_otp = request.data.get('otp')  
+#         if entered_otp == otp:
+#             return Response("verifired")
+#     else:
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+@api_view(['POST'])
+def verify_otp_view_register(request):
+    serializer = MobileNumberSerializer(data=request.data)
+
+    if serializer.is_valid():
+        mobile_no = serializer.validated_data['mobile_no']
+        # stored_otp = get_stored_otp_for_mobile(mobile_no)  # Implement this function to retrieve stored OTP
+        otp = serializer.validated_data['otp']
+        entered_otp = serializer.validated_data['otp']
+
+        if entered_otp == otp:
+            return Response({'message': 'OTP verified successfully'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 #===================== VERIFY OTP ====================
 @api_view(['POST']) #------------------- date : 5/01/2024--------------------
 def verify_otp(request):

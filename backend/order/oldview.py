@@ -37,30 +37,47 @@ class CartDetailView(APIView):
         # Access the user making the request
         current_user = 73
         # current_user = self.request.user
-        
-        # Check if the user is logged in
-        # if current_user.is_authenticated:
-            # Get or create the user's cart
+        # Get or create the user's cart
         cart = self.get_cart_for_user(current_user)
-            # Serialize the cart data
+        # Serialize the cart data
         serialized_cart = Cart_MSerializer(cart).data
         cart_items = Cart_Details.objects.filter(Cart_ID=cart)
         cart_items_serializer = Cart_DetailsSerializer(cart_items, many=True).data
 
-            
-
-        # offer = self.get_applicable_offer(cart)
-        # offer_serializer = OfferSerializer(offer) if offer else None
-
-            
         response_data = {
-                'cart': serialized_cart,
-                #'offer': offer_serializer.data if offer_serializer else None,  # Check if offer_serializer is not None
-                'cart_items': cart_items_serializer,
-                'message': 'Cart retrieved successfully'
-            }
+            'cart': {
+                'Total': serialized_cart['Total'],  # Assuming 'Total' is a property in serialized_cart
+                # Other cart properties here
+            },
+            'cart_items': cart_items_serializer,
+            'message': 'Cart retrieved successfully'
+        }
 
         return Response(response_data)
+        
+        # Check if the user is logged in
+        # if current_user.is_authenticated:
+            # Get or create the user's cart
+        # cart = self.get_cart_for_user(current_user)
+        #     # Serialize the cart data
+        # serialized_cart = Cart_MSerializer(cart).data
+        # cart_items = Cart_Details.objects.filter(Cart_ID=cart)
+        # cart_items_serializer = Cart_DetailsSerializer(cart_items, many=True).data
+
+            
+
+        # # offer = self.get_applicable_offer(cart)
+        # # offer_serializer = OfferSerializer(offer) if offer else None
+
+            
+        # response_data = {
+        #         'cart': serialized_cart,
+        #         #'offer': offer_serializer.data if offer_serializer else None,  # Check if offer_serializer is not None
+        #         'cart_items': cart_items_serializer,
+        #         'message': 'Cart retrieved successfully'
+        #     }
+
+        # return Response(response_data)
         
 
         # else:

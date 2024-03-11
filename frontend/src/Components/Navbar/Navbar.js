@@ -68,7 +68,7 @@ const Navbar = () => {
           <ul className='tgl'>
             <li><NavLink  to='/home'><span><IoIosHome /></span>Home</NavLink></li>
             <li><NavLink  to='/aboutus'><span><MdGroups /></span>About us</NavLink></li>
-            <li><NavLink  to='www.yahoo,com'><span><RiLoginBoxFill /></span>Sign in</NavLink></li>
+            <li><NavLink  to='/login'><span><RiLoginBoxFill /></span>Sign in</NavLink></li>
             <li><NavLink  to='/cart'><span><FaShoppingCart /></span>{/*Cart*/}</NavLink></li>
             <li><NavLink  to='www.instagram.com'><span><FaCircleUser /></span>{/*Profile*/}</NavLink></li>
           </ul>

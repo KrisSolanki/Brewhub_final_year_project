@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import { useState } from 'react'
+import CartList from '../Components/Cart/CartList'
 const Cart = () => {
     // const [amount , setAmount] = useState(500)
     
@@ -33,9 +34,11 @@ const Cart = () => {
     return (
     <>
     <div className='container_bn'>
-        <div className="btn">
+        {/* <div className="btn">
             <button type='button' onClick={razorpayPayment}>click</button>
-        </div>
+            <CartList/>
+        </div> */}
+        <CartList/>
       
     </div>
     </>

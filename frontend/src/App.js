@@ -11,8 +11,12 @@ import LoadingBar from 'react-top-loading-bar'
 import TypeDelivery from './Pages/TypeDelivery';
 import TypeTakeaway from './Pages/TypeTakeaway';
 import MenuList from './Pages/MenuList';
+import LoginPage from './Pages/Auth/LoginPage';
+import OTPPage from './Pages/Auth/OTPPage';
 // import CafeList from './Components/CafeList/CafeList';
 // import FiltDelivery from './Components/CafeList/FiltDelivery';
+import {AuthProvider} from './Context/AuthContext';
+import { MenuContext, MenuContextProvider } from './Context/MenuContext';
 
 function App() {
   
@@ -23,15 +27,20 @@ function App() {
     <Router>
     <div className="App">
 
+
       
       <LoadingBar
         color='#f11946'
         height={4}
         progress={progress}
         onLoaderFinished={() => setProgress(0)}
-      />
+        />
+      <AuthProvider>
+
+      
       <Navbar/>
       <SubNavbar/>
+        <MenuContextProvider>
       <Routes>
         
         <Route path='/' element={<Cart setProgress = {setProgress} />} />
@@ -44,7 +53,13 @@ function App() {
           
         {/* <Route path='/TypeDelivery' element={<FiltDelivery />} /> */}
 
+        <Route path="/login" element={<LoginPage/>} />
+          <Route path="/otp" element={<OTPPage />} />
+
       </Routes>
+        </MenuContextProvider>
+    </AuthProvider>
+  
     </div>
     </Router>
     </>

@@ -1,11 +1,32 @@
 from rest_framework import serializers
+from account.serializers import UserSerializer
+
+from cafe.serializers import MenuSerializer
 from .models import *
+
 
 class OfferSerializer(serializers.ModelSerializer):
     class Meta:
         model=Offer
         fields = '__all__'
 
+    #----------------------------------------------
+class CartDetailsSerializer(serializers.ModelSerializer):
+    Item_ID = MenuSerializer(read_only=True)
+    Cart_ID = serializers.PrimaryKeyRelatedField(queryset=Cart_M.objects.all(), write_only=True)
+
+    class Meta:
+        model = Cart_Details
+        fields = "__all__"
+
+class CartMSerializer(serializers.ModelSerializer):
+    User_ID = UserSerializer(read_only=True)
+    Offer_ID = OfferSerializer(read_only=True)
+    cart_details = CartDetailsSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Cart_M
+        fields = '__all__'
 class ComplaintSerializer(serializers.ModelSerializer):
     class Meta:
         model = Complaint
@@ -62,3 +83,4 @@ class Payment_MSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment_M
         fields = '__all__'
+
