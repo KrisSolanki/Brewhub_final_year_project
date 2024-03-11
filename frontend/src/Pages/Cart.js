@@ -23,7 +23,8 @@ const Cart = () => {
             'Content-Type': 'application/json', 
           },
         });
-        
+        // const deliveryCafes = response.data.filter(cart => cart.CartID === cart.cart_items.Cart_ID);
+        // setData(deliveryCafes);
         setData(response.data);
   
         // Additional code if needed...

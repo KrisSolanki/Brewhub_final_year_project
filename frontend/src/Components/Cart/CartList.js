@@ -11,7 +11,7 @@ const CartList = ({data}) => {
   
   // useEffect(() => {
   //   const fetchData = async () => {
-  //     try {
+  //     try { 
   //       const accessToken = localStorage.getItem('authTokens');
   //       const { access } = JSON.parse(accessToken);
   //       console.log('Access Token:', access);
