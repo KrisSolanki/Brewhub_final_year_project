@@ -35,8 +35,8 @@ class CartDetailView(APIView):
     
     def get(self, request, *args, **kwargs):
         # Access the user making the request
-        current_user = 73
-        # current_user = self.request.user
+        # current_user = 73
+        current_user = self.request.user
         
         # Check if the user is logged in
         # if current_user.is_authenticated:

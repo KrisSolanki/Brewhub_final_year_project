@@ -13,15 +13,22 @@ export const MenuContextProvider = (props) => {
     const [cartItems,setCartItems] = useState(getDefaultCart());
     const [cartCounts, setCartCounts] = useState(0);
     const [showCarts, setShowCarts] = useState(false);
-    const addToCart = (itemId) => {
-        setCartItems((prev) => ({...prev, [itemId]: prev[itemId] + 1}))
-    };
+    // const addToCart = (itemId) => {
+    //     setCartItems((prev) => ({...prev, [itemId]: prev[itemId] + 1}))
+// ``};
+
+const addToCart = (itemId) => {
+  setCartItems((prev) => ({
+    ...prev,
+    [itemId]: Math.max(0, prev[itemId] || 0) + 1,
+  }));
+};
     const removeFromCart = (itemId) => {
         setCartItems((prev) => ({...prev, [itemId]: prev[itemId] - 1}))
     };
-    const Count = (itemId) => {
-        setCartItems((prev) => ({...prev, [itemId]: (prev[itemId] || 0) + 1}))
-    };
+    // const Count = (itemId) => {
+    //     setCartItems((prev) => ({...prev, [itemId]: (prev[itemId] || 0) + 1}))
+    // };
     const handleAddToCart = (itemId) => {
         setCartCounts((prevCounts) => ({ ...prevCounts, [itemId]: 1 }));
         setShowCarts((prevShowCarts) => ({ ...prevShowCarts, [itemId]: true }));
@@ -36,7 +43,7 @@ export const MenuContextProvider = (props) => {
         setShowCarts((prevShowCarts) => ({ ...prevShowCarts, [itemId]: cartCounts[itemId] > 1 }));
       };
     
-    const contextValue = {cartItems,addToCart,removeFromCart,Count,handleDecrement,handleIncrement,handleAddToCart};
+    const contextValue = {cartItems,addToCart,removeFromCart,handleDecrement,handleIncrement,handleAddToCart};
       console.log("cartItems:",cartItems)
     return (<MenuContext.Provider value={contextValue} >{props.children}</MenuContext.Provider>)
   

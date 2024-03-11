@@ -115,15 +115,15 @@ class LoginView(APIView):
         # otp = send_otp_to_mobile(mobile_no)
         # user.otp = otp
         #--------------- using twilio --------------
-        # otp = send_sms(mobile_no)
-        # message = client.messages \
-        #                 .create(
-        #                     from_ = '+15169732425',
-        #                     body = f"Your OTP is {otp} .",
-        #                     # body = f"Hello , to reset password click this link http://127.0.0.1:8000/api/register/ ",
-        #                     # to = '+91 90543 95987'
-        #                     to = '+91'+mobile_no
-        #                 )
+        otp = send_sms(mobile_no)
+        message = client.messages \
+                        .create(
+                            from_ = '+15169732425',
+                            body = f"Your OTP is {otp} .",
+                            # body = f"Hello , to reset password click this link http://127.0.0.1:8000/api/register/ ",
+                            # to = '+91 90543 95987'
+                            to = '+91'+mobile_no
+                        )
         
 
         user.save()

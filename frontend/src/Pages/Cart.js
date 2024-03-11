@@ -1,47 +1,49 @@
 import React from 'react'
-import axios from 'axios'
-import { useState } from 'react'
 import CartList from '../Components/Cart/CartList'
+
+import { useState , useEffect } from 'react';
+import axios from 'axios';
+// import { useNavigate } from "react-router-dom";
+// import "../Cart/Cart.css"
+
 const Cart = () => {
-    // const [amount , setAmount] = useState(500)
-    
-    const razorpayPayment = () => {
-        const reviewData = {
-            "Review": "Great service!",
-            "Rating": 5,
-            "Status_ID": 1,
-            "User_ID": 73
-            // Add other required fields here
-        };
-        
-        axios.post('http://127.0.0.1:8000/api/order/',reviewData)
-            // "amount" : amount,
-            // "currency":"INR"
-        .then(function(response){
-            console.log(response)
-        })
-        .catch(function(error){
-            console.log(error)
+    const [data, setData] = useState({ cart: {}, cart_items: []})
+  // const [dataM, setDataM] = useState([])
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const accessToken = localStorage.getItem('authTokens');
+        const { access } = JSON.parse(accessToken);
+        console.log('Access Token:', access);
+  
+        const response = await axios.get("http://127.0.0.1:8000/api/cart/", {
+          headers: {
+            Authorization: `Bearer ${access}`,
+            'Content-Type': 'application/json', 
+          },
         });
-    }
-    // useEffect(()=>{
-    //     setProgress(30);
-    //     setTimeout(()=>{
-    //      setProgress(100);
-    //     },0);
-    //   }, [setProgress])
-    
-    return (
-    <>
-    <div className='container_bn'>
-        {/* <div className="btn">
-            <button type='button' onClick={razorpayPayment}>click</button>
-            <CartList/>
-        </div> */}
-        <CartList/>
-      
+        
+        setData(response.data);
+  
+        // Additional code if needed...
+  
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+  
+    fetchData();
+  }, []);
+//   const cart = data.cart;
+  console.log("data:",data);
+
+  
+  // console.log("data2:",dataM);
+  return (
+    <div>
+      <CartList data={data} />
     </div>
-    </>
   )
 }
 

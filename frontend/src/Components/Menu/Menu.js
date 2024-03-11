@@ -1,12 +1,14 @@
 import React, { useContext } from 'react'
-import { useState } from 'react';
+// import { useState } from 'react';
 import { MenuContext } from '../../Context/MenuContext'
 import './MenuList.css'
-
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 // import { useEffect } from 'react';
 const Menu = ({data}) => {
     // const ( id ,itemname,price,description) = props.data
-    const {addToCart,removeFromCart,Count} = useContext(MenuContext);
+    const {addToCart} = useContext(MenuContext);
+    const navigate = useNavigate();
     // const [cartCounts, setCartCounts] = useState(0);
     // const [showCarts, setShowCarts] = useState(false);
 
@@ -48,8 +50,36 @@ const Menu = ({data}) => {
         //       [itemId]: isCountGreaterThanOne,
         //     };
         //   });
-    
+  
+      const handleAddToCart = async (itemId) => {
+          try {
+            // const accessToken = localStorage.getItem('access_token');
+            const accessToken = localStorage.getItem('authTokens');
+            const { access } = JSON.parse(accessToken);
+            console.log('Access Token:', access)
 
+            // console.log('Access Token:', accessToken);
+            // Make a POST request to your server's add-to-cart endpoint
+            await axios.post('http://127.0.0.1:8000/api/cart/', {
+              Item_ID: itemId,
+              ItemQuantity: 1,
+            },{
+              headers: {
+                Authorization: `Bearer ${access}`,
+                'Content-Type': 'application/json', 
+              },
+          });
+      
+            addToCart(itemId);
+          } catch (error) {
+            console.error('Error adding item to cart:', error);
+          }
+        };  
+
+        const handleViewCart = () => {
+          navigate('/cart');
+        };
+      
   return (
     <div className="container-item">
           {data.length > 0 && (
@@ -91,7 +121,19 @@ const Menu = ({data}) => {
                 <p>Price: {Items.ItemPrice}</p>
               </div>
               <div className="item-add-to-card-btn">
-              <button className="button" onClick={() => addToCart(Items.itemId)}>Add to cart</button>
+
+              <button className="button" onClick={() => handleAddToCart(Items.ItemID)}>
+                  Add to cart
+                </button>
+                
+              <button
+                className="button"
+                onClick={handleViewCart}
+              >
+                View Cart
+              </button>
+
+              {/* <button className="button" onClick={() => addToCart(Items.itemId)}>Add to cart</button> */}
                 {/* {showCarts[Items.ItemID] ? (
                  <div className="cart-controls">
                  <button onClick={() => removeFromCart(Items.ItemID)}>-</button>

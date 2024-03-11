@@ -36,7 +36,7 @@ const CafeList = () => {
   return (
     <>
       <div>
-        <h1 className='h1-c'>Cafe List</h1>
+        <h1>Cafe List</h1>
         <div className="container_C">
           {data.map((cafe) => (
             <NavLink to={`/CafeList/${cafe.CafeID}`} className="nav-linkP">
