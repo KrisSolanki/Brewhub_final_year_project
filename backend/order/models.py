@@ -50,10 +50,10 @@ class Order_M(models.Model):
     OrderID = models.AutoField(primary_key=True)
     OrderDate = models.DateTimeField()
     Total = models.DecimalField(max_digits=10,decimal_places=2,null=True,blank=True)
-    Review = models.TextField()
-    Rating = models.IntegerField(choices = [(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')])
+    Review = models.TextField(null=True,blank=True)
+    Rating = models.IntegerField(choices = [(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')],null=True,blank=True)
     User_ID = models.ForeignKey(User,on_delete=models.CASCADE)
-    Status_ID = models.ForeignKey(Status,on_delete=models.CASCADE)
+    Status_ID = models.ForeignKey(Status,on_delete=models.SET_NULL,null=True,blank=True)
     Offer_ID = models.ForeignKey(Offer,on_delete = models.SET_NULL,null=True,blank=True)
     #Payment_ID = models.ForeignKey(Payment_M,on_delete=models.CASCADE,null=True,blank=True)
 

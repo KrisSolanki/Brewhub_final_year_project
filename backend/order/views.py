@@ -47,7 +47,10 @@ class CartDetailView(APIView):
         cart_items = Cart_Details.objects.filter(Cart_ID=cart)
         cart_items_serializer = Cart_DetailsSerializer(cart_items, many=True).data
 
-            
+        
+        item_ids = cart_items.values_list('Item_ID', flat=True)
+        menu_items = Menu.objects.filter(ItemID__in=item_ids)
+        menu_serializer = MenuSerializer(menu_items, many=True).data
 
         # offer = self.get_applicable_offer(cart)
         # offer_serializer = OfferSerializer(offer) if offer else None
@@ -57,215 +60,12 @@ class CartDetailView(APIView):
                 'cart': serialized_cart,
                 #'offer': offer_serializer.data if offer_serializer else None,  # Check if offer_serializer is not None
                 'cart_items': cart_items_serializer,
+                'menus': menu_serializer,
                 'message': 'Cart retrieved successfully'
             }
 
         return Response(response_data)
-        
 
-        # else:
-        #     # The user is not logged in, handle accordingly
-        #     return Response({'message': 'User is not logged in'}, status=status.HTTP_401_UNAUTHORIZED)
-
-    # def post(self, request, *args, **kwargs):
-    #     # Add a new item to the cart
-    #     serializer = Cart_DetailsSerializer(data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-        
-
-    #     cart = Cart_M.objects.get(User_ID=self.request.user)
-    #     item = serializer.validated_data['Item_ID']
-    #     quantity = serializer.validated_data['ItemQuantity']
-    #     subtotal = item.ItemPrice * quantity
-    #     # we have to make channges in model ,have to add offerid in cart_m and order m
-    #     #else there are minr changes 
-    #      # Check if an offer is selected 
-    #     selected_offer_id = request.data.get('Offer_ID')
-    #     print("Selected Offer ID:", selected_offer_id)
-    #     selected_offer = None
-
-    #     if selected_offer_id:
-    #     # User has selected an offer
-
-    #         try:
-    #             selected_offer = Offer.objects.get(pk=selected_offer_id)
-    #         except Offer.DoesNotExist:
-    #             return Response({'message': 'Selected offer does not exist'}, status=status.HTTP_400_BAD_REQUEST)
-    #         # Check if the selected offer is applicable
-    #         if selected_offer.MinimumAmount > cart.Total or selected_offer.MinimumAmount > subtotal:
-    #             return Response({'message': 'Selected offer is not applicable to the cart'}, status=status.HTTP_400_BAD_REQUEST)
-
-    #     # Apply offer
-    #     if selected_offer:
-    #         print("Applying Offer:", selected_offer)
-    #         subtotal_with_discount = subtotal - (subtotal * (selected_offer.DiscountPercentage / 100))
-    #         cart_item_data = {
-    #             'Cart_ID': cart,
-    #             'Item_ID': item,
-    #             'ItemQuantity': quantity,
-    #             'Subtotal': subtotal_with_discount,  # Use the discounted subtotal
-    #             # 'Total':subtotal,
-    #             'Offer_ID': selected_offer  # Assign the selected offer to the cart item
-    #             }
-    #     else:
-    #         cart_item_data = {
-    #             'Cart_ID': cart,
-    #             'Item_ID': item,
-    #             'ItemQuantity': quantity,
-    #             'Subtotal': subtotal,
-    #             }
-    #     cart_item = Cart_Details.objects.create(**cart_item_data)
-
-    #     # cart_item = Cart_Details.objects.create(Cart_ID=cart, Item_ID=item, ItemQuantity=quantity, Subtotal=subtotal_with_discount,Offer_ID=selected_offer)#Subtotal =subtotal,
-
-        
-    #     # Update total price in the cart
-    #     cart.Total += subtotal
-    #     cart.save()
-
-    #     response_data = {
-    #         'message': 'Item added to the cart successfully',
-    #         'cart_item': Cart_DetailsSerializer(cart_item).data,
-    #     }
-
-    #     return Response(response_data, status=status.HTTP_201_CREATED)
-        
-#---------------------------------------------------------------------------
-    # def post(self, request, *args, **kwargs):
-    #     # Add a new item to the cart
-    #     serializer = Cart_DetailsSerializer(data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-        
-
-    #     cart = Cart_M.objects.get(User_ID=self.request.user)
-    #     item = serializer.validated_data['Item_ID']
-    #     quantity = serializer.validated_data['ItemQuantity']
-    #     subtotal = item.ItemPrice * quantity
-    #     total=item.ItemPrice * quantity
-    #     # we have to make channges in model ,have to add offerid in cart_m and order m
-    #     #else there are minr changes 
-    #      # Check if an offer is selected 
-    #     selected_offer_id = request.data.get('Offer_ID')
-    #     print("Selected Offer ID:", selected_offer_id)
-    #     selected_offer = None
-
-    #     if selected_offer_id:
-    #     # User has selected an offer
-
-    #         try:
-    #             selected_offer = Offer.objects.get(pk=selected_offer_id)
-    #         except Offer.DoesNotExist:
-    #             return Response({'message': 'Selected offer does not exist'}, status=status.HTTP_400_BAD_REQUEST)
-    #         # Check if the selected offer is applicable
-    #         if selected_offer.MinimumAmount > cart.Total or selected_offer.MinimumAmount > subtotal:
-    #             return Response({'message': 'Selected offer is not applicable to the cart'}, status=status.HTTP_400_BAD_REQUEST)
-
-    #     # Apply offer
-    #     if selected_offer:
-    #         print("Applying Offer:", selected_offer)
-    #         subtotal_with_discount = total - (total * (selected_offer.DiscountPercentage / 100))
-    #         cart_item_data = {
-    #             'Cart_ID': cart,
-    #             'Item_ID': item,
-    #             'ItemQuantity': quantity,
-    #             'Subtotal': subtotal
-    #             # 'Total':subtotal,
-                
-    #             }
-            
-    #     else:
-    #         cart_item_data = {
-    #             'Cart_ID': cart,
-    #             'Item_ID': item,
-    #             'ItemQuantity': quantity,
-    #             'Subtotal': subtotal,
-    #             }
-    #     cart_item = Cart_Details.objects.create(**cart_item_data)
-
-    #     # cart_item = Cart_Details.objects.create(Cart_ID=cart, Item_ID=item, ItemQuantity=quantity, Subtotal=subtotal_with_discount,Offer_ID=selected_offer)#Subtotal =subtotal,
-
-        
-    #     # Update total price in the cart
-    #     cart.Total += subtotal_with_discount
-    #     cart.save()
-
-    #     response_data = {
-    #         'message': 'Item added to the cart successfully',
-    #         'cart_item': Cart_DetailsSerializer(cart_item).data,
-    #     }
-
-    #     return Response(response_data, status=status.HTTP_201_CREATED)
-#------------------------------------------------------------------------------------------
-        
-
-# class CartDetailView(APIView):
-#     # ... existing methods ...
-
-#__________________________________________________________________________________________________
-
-    # def post(self, request, *args, **kwargs):
-    #      # Determine Cart_ID based on the user making the request
-    #     print("--------------------------------------------------------------")
-    #     print(f"User ID: {request.user.id}")
-    #     # cart_id,created = Cart_M.objects.get_or_create(User_ID=request.user).CartID
-        
-    #     cart_obj, created = Cart_M.objects.get_or_create(User_ID=request.user)
-    #     cart_id = cart_obj.CartID
-        
-    #     print(f"Cart ID: {cart_id}, Created: {created}")
-    #     # Add Cart_ID to the request data
-    #     request.data['Cart_ID'] = cart_id
-
-    #     serializer = Cart_DetailsSerializer(data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-
-    #     cart = Cart_M.objects.get_or_create(User_ID=self.request.user)
-    #     item = serializer.validated_data['Item_ID']
-    #     quantity = serializer.validated_data['ItemQuantity']
-    #     total = item.ItemPrice * quantity
-    #     if cart.Offer_ID:
-    #         return Response({'message': 'An offer is already applied to the cart'}, status=status.HTTP_400_BAD_REQUEST)
-
-    #     # Check if the user already has a cart for the same cafe
-    #     existing_cart = Cart_M.objects.filter(User_ID=User, Cafe_ID=item.Cafe_ID).first()
-    #     if existing_cart:
-    #             # Update the existing cart's total by adding the price of the selected item
-    #             existing_cart.Total += total
-    #             existing_cart.save()
-    #             cart = existing_cart
-    #     else:
-    #             # Create a new cart and set its total to the price of the selected item
-    #             cart = Cart_M.objects.create(User_ID=User, Cafe_ID=item.Cafe_ID, Total=total)
-        
-    #     # Check if an offer is selected
-    #     selected_offer_id = request.data.get('Offer_ID')
-    #     selected_offer = None
-
-    #     if selected_offer_id:
-    #         # User has selected an offer
-    #         try:
-    #             selected_offer = Offer.objects.get(pk=selected_offer_id)
-    #         except Offer.DoesNotExist:
-    #             return Response({'message': 'Selected offer does not exist'}, status=status.HTTP_400_BAD_REQUEST)
-
-    #     # Apply offer to the entire cart
-    #     with transaction.atomic():
-    #         if selected_offer:
-    #             print("Applying Offer:", selected_offer)
-    #             cart.Total -= cart.Total * (selected_offer.DiscountPercentage / 100)
-    #             cart.Offer_ID = selected_offer
-    #             cart.save()
-
-    #         # Add the selected item to the cart details
-    #         subtotal = item.ItemPrice * quantity
-    #         Cart_Details.objects.create(Cart_ID=cart, Item_ID=item, ItemQuantity=quantity, Subtotal=subtotal)
-
-    #     response_data = {
-    #         'message': 'Item added to the cart successfully',
-    #         'cart': Cart_MSerializer(cart).data,
-    #     }
-
-    #     return Response(response_data, status=status.HTTP_201_CREATED)
     def post(self, request, *args, **kwargs):
     # Retrieve or create a cart based on the user making the request
         cart_obj, created = Cart_M.objects.get_or_create(User_ID=request.user)
@@ -273,9 +73,7 @@ class CartDetailView(APIView):
 
     # Create a mutable copy of the request data
         data = request.data.copy()
-        # Add the Cart_ID to the data
-        print("-------------------------------")
-        print(data)
+    # Add the Cart_ID to the data
         data['Cart_ID'] = cart_id
 
     # Validate serializer data
@@ -291,60 +89,45 @@ class CartDetailView(APIView):
             except Offer.DoesNotExist:
                 return Response({'message': 'Selected offer does not exist'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # if cart_obj.Offer_ID:
-        #     # if cart_obj.Offer_ID:
-        #     old_offer = cart_obj.Offer_ID
-        #     cart_obj.Total += cart_obj.Total * (old_offer.DiscountPercentage / 100)
-
-        #     return Response({'message': 'An offer is already applied to the cart'}, status=status.HTTP_400_BAD_REQUEST)
-    # Apply offer to the entire cart
-        if selected_offer:
-            cart_obj.Total -= cart_obj.Total * (selected_offer.DiscountPercentage / 100)
-            cart_obj.Offer_ID = selected_offer
+        # ** Check if an offer is being removed
+        if not selected_offer_id and cart_obj.Offer_ID:
+        # ** Restore the original total and subtotal values before the offer was applied
+            cart_obj.Total += cart_obj.Total * (cart_obj.Offer_ID.DiscountPercentage / 100)
+            cart_obj.Offer_ID = None
+            for cart_detail in Cart_Details.objects.filter(Cart_ID=cart_obj):
+                cart_detail.Subtotal = cart_detail.ItemQuantity * cart_detail.Item_ID.ItemPrice
+                cart_detail.save()
+        else:
+        # ** Apply offer to the entire cart
+            if selected_offer:
+                cart_obj.Total -= cart_obj.Total * (selected_offer.DiscountPercentage / 100)
+                cart_obj.Offer_ID = selected_offer
+            # ** Update subtotal for each item to reflect the discount
+                for cart_detail in Cart_Details.objects.filter(Cart_ID=cart_obj):
+                    cart_detail.Subtotal = cart_detail.ItemQuantity * cart_detail.Item_ID.ItemPrice * (1 - (selected_offer.DiscountPercentage / 100))
+                    cart_detail.save()
 
     # Add the selected item to the cart details
         item = serializer.validated_data['Item_ID']
         quantity = serializer.validated_data['ItemQuantity']
-        # subtotal = item.ItemPrice * quantity
-        # Cart_Details.objects.create(Cart_ID=cart_obj, Item_ID=item, ItemQuantity=quantity, Subtotal=subtotal)
         discount_factor = 1 - (selected_offer.DiscountPercentage / 100) if selected_offer else 1
         subtotal = item.ItemPrice * quantity * discount_factor
         cmst = item.ItemPrice * quantity
-        # Cart_Details.objects.create(Cart_ID=cart_obj, Item_ID=item, ItemQuantity=quantity, Subtotal=subtotal)
 
-        # Try to find an existing cart detail for the item
-        # try:
-        #     cart_detail = Cart_Details.objects.get(Cart_ID=cart_obj, Item_ID=item)
-        #     # If the cart detail exists, update the quantity and subtotal
-        #     cart_detail.ItemQuantity += quantity
-        #     cart_detail.Subtotal += subtotal * discount_factor
-        #     cart_detail.save()
-        # except Cart_Details.DoesNotExist:
-            # If the cart detail does not exist, create a new one
-            # Cart_Details.objects.create(Cart_ID=cart_obj, Item_ID=item, ItemQuantity=quantity, Subtotal=subtotal)
-        # Check if a cart detail for the item already exists
         cart_details = Cart_Details.objects.filter(Cart_ID=cart_obj, Item_ID=item)
-        # print(cart_details.exists())
-        # print(cart_details)
-        # print(item)
-              
+
         if cart_details.exists():
-        # If the cart detail exists, update the quantity and subtotal
+        # ** If the cart detail exists, update the quantity and recalculate the subtotal based on the new quantity and discount factor
             cart_detail = cart_details.first()
-            # print(cart_details.first())
             cart_detail.ItemQuantity += quantity
-            # print(cart_details.ItemQuantity)
-            cart_detail.Subtotal += subtotal * discount_factor
+            cart_detail.Subtotal = cart_detail.ItemQuantity * cart_detail.Item_ID.ItemPrice * discount_factor
             cart_detail.save()
         else:
-        # If the cart detail does not exist, create a new one
+        # ** If the cart detail does not exist, create a new one
             Cart_Details.objects.create(Cart_ID=cart_obj, Item_ID=item, ItemQuantity=quantity, Subtotal=subtotal)
-            # print(Cart_Details.objects.create())
 
-
-    # Update the total in the Cart_M model
-        cart_obj.Total += subtotal *discount_factor
-        # cart_obj.Subtotal += discount_factor
+    # ** Update the total in the Cart_M model
+        cart_obj.Total += subtotal * discount_factor
         cart_obj.Subtotal += cmst
         cart_obj.save()
 
@@ -355,146 +138,6 @@ class CartDetailView(APIView):
 
         return Response(response_data, status=status.HTTP_201_CREATED)
 
-
-#--------------------------OLD---------------------------------------------
-    
-    # def put(self, request, *args, **kwargs):
-    #     # Update quantity or other details of a cart item
-    #     cart_item = Cart_Details.objects.get(pk=request.data.get('Cart_Item_ID'))
-    #     serializer = Cart_DetailsSerializer(cart_item, data=request.data,partial=True)
-    #     serializer.is_valid(raise_exception=True)
-    #     serializer.save()
-    #     print(f"Updated Subtotal in Database: {cart_item.Subtotal}")
-
-    #     # Update total price in the cart
-    #     cart = cart_item.Cart_ID
-    #     # cart.Total += cart_item.Subtotal - serializer.validated_data.get('Subtotal',0)
-    #     # cart.Total += cart_item.Subtotal - serializer.initial_data['Subtotal']
-    #     # cart.Total += cart_item.Subtotal - serializer.initial_data.get('Subtotal',0)
-
-    #     # Calculate the updated subtotal based on the updated 'ItemQuantity' or other relevant fields
-    #     updated_quantity = serializer.validated_data.get('ItemQuantity', cart_item.ItemQuantity)
-    #     updated_subtotal = cart_item.Item_ID.ItemPrice * updated_quantity
-    #     # print(cart.Total)
-    #     # print(cart_item.Subtotal)
-    #     # print(serializer.initial_data)
-        
-       
-    #     cart_item.Subtotal = updated_subtotal
-    #     cart_item.save()
-
-    #     # tp =20000 
-    #     # Update total price in the cart
-    #     cart.Total += updated_subtotal - cart_item.Subtotal
-    #     cart.save()
-    #     print(f"Updated Quantity: {updated_quantity}")
-    #     print(f"Updated Subtotal: {updated_subtotal}")
-    #     print(f"Old Subtotal: {cart_item.Subtotal}")
-    #     print(f"Total: {cart.Total}")
-
-    #     updated_cart_item = Cart_Details.objects.get(pk=cart_item.pk)
-    #     updated_cart_item_serializer = Cart_DetailsSerializer(updated_cart_item).data
-
-    #     # return Response({'message': 'Cart item updated successfully'})
-    #     response_data = {
-    #         'message': 'Cart item updated successfully',
-    #         'updated_cart_item': updated_cart_item_serializer,
-    #     }
-    #     return Response(response_data)
-
-#------------------------------------------------------------------------------------
-    # def put(self, request, *args, **kwargs):
-    #     # Update quantity or other details of a cart item
-    #     cart_item = Cart_Details.objects.get(pk=request.data.get('Cart_Item_ID'))
-    #     serializer = Cart_DetailsSerializer(cart_item, data=request.data, partial=True)
-    #     serializer.is_valid(raise_exception=True)
-    #     serializer.save()
-
-    #     total=0
-
-    #     selected_offer = None
-    #     # Use a transaction to ensure atomicity
-    #     with transaction.atomic():
-    #         # Update total price in the cart
-    #         cart = cart_item.Cart_ID
-    #         updated_quantity = serializer.validated_data.get('ItemQuantity', cart_item.ItemQuantity)
-    #         updated_subtotal = cart_item.Item_ID.ItemPrice * updated_quantity
-    #         cart_item.Subtotal = updated_subtotal
-    #         cart_item.save()
-
-    #         # Update total price in the cart
-    #         # cart.Total += updated_subtotal - cart_item.Subtotal
-    #         # cart.Total = updated_subtotal 
-    #         # cart.Total -= cart.Total * (selected_offer.DiscountPercentage / 100)
-    #         # cart.save()
-
-    #         # Update Offer_ID in Cart_M if needed
-    #         selected_offer_id = request.data.get('Offer_ID')
-    #         if selected_offer_id:
-    #             try:
-    #                 selected_offer = Offer.objects.get(pk=selected_offer_id)
-    #             except Offer.DoesNotExist:
-    #                 return Response({'message': 'Selected offer does not exist'}, status=status.HTTP_400_BAD_REQUEST)
-
-    #         # if selected_offer.MinimumAmount <= cart.Total:  # Check if the offer is applicable
-
-    #         #     # Update Offer_ID in Cart_M
-    #         #     # cart.Offer_ID= selected_offer_id
-    #         #     cart.Offer_ID = selected_offer
-    #         #     # cart.Total = cart_item.Subtotal
-    #         #     cart.save()
-    #          # Calculate total based on the subtotal and discount
-    #     if selected_offer and selected_offer.MinimumAmount <= cart.Total:
-    #         discount_percentage = selected_offer.DiscountPercentage
-    #         total = updated_subtotal - (updated_subtotal * (discount_percentage / 100))
-            
-    #     else:
-            
-    #         total = updated_subtotal
-    #         cart.Total += total
-
-    #     cart_item.Subtotal = updated_subtotal
-    #     cart_item.save()
-
-    #     # Update total price in the cart
-    #     # sm = total - cart_item.Subtotal
-    #     cart.Total += total - cart_item.Subtotal
-
-    #     cart.save()
-
-    #     # Update Offer_ID in Cart_M if needed
-    #     if selected_offer :
-    #         cart.Offer_ID = selected_offer
-    #         # cart.Total = total - sm
-    #         cart.save()
-    #     else:
-    #         cart.Offer_ID = None
-    #         # cart.Total = total 
-
-    #         cart.save()
-        
-
-
-    #     updated_cart_item = Cart_Details.objects.get(pk=cart_item.pk)
-    #     updated_cart_item_serializer = Cart_DetailsSerializer(updated_cart_item).data
-    #     print(f"Cart ID: {cart_item.Cart_ID}")
-    #     print(f"Updated Subtotal: {updated_subtotal}")
-    #     print(f"Selected Offer ID: {selected_offer_id}")
-    #     print(f"Cart ID: {cart_item.Cart_ID}")
-    #     print(f"Updated Subtotal: {updated_subtotal}")
-    #     print(f"Selected Offer ID: {selected_offer_id}")
-    #     print(f"Updated Cart Offer ID: {cart.Offer_ID}")
-    #     print(f"Updated Cart Offer ID: {cart.Offer_ID.OfferID}")
-    #     print(f"Updated Cart Offer Title: {cart.Offer_ID.OfferTitle}")
-
-
-
-    #     response_data = {
-    #         'message': 'Cart item updated successfully',
-    #         'updated_cart_item': updated_cart_item_serializer,
-    #     }
-    #     return Response(response_data)
-    #------------------------------------------------------------------------------------------------------
 
     def put(self, request, *args, **kwargs):
     # Retrieve or create a cart based on the user making the request
@@ -559,7 +202,6 @@ class CartDetailView(APIView):
 class CartDetailsDeleteView(APIView):
     def delete(self, request, cart_item_id, *args, **kwargs):
         # Delete a cart item
-        # cart_item = Cart_Details.objects.get(pk=request.data.get('cart_item_id'))
         try:
             # Attempt to retrieve the Cart_Details object
             cart_item = Cart_Details.objects.get(pk=cart_item_id)

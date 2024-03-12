@@ -4,6 +4,8 @@ app_name='order'
 urlpatterns = [
 
     path('cart/',CartDetailView.as_view(),name='cart-list'),
+    
+    path('cart/<int:itemid>/',CartDetailView.as_view(),name='cart-list'),
     # path('cart/',CartDetailView1.as_view(),name='cart-list'),
 
     # path('carts/', CartListCreateView.as_view(), name='cart-list-create'),

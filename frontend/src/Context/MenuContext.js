@@ -1,5 +1,7 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useState,useEffect } from 'react'
 import Menu from '../Components/Menu/Menu';
+
+import axios from 'axios';
 export const MenuContext = createContext(null);
 const getDefaultCart = () =>{
     let cart = {}
@@ -16,7 +18,7 @@ export const MenuContextProvider = (props) => {
     // const addToCart = (itemId) => {
     //     setCartItems((prev) => ({...prev, [itemId]: prev[itemId] + 1}))
 // ``};
-
+// console.log("MenuDate ",data)
 const addToCart = (itemId) => {
   setCartItems((prev) => ({
     ...prev,
@@ -26,6 +28,9 @@ const addToCart = (itemId) => {
     const removeFromCart = (itemId) => {
         setCartItems((prev) => ({...prev, [itemId]: prev[itemId] - 1}))
     };
+    const updateCartItemCount = (newAmount, itemId) => {
+      setCartItems((prev) => ({ ...prev, [itemId]: newAmount }));
+    };
     // const Count = (itemId) => {
     //     setCartItems((prev) => ({...prev, [itemId]: (prev[itemId] || 0) + 1}))
     // };
@@ -34,16 +39,42 @@ const addToCart = (itemId) => {
         setShowCarts((prevShowCarts) => ({ ...prevShowCarts, [itemId]: true }));
       };
       
-      const handleIncrement = (itemId) => {
-        setCartCounts((prevCounts) => ({ ...prevCounts, [itemId]: (prevCounts[itemId] || 0) + 1 }));
-      };
+      // const handleIncrement = (itemId) => {
+      //   setCartCounts((prevCounts) => ({ ...prevCounts, [itemId]: (prevCounts[itemId] || 0) + 1 }));
+      // };
       
-      const handleDecrement = (itemId) => {
-        setCartCounts((prevCounts) => ({ ...prevCounts, [itemId]: Math.max(0, (prevCounts[itemId] || 0) - 1) }));
-        setShowCarts((prevShowCarts) => ({ ...prevShowCarts, [itemId]: cartCounts[itemId] > 1 }));
-      };
+      // const handleDecrement = (itemId) => {
+      //   setCartCounts((prevCounts) => ({ ...prevCounts, [itemId]: Math.max(0, (prevCounts[itemId] || 0) - 1) }));
+      //   setShowCarts((prevShowCarts) => ({ ...prevShowCarts, [itemId]: cartCounts[itemId] > 1 }));
+      // };
+    //   const [menuData, setMenuData] = useState([]);
+    //   useEffect(() => {
+    //     const fetchMenuData = async () => {
+    //       try {
+    //         const response = await axios.get("http://127.0.0.1:8000/api/menulist/");
+    //         // const filteredMenuData = response.data.filter((item) => item.Item_ID === cartItems);
+
+    //         setMenuData(response.data);
+    //         // setMenuData(filteredMenuData);
+    //       } catch (error) {
+    //         console.error('Error fetching menu data:', error);
+    //       }
+    //     };
     
-    const contextValue = {cartItems,addToCart,removeFromCart,handleDecrement,handleIncrement,handleAddToCart};
+    //     fetchMenuData();
+    //   }, []);
+    // console.log("*******")
+    // console.log("CartinMenuC",cartItems)
+     
+
+      const contextValue = {
+        cartItems,
+        addToCart,
+        removeFromCart,
+        updateCartItemCount,
+        handleAddToCart,
+        // menuData,
+      };
       console.log("cartItems:",cartItems)
     return (<MenuContext.Provider value={contextValue} >{props.children}</MenuContext.Provider>)
   

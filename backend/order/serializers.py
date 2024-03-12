@@ -12,7 +12,7 @@ class OfferSerializer(serializers.ModelSerializer):
 
     #----------------------------------------------
 class CartDetailsSerializer(serializers.ModelSerializer):
-    Item_ID = MenuSerializer(read_only=True)
+    Item_ID = MenuSerializer()
     Cart_ID = serializers.PrimaryKeyRelatedField(queryset=Cart_M.objects.all(), write_only=True)
 
     class Meta:
