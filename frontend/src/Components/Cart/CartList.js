@@ -16,6 +16,12 @@ const CartList = () => {
     menus: [],
     message: ''
   });
+  const [cartCounts1, setCartCounts1] = useState({});
+
+  useEffect(() => {
+    console.log("cartCounts1",cartCounts1);
+ }, [cartCounts1]);
+
    useEffect(() => {
     const fetchData = async () => {
       try {
@@ -44,12 +50,9 @@ const CartList = () => {
 
 
 
-  const handleIncrement = async (cart_items) => {
-    // Correctly update the local state
-    setCartCounts1((prevCounts) => ({
-      ...prevCounts,
-      [cart_items.Cart_Item_ID]: (prevCounts[cart_items.Cart_Item_ID] || 0) + 1,
-    }));
+  const handleIncrement = async (event,cart_items) => {
+    event.preventDefault();
+    
 
     try {
       const accessToken = localStorage.getItem('authTokens');
@@ -73,6 +76,7 @@ const CartList = () => {
           },
         }
       );
+      addToCart(cart_items.Item_ID);
     } catch (error) {
       console.error('Error updating item quantity:', error);
     }
@@ -80,17 +84,16 @@ const CartList = () => {
     console.log("cart_items", cart_items)
   };
 
-  const [cartCounts1, setCartCounts1] = useState({});
   const handleDecrement = async (cart_items) => {
-    ;
+    
     console.log("Before update:", cartCounts1);
     setCartCounts1((prevCounts) => {
       const updatedCounts = {
         ...prevCounts,
         [cart_items.CartDetailsID]: Math.max(0, (prevCounts[cart_items.CartDetailsID] || 0) - 1),
+        // console.log("After update:", updatedCounts);
+        // return updatedCounts;
       };
-      console.log("After update:", updatedCounts);
-      return updatedCounts;
     });
     
     
@@ -189,10 +192,13 @@ const CartList = () => {
         {data.cart_items.map((cartItem) => (
           <div key={cartItem.CartDetailsID}>
             <p>ItemID: {cartItem.Item_ID}</p>
-            leDecremen <p>Quantity: {cartItem.ItemQuantity}</p>
-            <button onClick={() => handleIncrement(cartItem)}>+</button>
-            {cartItem.ItemQuantity}
+            <p>Quantity: {cartItem.ItemQuantity}</p>
+            <button onClick={(event) => handleIncrement(event, cartItem)}>+</button>
+            {/* {cartItem.ItemQuantity} */}
+            {cartCounts1[cartItem.Cart_Item_ID] || cartItem.ItemQuantity}
             <button onClick={() => handleDecrement(cartItem)}>-</button>
+            
+            
             <p>Subtotal: {cartItem.Subtotal}</p>
           </div>
         ))}

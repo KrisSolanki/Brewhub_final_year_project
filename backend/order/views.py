@@ -176,20 +176,20 @@ class CartDetailView(APIView):
 
         
     # Try to find an existing cart detail for the item
-        cart_detail, created = Cart_Details.objects.get_or_create(Cart_ID=cart_obj, Item_ID=item)
-        if created:
-        # If the cart detail was created, set the quantity and subtotal
-            cart_detail.ItemQuantity = quantity
-            cart_detail.Subtotal = subtotal
-        else:
+        cart_detail = Cart_Details.objects.get(Cart_ID=cart_obj, Item_ID=item)
+        
         # If the cart detail already exists, update the quantity and subtotal
-            cart_detail.ItemQuantity += quantity
-            cart_detail.Subtotal += subtotal * discount_factor
+        cart_detail.ItemQuantity += 1
+        cart_detail.Subtotal = item.ItemPrice * cart_detail.ItemQuantity * discount_factor
+        print("cart_detail",cart_detail.ItemQuantity)
+        print("cart_detail.Subtotal",cart_detail.Subtotal)
+            
 
         cart_detail.save()
 
         # Update the total in the Cart_M model
-        cart_obj.Total += subtotal
+        cart_obj.Total = cart_detail.Subtotal
+        cart_obj.Subtotal = item.ItemPrice * cart_detail.ItemQuantity
         cart_obj.save()
 
         response_data = {

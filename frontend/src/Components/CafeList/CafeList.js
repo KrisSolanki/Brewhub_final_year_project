@@ -39,9 +39,9 @@ const CafeList = () => {
         <h1>Cafe List</h1>
         <div className="container_C">
           {data.map((cafe) => (
-            <NavLink to={`/CafeList/${cafe.CafeID}`} className="nav-linkP">
-
+            
             <div key={cafe.CafeID} className="product">
+              <NavLink to={`/CafeList/${cafe.CafeID}`} className="nav-linkP">
               <div className="img">
               <img src={`http://127.0.0.1:8000/api${cafe.LogoImage}`} alt={cafe.CafeName} />
               </div>
@@ -58,8 +58,8 @@ const CafeList = () => {
               </div>    
               </div>
 
-            </div>
           </NavLink>
+            </div>
           ))}
         </div>
       </div>
