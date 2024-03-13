@@ -14,8 +14,8 @@ urlpatterns = [
     # path('cart-details/<int:pk>/', CartDetailsRetrieveUpdateDestroyView.as_view(), name='cart-details-retrieve-update-destroy'),
 
 
-    path('cart/<int:cart_item_id>/',CartDetailsDeleteView.as_view(),name='cart-details-delete'),
-    
+    path('cart1/<int:cart_item_id>/',CartDetailsDeleteView.as_view(),name='cart-details-delete'),
+    # path('cartpatch/',CartDetailsDeleteView.as_view(), name='cart-update'),
     # path('create-checkout-session/', CreateCheckoutSessionView.as_view(), name='create-checkout-session'),
     # path('payment-success/', paymentSuccess, name='payment-success'),
     # path('webhook/stripe/', my_webhook_view , name='webhook-stripe'),

@@ -9,20 +9,22 @@ import useRazorpay from 'react-razorpay';
 
 
 const CartList = () => {
-  const { addToCart, removeFromCart } = useContext(MenuContext);
+  const { addToCart, removeFromCart, cartItems } = useContext(MenuContext);
+
   const [data, setData] = useState({
+
     cart: {},
     cart_items: [],
     menus: [],
     message: ''
   });
   const [cartCounts1, setCartCounts1] = useState({});
+  // const [count,setCount] = useState(); 
+  useEffect(() => {
+
+  }, [cartCounts1]);
 
   useEffect(() => {
-    console.log("cartCounts1",cartCounts1);
- }, [cartCounts1]);
-
-   useEffect(() => {
     const fetchData = async () => {
       try {
         const accessToken = localStorage.getItem('authTokens');
@@ -35,8 +37,9 @@ const CartList = () => {
             'Content-Type': 'application/json',
           },
         });
-       
+
         setData(response.data);
+        console.log("adrfs", data)
 
 
 
@@ -46,18 +49,19 @@ const CartList = () => {
     };
 
     fetchData();
-  }, []);
+  }, [data]);
 
 
 
-  const handleIncrement = async (event,cart_items) => {
+  const handleIncrement = async (event, cart_items) => {
     event.preventDefault();
-    
+    const updatedCounts = { ...cartCounts1, [cartItems.Cart_Item_ID]: (cartCounts1[cartItems.Cart_Item_ID] || cartItems.ItemQuantity) + 1 };
+    setCartCounts1(updatedCounts);
 
     try {
       const accessToken = localStorage.getItem('authTokens');
       const { access } = JSON.parse(accessToken);
-      
+
       // Ensure the request body reflects the updated quantity
       const updatedQuantity = (cart_items.ItemQuantity || 0) + 1;
 
@@ -68,6 +72,7 @@ const CartList = () => {
           ItemQuantity: updatedQuantity,
           Cart_ID: data.cart.CartID,
           Item_ID: cart_items.Item_ID,
+
         },
         {
           headers: {
@@ -84,28 +89,27 @@ const CartList = () => {
     console.log("cart_items", cart_items)
   };
 
-  const handleDecrement = async (cart_items) => {
-    
-    console.log("Before update:", cartCounts1);
+  const handleDecrement = async (cart_items, itemId) => {
+
     setCartCounts1((prevCounts) => {
       const updatedCounts = {
         ...prevCounts,
         [cart_items.CartDetailsID]: Math.max(0, (prevCounts[cart_items.CartDetailsID] || 0) - 1),
-        // console.log("After update:", updatedCounts);
-        // return updatedCounts;
       };
+      return updatedCounts;
     });
-    
-    
+
+
     try {
       const accessToken = localStorage.getItem('authTokens');
       const { access } = JSON.parse(accessToken);
+      const updatedQuantity = (cart_items.ItemQuantity || 0) - 1;
 
       // Ensure the request body reflects the updated quantity
-      const updatedQuantity = Math.max(0, (cart_items.ItemQuantity || 0) - 1);
+
       console.log("access:", access)
-      console.log("updatedQuantity", updatedQuantity)
-      await axios.put(
+      // console.log("updatedQuantity", updatedQuantity)
+      await axios.patch(
         `http://127.0.0.1:8000/api/cart/`,
         {
           Cart_Item_ID: cart_items.CartDetailsID,
@@ -120,44 +124,47 @@ const CartList = () => {
           }
         }
       );
+      removeFromCart(cart_items.Item_ID)
     } catch (error) {
       console.error('Error updating item quantity:', error);
     }
-    console.log("data.cart.CartID", data.cart.CartID)
-    console.log("cart_items", cart_items)
-    console.log("cart_items.CartDetailsID", cart_items.CartDetailsID);
-    console.log("cart_items.Item_ID", cart_items.Item_ID)
-    console.log("Before decrement:", cartCounts1);
-    console.log("Before decrement:", cartCounts1);
-    console.log("cart_items.CartDetailsID", cart_items.CartDetailsID);
-    console.log("cart_items1:", cart_items)
+    // console.log("data.cart.CartID", data.cart.CartID)
+    // console.log("cart_items", cart_items)
+    // console.log("cart_items.CartDetailsID", cart_items.CartDetailsID);
+    // console.log("cart_items.Item_ID", cart_items.Item_ID)
+    // console.log("Before decrement:", cartCounts1);
+    // console.log("Before decrement:", cartCounts1);
+    // console.log("cart_items.CartDetailsID", cart_items.CartDetailsID);
+    // console.log("cart_items1:", cart_items)
   };
+  //=============================================================
+
 
   // Handle order and razorpay---------------------  
   const [Razorpay] = useRazorpay();
-   
-    
-    const handleorder = () => {
-      
-      const accessToken = localStorage.getItem('authTokens');
-      const { access } = JSON.parse(accessToken);
-      
-      axios.post(
-       `http://127.0.0.1:8000/api/order/`,
-       {
-         
-       },
-       {
-         headers: {
-           Authorization: `Bearer ${access}`,
-           'Content-Type': 'application/json',
-         },
-       }
-    ).then(function (response) {
-       console.log("Response", response.data.RAZORPAY_ORDER_ID);
-       const orderid = response.data.RAZORPAY_ORDER_ID; // Assuming the order ID is in the response data
 
-       const options = {
+
+  const handleorder = () => {
+
+    const accessToken = localStorage.getItem('authTokens');
+    const { access } = JSON.parse(accessToken);
+
+    axios.post(
+      `http://127.0.0.1:8000/api/order/`,
+      {
+
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${access}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    ).then(function (response) {
+      console.log("Response", response.data.RAZORPAY_ORDER_ID);
+      const orderid = response.data.RAZORPAY_ORDER_ID; // Assuming the order ID is in the response data
+
+      const options = {
         key: "rzp_test_hcdXSoauARgkpH",
         name: "Acme Corp",
         description: "Test Transaction",
@@ -174,16 +181,46 @@ const CartList = () => {
           color: "#3399cc",
         },
       };
-      
+
       const rzp = new Razorpay(options);
       rzp.open();
 
     }).catch(function (error) {
       console.error('Error updating item quantity:', error);
     });
+  }
+  const handleDelete = (itemId) => {
+    const accessToken = localStorage.getItem('authTokens');
+    const { access } = JSON.parse(accessToken);
+    try {
+      axios.delete(
+        `http://127.0.0.1:8000/api/cart1/${itemId}/`,
+        {
+          headers: {
+            Authorization: `Bearer ${access}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+        .then(response => {
+          console.log('Item deleted successfully:', response.data);
+          // Handle the response, e.g., update the UI to reflect the deletion
+        })
+        .catch(error => {
+          console.error('Error deleting item:', error);
+          // Handle the error, e.g., show an error message to the user
+        });
+    } catch (error) {
+      console.error('Error parsing access token:', error);
+      // Handle the error, e.g., show an error message to the user
+    }
+
+
   };
   console.log("open", useRazorpay());
   console.log("Type of first element:", typeof useRazorpay()[0]);
+  console.log("cartCounts1", cartCounts1);
+  // console.log("zzzz",data.cart.menus.ItemID )
   return (
 
     <div className="cart">
@@ -196,15 +233,18 @@ const CartList = () => {
             <button onClick={(event) => handleIncrement(event, cartItem)}>+</button>
             {/* {cartItem.ItemQuantity} */}
             {cartCounts1[cartItem.Cart_Item_ID] || cartItem.ItemQuantity}
-            <button onClick={() => handleDecrement(cartItem)}>-</button>
-            
-            
+            {/* {cartCounts1} */}
+            <button onClick={() => handleDecrement(cartItem, cartItem.CartDetailsID)}>-</button>
+
+            <button onClick={() => handleDelete(cartItem.CartDetailsID)}>DELETE</button>
+
             <p>Subtotal: {cartItem.Subtotal}</p>
           </div>
         ))}
       </div>
       <div className="cart">
         <p>Total: {data.cart.Total}</p>
+
       </div>
       <div className="checkout">
         <button onClick={handleorder}>Checkout</button>
