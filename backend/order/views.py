@@ -305,7 +305,7 @@ class OrderCreateView(APIView):
 
         return Response({
             'message': 'Order created successfully',
-            'RAZORPAY_ORDER_ID:':razorpay_order_id
+            'RAZORPAY_ORDER_ID':razorpay_order_id
             })
     
     def get(self, request, order_id=None, *args, **kwargs):
