@@ -446,29 +446,58 @@ class OrderCreateView(APIView):
 #     payload = request.body
 #     print(payload)
 #     return HttpResponse(status=200)
-        
 
 class CompetePaymentView(APIView):
-    def post(self,request):
-        transaction = Payment_MSerializer
-        data=request.data
+    def post(self, request):
+        # Instantiate the serializer with the request data
+        transaction = Payment_MSerializer(data=request.data)
+        
+        # Check if the serializer is valid
         if transaction.is_valid():
-            rapy_client=verify_payment(
-                razorpay_order_id= Payment_MSerializer.validated_data.get("razorpay_order_id"),
-                razorpay_payment_id= Payment_MSerializer.validated_data.get("razorpay_payment_id"),
-                razorpay_signature= Payment_MSerializer.validated_data.get("razorpay_signature")
+            # Assuming verify_payment is a function you've defined elsewhere
+            # that verifies the payment details
+            verify_payment(
+                razorpay_order_id=transaction.validated_data.get("razorpay_order_id"),
+                razorpay_payment_id=transaction.validated_data.get("razorpay_payment_id"),
+                razorpay_signature=transaction.validated_data.get("razorpay_signature")
             )
+            # Save the transaction
             transaction.save()
             response = {
-                "status_code:":status.HTTP_201_CREATED,
-                "message":"transaction created"
+                "status_code": status.HTTP_201_CREATED,
+                "message": "transaction created"
             }
-            return Response(response,status=status.HTTP_201_CREATED)
+            return Response(response, status=status.HTTP_201_CREATED)
         else:
             response = {
-                "statuc_code:":status.HTTP_201_CREATED,
-                "message:":"bad request",
-                "error":transaction.error
+                "status_code": status.HTTP_400_BAD_REQUEST,
+                "message": "bad request",
+                "error": transaction.errors # Corrected from transaction.error to transaction.errors
             }
-            return Response(response,status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+
+# class CompetePaymentView(APIView):
+#     def post(self,request):
+#         transaction = Payment_MSerializer
+#         data=request.data
+#         if transaction.is_valid():
+#             rapy_client=verify_payment(
+#                 razorpay_order_id= Payment_MSerializer.validated_data.get("razorpay_order_id"),
+#                 razorpay_payment_id= Payment_MSerializer.validated_data.get("razorpay_payment_id"),
+#                 razorpay_signature= Payment_MSerializer.validated_data.get("razorpay_signature")
+#             )
+#             transaction.save()
+#             response = {
+#                 "status_code:":status.HTTP_201_CREATED,
+#                 "message":"transaction created"
+#             }
+#             return Response(response,status=status.HTTP_201_CREATED)
+#         else:
+#             response = {
+#                 "statuc_code:":status.HTTP_201_CREATED,
+#                 "message:":"bad request",
+#                 "error":transaction.error
+#             }
+#             return Response(response,status=status.HTTP_400_BAD_REQUEST)
  

@@ -67,9 +67,9 @@ class Cart_MSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class Order_MSerializer(serializers.ModelSerializer):
-    User_ID = UserSerializer()
-    Status_ID = StatusSerializer()
-    Offer_ID = OfferSerializer()
+    # User_ID = UserSerializer()
+    # Status_ID = StatusSerializer()
+    # Offer_ID = OfferSerializer()
 
     class Meta:
         model = Order_M

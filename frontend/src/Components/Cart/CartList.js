@@ -49,7 +49,7 @@ const CartList = () => {
     };
 
     fetchData();
-  }, [data]);
+  }, []);
 
 
 
@@ -141,6 +141,24 @@ const CartList = () => {
 
 
   // Handle order and razorpay---------------------  
+
+  const complete_payment = (orderid,paymentid,sig) => {
+    axios.post('http://127.0.0.1:8000/api/complete/',{
+      "razorpay_payment_id" : paymentid,
+      "razorpay_order_id" : orderid,
+      "razorpay_signature" : sig
+      // pay_Nm0LIsmdIo9mCE
+      // order_Nm0Kwd7Ar65MkD
+      //2aba4691f4649776ba8cbdc4870ded5cf818e98fbacc86f602ff23c8fb0587a5
+
+    })
+    .then((response)=>{
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.log(error.message)
+    })
+  }
   const [Razorpay] = useRazorpay();
 
 
@@ -169,6 +187,16 @@ const CartList = () => {
         name: "Acme Corp",
         description: "Test Transaction",
         order_id: orderid,
+        handler: function (response) {
+          alert(response.razorpay_payment_id);
+          alert(response.razorpay_order_id);
+          alert(response.razorpay_signature);
+          complete_payment(
+            response.razorpay_payment_id,
+            response.razorpay_order_id,
+            response.razorpay_signature
+          )
+        },
         prefill: {
           name: "Piyush Garg",
           email: "youremail@example.com",
@@ -183,6 +211,15 @@ const CartList = () => {
       };
 
       const rzp = new Razorpay(options);
+      rzp.on("payment.failed", function (response) {
+        alert(response.error.code);
+        alert(response.error.description);
+        alert(response.error.source);
+        alert(response.error.step);
+        alert(response.error.reason);
+        alert(response.error.metadata.order_id);
+        alert(response.error.metadata.payment_id);
+      });
       rzp.open();
 
     }).catch(function (error) {
