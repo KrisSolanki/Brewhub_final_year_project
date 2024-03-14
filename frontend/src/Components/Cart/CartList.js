@@ -49,7 +49,7 @@ const CartList = () => {
     };
 
     fetchData();
-  }, []);
+  }, [data]);
 
 
 

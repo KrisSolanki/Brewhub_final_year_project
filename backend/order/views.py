@@ -171,8 +171,9 @@ class CartDetailView(APIView):
     # Find or create the cart detail for the item
         item = serializer.validated_data['Item_ID']
         quantity = serializer.validated_data['ItemQuantity']
-        discount_factor = 1 - (selected_offer.DiscountPercentage / 100) if selected_offer else 1
-        subtotal = item.ItemPrice * quantity * discount_factor
+        # discount_factor = 1 - (selected_offer.DiscountPercentage / 100) if selected_offer else 1
+        # subtotal = item.ItemPrice * quantity * discount_factor
+        subtotal = item.ItemPrice * quantity 
 
         
     # Try to find an existing cart detail for the item
@@ -180,16 +181,30 @@ class CartDetailView(APIView):
         
         # If the cart detail already exists, update the quantity and subtotal
         cart_detail.ItemQuantity += 1
-        cart_detail.Subtotal = item.ItemPrice * cart_detail.ItemQuantity * discount_factor
+        # cart_detail.Subtotal = item.ItemPrice * cart_detail.ItemQuantity * discount_factor
+        cart_detail.Subtotal = item.ItemPrice * cart_detail.ItemQuantity 
         print("cart_detail",cart_detail.ItemQuantity)
         print("cart_detail.Subtotal",cart_detail.Subtotal)
-            
-
         cart_detail.save()
+        
+        # cart_details = Cart_Details.objects.filter(Cart_ID=cart_obj)
+        # cart_obj.Subtotal = sum(cart_item.Subtotal for cart_item in cart_details)
 
-        # Update the total in the Cart_M model
-        cart_obj.Total = cart_detail.Subtotal
-        cart_obj.Subtotal = item.ItemPrice * cart_detail.ItemQuantity
+        # # Update the total in the Cart_M model
+        # # cart_obj.Total = cart_detail.Subtotal
+        # # cart_obj.Subtotal = item.ItemPrice * cart_detail.ItemQuantity
+        # # cart_obj.save()
+
+        # # Recalculate the total for the entire cart
+        # cart_details = Cart_Details.objects.filter(Cart_ID=cart_obj)
+        # total = sum(cart_item.Subtotal for cart_item in cart_details)
+        # cart_obj.Total = total
+        # cart_obj.save()
+        cart_details = Cart_Details.objects.filter(Cart_ID=cart_obj)
+        cart_obj.Subtotal = sum(cart_item.Subtotal for cart_item in cart_details)
+            
+            # Update the total for the entire cart
+        cart_obj.Total = cart_obj.Subtotal  # Assuming there are no additional discounts
         cart_obj.save()
 
         response_data = {
@@ -236,34 +251,40 @@ class CartDetailView(APIView):
 
         
     # Try to find an existing cart detail for the item
-        cart_detail = Cart_Details.objects.get(Cart_ID=cart_obj, Item_ID=item)
+        try:
+            cart_detail = Cart_Details.objects.get(Cart_ID=cart_obj, Item_ID=item)
         
         # If the cart detail already exists, update the quantity and subtotal
-        if cart_detail.ItemQuantity > 1:
+            if cart_detail.ItemQuantity > 1:
     # Decrease the item quantity by 1
-            cart_detail.ItemQuantity -= 1
+                cart_detail.ItemQuantity -= 1
     # Update the subtotal based on the new quantity and the discount factor
-            cart_detail.Subtotal = item.ItemPrice * cart_detail.ItemQuantity * discount_factor
-            cart_obj.Total = item.ItemPrice * cart_detail.ItemQuantity * discount_factor 
-            cart_obj.Subtotal = item.ItemPrice * cart_detail.ItemQuantity
-            cart_detail.save()
+                cart_detail.Subtotal = item.ItemPrice * cart_detail.ItemQuantity * discount_factor
+                cart_detail.save()
+            # cart_obj.Total = item.ItemPrice * cart_detail.ItemQuantity * discount_factor 
+            # cart_obj.Subtotal = item.ItemPrice * cart_detail.ItemQuantity
+            # cart_detail.save()
 
-        else:
-            cart_detail.delete()
-            
-            cart_obj.Total = item.ItemPrice * cart_detail.ItemQuantity * discount_factor 
-            cart_obj.Subtotal = item.ItemPrice * cart_detail.ItemQuantity
-            cart_obj.save()
-            if cart_obj.CartID == cart_detail.Cart_ID:
-                print("cart_obj.CartID",cart_obj.CartID)
-                print("cart_detail.Cart_ID",cart_detail.Cart_ID)
-                cart_obj.delete()
             else:
-                cart_obj.Total = 0
-                cart_obj.Subtotal = 0
-                cart_obj.Total = item.ItemPrice * cart_detail.ItemQuantity * discount_factor 
-                cart_obj.Subtotal = item.ItemPrice * cart_detail.ItemQuantity
-                cart_obj.save()
+                cart_detail.delete()
+            
+            cart_details = Cart_Details.objects.filter(Cart_ID=cart_obj)
+            cart_obj.Subtotal = sum(cart_item.Subtotal for cart_item in cart_details)
+            cart_obj.Total = cart_obj.Subtotal  # Assuming there are no additional discounts
+            cart_obj.save()
+        except Cart_Details.DoesNotExist:
+            pass
+            # if cart_obj.CartID == cart_detail.Cart_ID:
+            #     print("cart_obj.CartID",cart_obj.CartID)
+            #     print("cart_detail.Cart_ID",cart_detail.Cart_ID)
+            #     cart_obj.delete()
+            # else:
+            #     cart_obj.Total = 0
+            #     cart_obj.Subtotal = 0
+            #     cart_obj.Total = item.ItemPrice * cart_detail.ItemQuantity * discount_factor 
+            #     cart_obj.Subtotal = item.ItemPrice * cart_detail.ItemQuantity
+            #     cart_obj.save()
+        
 
         # Update the total in the Cart_M model
         
