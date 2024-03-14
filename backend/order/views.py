@@ -274,25 +274,12 @@ class CartDetailView(APIView):
             cart_obj.save()
         except Cart_Details.DoesNotExist:
             pass
-            # if cart_obj.CartID == cart_detail.Cart_ID:
-            #     print("cart_obj.CartID",cart_obj.CartID)
-            #     print("cart_detail.Cart_ID",cart_detail.Cart_ID)
-            #     cart_obj.delete()
-            # else:
-            #     cart_obj.Total = 0
-            #     cart_obj.Subtotal = 0
-            #     cart_obj.Total = item.ItemPrice * cart_detail.ItemQuantity * discount_factor 
-            #     cart_obj.Subtotal = item.ItemPrice * cart_detail.ItemQuantity
-            #     cart_obj.save()
         
-
-        # Update the total in the Cart_M model
-        
-
         response_data = {
         'message': 'Item updated in the cart successfully',
         'cart': Cart_MSerializer(cart_obj).data,
         }
+
 
         return Response(response_data, status=status.HTTP_200_OK)
    
