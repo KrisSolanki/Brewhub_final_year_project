@@ -228,11 +228,21 @@ def send_otp_to_mobile_view(request):
 
     if serializer.is_valid():
         mobile_no = serializer.validated_data['mobile_no']
-        otp = send_otp_to_mobile(mobile_no)
-        serializer.data.otp = otp  # Store the OTP in the serializer
+        # otp = send_otp_to_mobile(mobile_no)
+        otp = send_sms(mobile_no)
+        message = client.messages \
+                        .create(
+                            from_ = '+15169732425',
+                            body = f"Your OTP is {otp} .",
+                            # body = f"Hello , to reset password click this link http://127.0.0.1:8000/api/register/ ",
+                            # to = '+91 90543 95987'
+                            to = '+91'+mobile_no
+                        )
+        
+        # serializer.data.otp = otp  # Store the OTP in the serializer
 
         if otp is not None:
-            return Response(serializer.validated_data, status=status.HTTP_200_OK)
+            return Response({'otp': otp}, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'Failed to send OTP'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     else:

@@ -6,7 +6,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 class MobileNumberSerializer(serializers.Serializer):
     mobile_no = serializers.CharField(max_length=15)
-    otp = serializers.CharField(max_length=6)
+    # otp = serializers.CharField(max_length=6)
 class RolesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Roles

@@ -17,6 +17,7 @@ import OTPPage from './Pages/Auth/OTPPage';
 // import FiltDelivery from './Components/CafeList/FiltDelivery';
 import {AuthProvider} from './Context/AuthContext';
 import { MenuContext, MenuContextProvider } from './Context/MenuContext';
+import ForgetPasswdPage from './Pages/Auth/ForgetPasswdPage';
 
 function App() {
   
@@ -55,6 +56,7 @@ function App() {
 
         <Route path="/login" element={<LoginPage/>} />
           <Route path="/otp" element={<OTPPage />} />
+          <Route path="/forgotpassword" element={<ForgetPasswdPage />} />
 
       </Routes>
         </MenuContextProvider>
