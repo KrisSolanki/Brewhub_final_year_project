@@ -28,6 +28,11 @@
     margin: auto;
     height: 224px;
 }
+.item-img{
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
    
    .menu-item-image {
     width: 100%;

@@ -82,6 +82,8 @@ const CartList = () => {
         }
       );
       addToCart(cart_items.Item_ID);
+      
+      
     } catch (error) {
       console.error('Error updating item quantity:', error);
     }
@@ -260,45 +262,88 @@ const CartList = () => {
   // console.log("zzzz",data.cart.menus.ItemID )
   return (
 
-    <div className="cart">
-      <div>
-        <h1>Your Cart Items</h1>
-        {data.cart_items.map((cartItem) => (
-          <div key={cartItem.CartDetailsID}>
-            <p>ItemID: {cartItem.Item_ID}</p>
-            <p>Quantity: {cartItem.ItemQuantity}</p>
-            <button onClick={(event) => handleIncrement(event, cartItem)}>+</button>
-            {/* {cartItem.ItemQuantity} */}
-            {cartCounts1[cartItem.Cart_Item_ID] || cartItem.ItemQuantity}
-            {/* {cartCounts1} */}
-            <button onClick={() => handleDecrement(cartItem, cartItem.CartDetailsID)}>-</button>
+    // <div className="cart">
+    //   <div>
+    //     <h1>Your Cart Items</h1>
+    //     {data.cart_items.map((cartItem) => (
+    //       <div key={cartItem.CartDetailsID}>
+    //         <p>ItemID: {cartItem.Item_ID}</p>
+    //         <p>Quantity: {cartItem.ItemQuantity}</p>
+    //         <button onClick={(event) => handleIncrement(event, cartItem)}>+</button>
+    //         {/* {cartItem.ItemQuantity} */}
+    //         {cartCounts1[cartItem.Cart_Item_ID] || cartItem.ItemQuantity}
+    //         {/* {cartCounts1} */}
+    //         <button onClick={() => handleDecrement(cartItem, cartItem.CartDetailsID)}>-</button>
 
-            <button onClick={() => handleDelete(cartItem.CartDetailsID)}>DELETE</button>
+    //         <button onClick={() => handleDelete(cartItem.CartDetailsID)}>DELETE</button>
 
-            <p>Subtotal: {cartItem.Subtotal}</p>
+    //         <p>Subtotal: {cartItem.Subtotal}</p>
+    //       </div>
+    //     ))}
+    //   </div>
+    //   <div className="cart">
+    //     <p>Total: {data.cart.Total}</p>
+
+    //   </div>
+    //   <div className="checkout">
+    //     <button onClick={handleorder}>Checkout</button>
+    //   </div>
+    //   {data.cart_items.length === 0 && <h1>Your Cart is Empty</h1>}
+    //   <div>
+    //     <h1>Menus</h1>
+    //     {data.menus.map((menu) => (
+    //       <div key={menu.ItemID}>
+    //         <p>Item Name: {menu.ItemName}</p>
+    //         <p>Description: {menu.ItemDescription}</p>
+    //         <p>Price: {menu.ItemPrice}</p>
+    //         {/* Add more details as needed */}
+    //       </div>
+    //     ))}
+    //   </div>
+    // </div>
+
+
+    <div class="cart-container">
+  <div class="cart-items">
+    <h1>Your Cart Items</h1>
+    {data.cart_items.map((cartItem) => {
+      // Find the corresponding menu item for the cart item
+      const menuItem = data.menus.find(menu => menu.ItemID === cartItem.Item_ID);
+
+      return (
+        <div class="cart-item" key={cartItem.CartDetailsID}>
+          <div class="item-details">
+            <img src={menuItem.ItemImage} alt={menuItem.ItemName} />
+            <div class="item-info">
+              <p><strong>Item Name:</strong> {menuItem.ItemName}</p>
+              <p><strong>Description:</strong> {menuItem.ItemDescription}</p>
+              <p><strong>Price:</strong> {menuItem.ItemPrice}</p>
+              <p><strong>Quantity:</strong> {cartCounts1[cartItem.CartDetailsID] || cartItem.ItemQuantity}</p>
+              <p><strong>Subtotal:</strong> {cartItem.Subtotal}</p>
+            </div>
           </div>
-        ))}
-      </div>
-      <div className="cart">
-        <p>Total: {data.cart.Total}</p>
-
-      </div>
-      <div className="checkout">
-        <button onClick={handleorder}>Checkout</button>
-      </div>
-      {data.cart_items.length === 0 && <h1>Your Cart is Empty</h1>}
-      <div>
-        <h1>Menus</h1>
-        {data.menus.map((menu) => (
-          <div key={menu.ItemID}>
-            <p>Item Name: {menu.ItemName}</p>
-            <p>Description: {menu.ItemDescription}</p>
-            <p>Price: {menu.ItemPrice}</p>
-            {/* Add more details as needed */}
+          <div class="item-actions">
+            <button class="action-btn" onClick={(event) => handleIncrement(event, cartItem)}>+</button>
+            <p class="quantityDisplay">{cartCounts1[cartItem.CartDetailsID] || cartItem.ItemQuantity}</p>
+            <button class="action-btn" onClick={() => handleDecrement(cartItem, cartItem.CartDetailsID)}>-</button>
+            <button class="delete-btn" onClick={() => handleDelete(cartItem.CartDetailsID)}>DELETE</button>
           </div>
-        ))}
-      </div>
+        </div>
+      );
+    })}
+    {data.cart_items.length === 0 && <h1>Your Cart is Empty</h1>}
+  </div>
+  <div class="cart-summary">
+    <div class="summary-total">
+      <p><strong>Total:</strong> {data.cart.Total}</p>
     </div>
+    <div class="checkout-btn">
+      <button onClick={handleorder}>Checkout</button>
+    </div>
+  </div>
+</div>
+
+
   );
 };
 

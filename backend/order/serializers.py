@@ -66,7 +66,13 @@ class Cart_MSerializer(serializers.ModelSerializer):
         model = Cart_M
         fields = '__all__'
 
+class Order_DetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order_Details
+        fields = '__all__'
+
 class Order_MSerializer(serializers.ModelSerializer):
+    Order_ID=Order_DetailsSerializer()
     # User_ID = UserSerializer()
     # Status_ID = StatusSerializer()
     # Offer_ID = OfferSerializer()
@@ -77,11 +83,6 @@ class Order_MSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'User_ID': {'required': False},
         }
-
-class Order_DetailsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Order_Details
-        fields = '__all__'
 
 class Payment_MSerializer(serializers.ModelSerializer):
     class Meta:

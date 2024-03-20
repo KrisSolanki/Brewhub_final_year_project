@@ -85,7 +85,7 @@ const Menu = ({data}) => {
           {data.length > 0 && (
             <div className="cafe-details">
               <div className="cafe-logo">
-                {/* <img src="{`http://127.0.0.1:8000/api${cafe.LogoImage}`}" alt="" srcset="" /> */}
+                <img src={`http://127.0.0.1:8000/api${data[0].cafe.LogoImage}`} alt="" srcset="" />
                 <p>img</p>
               </div>
               <div className="cafe-name">
@@ -105,7 +105,8 @@ const Menu = ({data}) => {
               <div className="grp">
 
               <div className="item-img">
-                <p>img</p>
+              <img src={`http://127.0.0.1:8000/api${Items.ItemImage
+            }`} alt="" srcset="" />
               </div>
               <div className="item-name">
                 <h2>{Items.ItemName}</h2>
