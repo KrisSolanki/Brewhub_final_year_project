@@ -8,6 +8,7 @@ import { useContext } from 'react';
 import useRazorpay from 'react-razorpay';
 
 
+
 const CartList = () => {
   const { addToCart, removeFromCart, cartItems } = useContext(MenuContext);
 
@@ -19,6 +20,8 @@ const CartList = () => {
     message: ''
   });
   const [cartCounts1, setCartCounts1] = useState({});
+  
+
   // const [count,setCount] = useState(); 
   useEffect(() => {
 
@@ -82,6 +85,7 @@ const CartList = () => {
         }
       );
       addToCart(cart_items.Item_ID);
+     
       
       
     } catch (error) {
@@ -130,14 +134,7 @@ const CartList = () => {
     } catch (error) {
       console.error('Error updating item quantity:', error);
     }
-    // console.log("data.cart.CartID", data.cart.CartID)
-    // console.log("cart_items", cart_items)
-    // console.log("cart_items.CartDetailsID", cart_items.CartDetailsID);
-    // console.log("cart_items.Item_ID", cart_items.Item_ID)
-    // console.log("Before decrement:", cartCounts1);
-    // console.log("Before decrement:", cartCounts1);
-    // console.log("cart_items.CartDetailsID", cart_items.CartDetailsID);
-    // console.log("cart_items1:", cart_items)
+    
   };
   //=============================================================
 
@@ -262,45 +259,7 @@ const CartList = () => {
   // console.log("zzzz",data.cart.menus.ItemID )
   return (
 
-    // <div className="cart">
-    //   <div>
-    //     <h1>Your Cart Items</h1>
-    //     {data.cart_items.map((cartItem) => (
-    //       <div key={cartItem.CartDetailsID}>
-    //         <p>ItemID: {cartItem.Item_ID}</p>
-    //         <p>Quantity: {cartItem.ItemQuantity}</p>
-    //         <button onClick={(event) => handleIncrement(event, cartItem)}>+</button>
-    //         {/* {cartItem.ItemQuantity} */}
-    //         {cartCounts1[cartItem.Cart_Item_ID] || cartItem.ItemQuantity}
-    //         {/* {cartCounts1} */}
-    //         <button onClick={() => handleDecrement(cartItem, cartItem.CartDetailsID)}>-</button>
-
-    //         <button onClick={() => handleDelete(cartItem.CartDetailsID)}>DELETE</button>
-
-    //         <p>Subtotal: {cartItem.Subtotal}</p>
-    //       </div>
-    //     ))}
-    //   </div>
-    //   <div className="cart">
-    //     <p>Total: {data.cart.Total}</p>
-
-    //   </div>
-    //   <div className="checkout">
-    //     <button onClick={handleorder}>Checkout</button>
-    //   </div>
-    //   {data.cart_items.length === 0 && <h1>Your Cart is Empty</h1>}
-    //   <div>
-    //     <h1>Menus</h1>
-    //     {data.menus.map((menu) => (
-    //       <div key={menu.ItemID}>
-    //         <p>Item Name: {menu.ItemName}</p>
-    //         <p>Description: {menu.ItemDescription}</p>
-    //         <p>Price: {menu.ItemPrice}</p>
-    //         {/* Add more details as needed */}
-    //       </div>
-    //     ))}
-    //   </div>
-    // </div>
+<>
 
 
     <div class="cart-container">
@@ -343,6 +302,7 @@ const CartList = () => {
   </div>
 </div>
 
+</>
 
   );
 };

@@ -1,14 +1,19 @@
-import React, { useContext } from 'react'
+import React, { useContext,useState } from 'react'
 // import { useState } from 'react';
 import { MenuContext } from '../../Context/MenuContext'
 import './MenuList.css'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Notification from '../Notification/Notification'
+
 // import { useEffect } from 'react';
 const Menu = ({data}) => {
     // const ( id ,itemname,price,description) = props.data
     const {addToCart} = useContext(MenuContext);
     const navigate = useNavigate();
+    const [showNotification, setShowNotification] = useState(false);
+ const [notificationMessage, setNotificationMessage] = useState("");
+ const [notificationColor, setNotificationColor] = useState("");
     // const [cartCounts, setCartCounts] = useState(0);
     // const [showCarts, setShowCarts] = useState(false);
 
@@ -71,6 +76,10 @@ const Menu = ({data}) => {
           });
       
             addToCart(itemId);
+            setNotificationMessage("Item quantity updated successfully.");
+            setNotificationColor("green");
+            setShowNotification(true);
+            setTimeout(() => setShowNotification(false), 3000);
           } catch (error) {
             console.error('Error adding item to cart:', error);
           }
@@ -81,6 +90,10 @@ const Menu = ({data}) => {
         };
       
   return (
+    <>
+    {showNotification && (
+        <Notification message={notificationMessage} color={notificationColor} />
+      )}
     <div className="container-item">
           {data.length > 0 && (
             <div className="cafe-details">
@@ -151,8 +164,9 @@ const Menu = ({data}) => {
         </div>
 
 
-        ))}
+))}
       </div >
+</>
 
   )
 }
