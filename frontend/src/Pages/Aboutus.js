@@ -13,6 +13,9 @@ function Aboutus({setProgress}) {
   return (
     <div>
       <h1>About Us</h1>
+      <ul>
+      
+      </ul>
       
     </div>
   )

@@ -85,7 +85,7 @@ const Menu = ({data}) => {
           {data.length > 0 && (
             <div className="cafe-details">
               <div className="cafe-logo">
-                <img src={`http://127.0.0.1:8000/api${data[0].cafe.LogoImage}`} alt="" srcset="" />
+                <img className='cafelogoimg' src={`http://127.0.0.1:8000/api${data[0].cafe.LogoImage}`} alt="" srcset="" />
               </div>
               <div className="cafe-name">
                 {/* <p>{Items.cafe.CafeName}</p> */}
