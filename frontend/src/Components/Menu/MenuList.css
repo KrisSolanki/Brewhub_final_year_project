@@ -3,11 +3,11 @@
     flex-direction: column; /* Stack cafe details and menu cards vertically */
     align-items: center; /* Center items horizontally */
     margin: 10px auto; /* Center the container */
-    padding: 10px;
+    padding-top: 10px;
     /* border: 1px solid #ccc; */
     /* border-radius: 8px; */
     /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
-    width: 90%; /* Adjust the width as needed */
+    width: 100%; /* Adjust the width as needed */
 }
 
 .cafe-details {
@@ -36,7 +36,8 @@
     align-items: center;
     justify-content: space-between;
     /* width: 150px; */
-    width: 302px;
+    
+    width: 1006px;
 }
 .menu-card {
     display: flex;
@@ -55,10 +56,20 @@
     margin-right: 20px;
 }
 
-.item-name,
-.item-price,
+.item-name{
+    text-align: left;
+    display: flex;
+}
+
+.item-price{
+    text-align: left;
+}
 .item-desc {
     text-align: left;
+    height: 61px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
 }
 
 .item-add-to-cart-btn {

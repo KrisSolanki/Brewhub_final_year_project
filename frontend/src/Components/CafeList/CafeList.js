@@ -53,10 +53,8 @@ const CafeList = () => {
               <div className="desc">
               <p>{cafe.Description}</p>
               </div>
-              <div className="ratings">
-              <p>4.1</p>  
-              </div>    
               </div>
+   
 
           </NavLink>
             </div>

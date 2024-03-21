@@ -332,7 +332,6 @@ const CartList = () => {
       );
     })}
     {data.cart_items.length === 0 && <h1>Your Cart is Empty</h1>}
-  </div>
   <div class="cart-summary">
     <div class="summary-total">
       <p><strong>Total:</strong> {data.cart.Total}</p>
@@ -340,6 +339,7 @@ const CartList = () => {
     <div class="checkout-btn">
       <button onClick={handleorder}>Checkout</button>
     </div>
+  </div>
   </div>
 </div>
 
