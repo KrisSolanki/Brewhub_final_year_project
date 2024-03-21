@@ -48,7 +48,7 @@ class Menu(models.Model):
     ItemName = models.CharField(max_length=30)
     ItemDescription = models.TextField(blank=True)
     ItemSize = models.CharField(max_length=6,null=True,blank=True)
-    ItemWeight = models.DecimalField(max_digits=6, decimal_places=2)
+    ItemWeight = models.CharField(max_length=30)
     ItemPrice = models.DecimalField(max_digits=6,decimal_places=2,default=0)
     ItemImage = models.ImageField(upload_to='item_images/',blank=True,null=True)
     category = models.ForeignKey(Category,on_delete=models.CASCADE)

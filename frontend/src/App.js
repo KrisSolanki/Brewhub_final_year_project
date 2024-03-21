@@ -40,7 +40,7 @@ function App() {
 
       
       <Navbar/>
-      <SubNavbar/>
+      {/* <SubNavbar/> */}
         <MenuContextProvider>
       <Routes>
         
@@ -48,8 +48,8 @@ function App() {
         <Route path='/cart' element={<Cart setProgress = {setProgress} />} />
         <Route path='/home' element={<Home setProgress = {setProgress} />} />
         <Route path='/aboutus' element={<Aboutus setProgress = {setProgress} />} />
-        <Route path='/TypeDelivery' element={<TypeDelivery setProgress = {setProgress} />} />
-        <Route path='/TypeTakeAway' element={<TypeTakeaway setProgress = {setProgress} />} />
+        {/* <Route path='/TypeDelivery' element={<TypeDelivery setProgress = {setProgress} />} /> */}
+        {/* <Route path='/TypeTakeAway' element={<TypeTakeaway setProgress = {setProgress} />} /> */}
         <Route path='/CafeList/:CafeID/' element={<MenuList setProgress = {setProgress} />} />
           
         {/* <Route path='/TypeDelivery' element={<FiltDelivery />} /> */}

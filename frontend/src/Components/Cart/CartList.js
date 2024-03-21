@@ -313,7 +313,7 @@ const CartList = () => {
       return (
         <div class="cart-item" key={cartItem.CartDetailsID}>
           <div class="item-details">
-            <img src={menuItem.ItemImage} alt={menuItem.ItemName} />
+          <img src={`http://127.0.0.1:8000/api${menuItem.ItemImage}`} alt="" srcset="" />
             <div class="item-info">
               <p><strong>Item Name:</strong> {menuItem.ItemName}</p>
               <p><strong>Description:</strong> {menuItem.ItemDescription}</p>

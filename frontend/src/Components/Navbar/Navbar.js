@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom';
 
 import Logo from '../../Assets/NavbarImgs/test1.png';
 // import Search from '../../Assets/NavbarImgs/search.png';
+import Search from '../../Assets/NavbarImgs/search.png';
 
 // import { IoHomeOutline } from "react-icons/io5";<IoHomeOutline />
 import { IoIosHome } from "react-icons/io";
@@ -66,6 +67,11 @@ const Navbar = () => {
           {/* </li> */}
           {/* </ul> */}
           <ul className='tgl'>
+            <li><div className="searchboxSubNavbar">
+            <input type="text" placeholder="Search" className='searchtxtSubNav' />
+            <button className="btn1SubNav" type="submit"><img src={Search} alt="search img" className='search-img' /></button>
+            {/* <button className="btn1SubNav" id="btn1SubNav" type="submit"><IoSearchCircle size='4rem' className='icon' /></button> */}
+          </div></li>
             <li><NavLink  to='/home'><span><IoIosHome /></span>Home</NavLink></li>
             <li><NavLink  to='/aboutus'><span><MdGroups /></span>About us</NavLink></li>
             <li><NavLink  to='/login'><span><RiLoginBoxFill /></span>Sign in</NavLink></li>

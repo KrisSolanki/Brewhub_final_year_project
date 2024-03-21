@@ -161,7 +161,8 @@
 .tgl{
     /* flex: 1; */
     list-style: none;
-    display: inline-block;
+    display: flex;
+    align-items: center;
     
 }
 
@@ -266,4 +267,41 @@
     .tgl li {
         font-size: 16px;
     }
+}
+
+.searchboxSubNavbar{
+    display: flex;
+    align-items: center;
+    /* margin-inline-end: -342px; */
+    /* margin-inline-start: 336px; */
+    height: 50px;
+    /* width: 30%; */
+    margin: 3px 12px;
+}
+.searchboxSubNavbar input {
+    /* padding: 6px; */
+    background: white;
+    border-radius: 50px;
+    border: 1px solid black;
+    outline: 0;
+    color: black;
+    font-size: 18px;
+    /* max-width: 300px; */
+    transition: 0.4s ease;
+    width: 0;
+    border: none;
+    padding: 0px;
+}
+.searchboxSubNavbar:hover > .searchtxtSubNav{
+    
+    width: 200px;
+    border: 1px solid black;
+    padding:6px;
+    
+}
+.search-img{
+    height: 32px;
+    width: 32px;
+    border-radius: 50px;
+    /* margin: 10px 10px; */
 }
