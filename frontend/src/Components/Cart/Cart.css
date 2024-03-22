@@ -1,45 +1,4 @@
-/* .cart-page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 10px auto;
-    padding: 10px;
-    width: 90%;
-   }
-   
-   .cart-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-   }
-   
-   .item-details {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-   }
-   
-   .cart-controls button {
-    padding: 5px 10px;
-    margin: 0 5px;
-    font-size: 16px;
-   }
-   
-   .cart-controls button:hover {
-    background-color: #cfd0d1;
-    color: black;
-   }
-    */
-
-
-    /* ______________________________ */
-
-    /* Cart.module.css or Cart.css */
+/* 
     .cart-container {
       display: flex;
       flex-direction: column;
@@ -53,7 +12,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      /* margin-bottom: 20px; */
       margin: 0 100px 0 100px ;
     }
     
@@ -94,7 +52,7 @@
       align-items: center;
   }
     .summary-total {
-      margin-bottom: 10px; /* Add margin to create space between total and checkout */
+      margin-bottom: 10px; 
     }
     
     .checkout-btn button {
@@ -104,4 +62,79 @@
       color: #fff;
       cursor: pointer;
     }
-    
+     */
+
+
+     /* Cart.module.css or Cart.css */
+.cart-container {
+  display: flex;
+  flex-direction: column;
+ }
+ 
+ .cart-items {
+  margin-bottom: 20px; 
+ }
+ 
+ .cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 100px 0 100px;
+ }
+ 
+ .item-details {
+  display: flex;
+  align-items: center;
+ }
+ 
+ .item-details img {
+  width: 100px; /* Set a fixed width */
+  height: 100px; /* Set a fixed height */
+  object-fit: cover; /* Maintain aspect ratio while filling the container */
+  border-radius: 5px; /* Optional: Add a border radius for aesthetics */
+ }
+ 
+ .item-info {
+  margin-left: 20px;
+ }
+ 
+ .item-actions {
+  display: flex;
+  align-items: center;
+ }
+ 
+ .action-btn {
+  padding: 5px 10px;
+  margin-right: 5px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+ }
+ 
+ .delete-btn {
+  padding: 5px 10px;
+  border: none;
+  background-color: #dc3545;
+  color: #fff;
+  cursor: pointer;
+ }
+ 
+ .cart-summary {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+ }
+ 
+ .summary-total {
+  margin-bottom: 10px; /* Add margin to create space between total and checkout */
+ }
+ 
+ .checkout-btn button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #28a745;
+  color: #fff;
+  cursor: pointer;
+ }
+ 

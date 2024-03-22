@@ -20,7 +20,7 @@
     background-color: #f44336;
     color: white;
    }
-   
+
    @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }

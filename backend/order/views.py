@@ -322,6 +322,8 @@ class OrderCreateView(APIView):
 
         # Retrieve items from the user's cart
         cart_items = Cart_Details.objects.filter(Cart_ID__User_ID=user)
+        cart = Cart_M.objects.filter(User_ID=user)
+        # cart = Cart_M.objects.filter(Cart_ID__User_ID=user)
 
         # offer_applied = cart_items.filter(Offer_ID__isnull=False).exists()
         # print(offer_applied)
@@ -351,7 +353,8 @@ class OrderCreateView(APIView):
                 # Offer_ID=cart_item.Offer_ID if cart_item.Offer_ID else None,
                 )
             total=subtotal
-            new_order.Total = total
+            new_order.Total = subtotal
+
 
         # if offer_applied:
         #     # Assuming the first item's offer is applied to the entire order
@@ -371,7 +374,6 @@ class OrderCreateView(APIView):
 
         # Update the total price of the order
         # new_order.Total = sum(cart_item.Subtotal for cart_item in cart_items)
-        new_order.Total = total
         # new_order.Offer_ID=cart_item.Offer_ID if cart_item.Offer_ID else None,
         # new_order.save()
 
@@ -387,7 +389,9 @@ class OrderCreateView(APIView):
         # payment = Payment_M.objects.create(OrderID=order)
 
         # Clear the user's cart
-        # cart_items.delete()
+        cart_items.delete()
+        cart.delete()
+        # cart.delete()
 
         return Response({
             'message': 'Order created successfully',

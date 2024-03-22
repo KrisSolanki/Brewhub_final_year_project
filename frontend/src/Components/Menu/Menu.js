@@ -14,47 +14,7 @@ const Menu = ({data}) => {
     const [showNotification, setShowNotification] = useState(false);
  const [notificationMessage, setNotificationMessage] = useState("");
  const [notificationColor, setNotificationColor] = useState("");
-    // const [cartCounts, setCartCounts] = useState(0);
-    // const [showCarts, setShowCarts] = useState(false);
-
-    // const handleAddToCart = (itemId) => {
-    //     setCartCounts(prevCounts => ({
-    //       ...prevCounts,
-    //       [itemId]: 1,
-    //     }))};
     
-    //     setShowCarts(prevShowCarts => ({
-    //       ...prevShowCarts,
-    //       [itemId]: true,
-    //     }));
-    //   };
-    
-    //   const handleIncrement = (itemId) => {
-    //     setCartCounts(prevCounts => ({
-    //       ...prevCounts,
-    //       [itemId]: (prevCounts[itemId] || 0) + 1,
-    //     }));
-    //   };
-    
-    //   const handleDecrement = (itemId) => {
-    //     setCartCounts(prevCounts => ({
-    //       ...prevCounts,
-    //       [itemId]: Math.max(0, (prevCounts[itemId] || 0) - 1),
-    //     }));
-    
-        // setShowCarts(prevShowCarts => ({
-        //   ...prevShowCarts,
-        //   [Items.ItemID]: Count[Items.ItemID] > 1,
-        // }));
-        // setShowCarts(prevShowCarts => {
-        //     const itemId = Items.ItemID;
-        //     const isCountGreaterThanOne = Count[itemId] > 1;
-          
-        //     return {
-        //       ...prevShowCarts,
-        //       [itemId]: isCountGreaterThanOne,
-        //     };
-        //   });
   
       const handleAddToCart = async (itemId) => {
           try {
@@ -76,7 +36,7 @@ const Menu = ({data}) => {
           });
       
             addToCart(itemId);
-            setNotificationMessage("Item quantity updated successfully.");
+            setNotificationMessage("Item added to successfully.");
             setNotificationColor("green");
             setShowNotification(true);
             setTimeout(() => setShowNotification(false), 3000);

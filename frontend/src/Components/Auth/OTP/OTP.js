@@ -27,7 +27,7 @@ const OTP = () => {
       if (response.data.status === 200) {
         const token = response.data.token; // Adjust this based on the actual response structure
         // localStorage.setItem("authTokens", JSON.stringify(token));
-        navigate("/address"); // Navigate to the next page after successful OTP verification
+        navigate("/home"); // Navigate to the next page after successful OTP verification
         alert("Token Stored");
       } else {
         alert("OTP verification failed. Please try again.");
@@ -45,37 +45,7 @@ const OTP = () => {
     }
   };
 
-  // const handleVerify = async () => {
-  //   try {
-  //     alert(otp)
-  //     const response = await axios.post(
-  //       "http://127.0.0.1:8000/api/Auth/verify_otp/",
-  //       {
-  //         otp: otp,
-  //         mobile_no: mobileNumber, // Include the mobile number in the request
-  //       }
-  //     );
-
-  //     if (response.status === 200) {
-  //       const token = response.data.token; // Adjust this based on the actual response structure
-  //       // localStorage.setItem("authTokens", JSON.stringify(token));
-  //       navigate("/address"); // Navigate to the next page after successful OTP verification
-  //       alert("Token Stored");
-  //     } else {
-  //       alert("OTP verification failed. Please try again.");
-  //       console.log("Calling logoutUser");
-  //       const f1 = logoutUser;
-  //       f1(); // This calls the logoutUser functio
-  //     }
-  //   } catch (error) {
-  //     console.error("Error verifying OTP:", error.message);
-  //     alert("An error occurred while verifying OTP.");
-  //     // f1 = () =>{logoutUser}
-  //     // f1()
-  //     const f1 = logoutUser;
-  //     f1(); // This calls the logoutUser function
-  //   }
-  // };
+ 
   return (
     <div className="OTP">
       <h2>OTP Verification</h2>
@@ -101,7 +71,7 @@ const OTP = () => {
           Verify
         </button>
 
-        <button type="button" onClick={() => navigate("/address")}>
+        <button type="button" onClick={() => navigate("/home")}>
           Next
         </button>
       </form>

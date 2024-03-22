@@ -112,18 +112,18 @@ class LoginView(APIView):
             raise AuthenticationFailed('Incorrect password! \nPlease enter the correct password.')
         #-------------- using 2factor --------------
         # Generate and send OTP
-        # otp = send_otp_to_mobile(mobile_no)
-        # user.otp = otp
+        otp = send_otp_to_mobile(mobile_no)
+        user.otp = otp
         #--------------- using twilio --------------
-        otp = send_sms(mobile_no)
-        message = client.messages \
-                        .create(
-                            from_ = '+15169732425',
-                            body = f"Your OTP is {otp} .",
-                            # body = f"Hello , to reset password click this link http://127.0.0.1:8000/api/register/ ",
-                            # to = '+91 90543 95987'
-                            to = '+91'+mobile_no
-                        )
+        # otp = send_sms(mobile_no)
+        # message = client.messages \
+        #                 .create(
+        #                     from_ = '+15169732425',
+        #                     body = f"Your OTP is {otp} .",
+        #                     # body = f"Hello , to reset password click this link http://127.0.0.1:8000/api/register/ ",
+        #                     # to = '+91 90543 95987'
+        #                     to = '+91'+mobile_no
+        #                 )
         
 
         user.save()
@@ -143,8 +143,8 @@ class LoginView(APIView):
         return Response({
             'status': 200,
             'message': 'Login successful. OTP sent for verification.',
-            'otp_status': 'sent'
-            # 'access_token': token
+            'otp_status': 'sent',
+            'otp': otp
         })
     
     def get(self,request,*args,**kwargs):
@@ -228,16 +228,16 @@ def send_otp_to_mobile_view(request):
 
     if serializer.is_valid():
         mobile_no = serializer.validated_data['mobile_no']
-        # otp = send_otp_to_mobile(mobile_no)
+        otp = send_otp_to_mobile(mobile_no)
         otp = send_sms(mobile_no)
-        message = client.messages \
-                        .create(
-                            from_ = '+15169732425',
-                            body = f"Your OTP is {otp} .",
-                            # body = f"Hello , to reset password click this link http://127.0.0.1:8000/api/register/ ",
-                            # to = '+91 90543 95987'
-                            to = '+91'+mobile_no
-                        )
+        # message = client.messages \
+        #                 .create(
+        #                     from_ = '+15169732425',
+        #                     body = f"Your OTP is {otp} .",
+        #                     # body = f"Hello , to reset password click this link http://127.0.0.1:8000/api/register/ ",
+        #                     # to = '+91 90543 95987'
+        #                     to = '+91'+mobile_no
+        #                 )
         
         # serializer.data.otp = otp  # Store the OTP in the serializer
 
@@ -337,6 +337,7 @@ def resend_otp(request):
             'status': 400,
             'message': 'Invalid mobile no'
         })
+            
     
     #--------------------------------------------------------------------------------------------
     # this block of code Checks if enough time has passed since the last OTP request

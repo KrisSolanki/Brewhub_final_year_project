@@ -72,7 +72,7 @@ class Order_DetailsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class Order_MSerializer(serializers.ModelSerializer):
-    Order_ID=Order_DetailsSerializer()
+    # Order_ID=Order_DetailsSerializer()
     # User_ID = UserSerializer()
     # Status_ID = StatusSerializer()
     # Offer_ID = OfferSerializer()
