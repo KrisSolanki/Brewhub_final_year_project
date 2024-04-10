@@ -48,7 +48,7 @@ const OTP = () => {
  
   return (
     <div className="OTP">
-      <h2>OTP Verification</h2>
+      <h2 className="OTPtext">OTP Verification</h2>
       <form>
         {/* <div className="otpWrapper"> */}
         <div className="otpDigit">
@@ -56,7 +56,7 @@ const OTP = () => {
             <input
               key={digit}
               type="text"
-              maxLength="1"
+              maxLength="1" 
               value={otp[digit - 1]}
               onChange={(e) => {
                 const newOtp = otp.split("");
@@ -67,11 +67,11 @@ const OTP = () => {
           ))}
         </div>
 
-        <button type="button" onClick={handleVerify}>
+        <button type="button" className="buttonverify" onClick={handleVerify}>
           Verify
         </button>
 
-        <button type="button" onClick={() => navigate("/home")}>
+        <button type="button" className="buttonnext" onClick={() => navigate("/")}>
           Next
         </button>
       </form>

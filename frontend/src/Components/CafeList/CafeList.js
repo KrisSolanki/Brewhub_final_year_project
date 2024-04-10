@@ -47,7 +47,7 @@ const CafeList = () => {
               </div>
               <div className="details">
                 <div className="title">
-              <h2>{cafe.CafeName}</h2>
+              <h2 className='cafenametext'>{cafe.CafeName}</h2>
 
                 </div>
               <div className="desc">

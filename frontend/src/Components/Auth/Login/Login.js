@@ -60,7 +60,7 @@ const Login = ({ onNext }) => {
  
 return (
   <div className='loginForm'>
-     <h2>Login</h2>
+     <h2 className='logintext'>Login</h2>
      <form onSubmit={loginUser}>
        <label>
          Mobile Number:

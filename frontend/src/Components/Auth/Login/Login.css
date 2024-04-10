@@ -13,7 +13,7 @@
    }
    
    /* Heading styling */
-   h2 {
+   .logintext {
     text-align: center;
     color: #333;
    }

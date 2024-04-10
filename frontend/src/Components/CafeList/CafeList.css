@@ -27,8 +27,16 @@
     padding: 7px 0px 4px 0px;
     font-size: 14px;
 }
-.desc{
+.cafenametext{
+    text-align: center;
+}
+.desc p{ 
+    font-family: sans-serif,Arial, Helvetica;
+    color: #484e58;
     
+}
+.desc{
+        
         padding: 7px 0px 4px 0px;
         font-size: 14px;
 }

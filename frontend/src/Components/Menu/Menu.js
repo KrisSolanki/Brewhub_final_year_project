@@ -47,7 +47,7 @@ const Menu = ({ data }) => {
         navigate('/cart');
     };
 
-    // Group items by category
+    // Group 
     const groupedItems = data.reduce((acc, item) => {
         const key = item.category.CategoryName;
         if (!acc[key]) {
@@ -88,8 +88,8 @@ const Menu = ({ data }) => {
             </div>
             <div className="container-item">
                 {Object.entries(groupedItems).map(([categoryName, items]) => (
-                    <div key={categoryName}>
-                        <h2>{categoryName}</h2>
+                    <div key={categoryName} className='categoryname'>
+                        <h2 className='categoryname-p'>{categoryName}</h2>
                         {items.map((item) => (
                             <div key={item.ItemID} className='menu-card'>
                                 <div className="grp">
@@ -97,7 +97,7 @@ const Menu = ({ data }) => {
                                         <img src={`http://127.0.0.1:8000/api${item.ItemImage}`} alt="" srcset="" />
                                     </div>
                                     <div className="item-name">
-                                        <h2>{item.ItemName}</h2>
+                                        <h2 className='item-namep'>{item.ItemName}</h2>
                                     </div>
                                     <div className="item-desc">
                                         <p>{item.ItemDescription}</p>
@@ -105,7 +105,7 @@ const Menu = ({ data }) => {
                                 </div>
                                 <div className="grp2">
                                     <div className="item-price">
-                                        <p>Price: {item.ItemPrice}</p>
+                                        <h4 className='item-price'>Price: {item.ItemPrice}</h4>
                                     </div>
                                     <div className="item-add-to-card-btn">
                                         <button className="button" onClick={() => handleAddToCart(item.ItemID)}>
