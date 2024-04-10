@@ -306,7 +306,16 @@
     border-radius: 50px;
     /* margin: 10px 10px; */
 }
-
+.btn1SubNav {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 50%;
+    height: 32px;
+    width: 32px;
+    border: none;
+    margin-bottom: 22px;
+}
 
 .dropdown-menu {
     position: absolute;

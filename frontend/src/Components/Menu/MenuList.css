@@ -55,6 +55,7 @@
     margin-bottom: 10px;
 }
 
+
 .item-img img {
     width: 100px;
     height: 100px;
@@ -62,6 +63,8 @@
     border-radius: 8px;
     margin-right: 20px;
 }
+
+
 
 .item-name{
     text-align: left;
@@ -72,6 +75,9 @@
 .item-price{
     text-align: left;
 }
+
+
+
 .item-desc {
     text-align: left;
     height: 61px;
@@ -79,6 +85,8 @@
     display: flex;
     justify-content: center;
 }
+
+
 
 .item-add-to-cart-btn {
     margin-left: auto;
@@ -114,4 +122,63 @@
     background-color: #cfd0d1;
     color: black;
    }
+
+   /* .cafegrp{
+    height: 295px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 400px;
+   } */
+
+   .cafegrp {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+    justify-content: center; /* Center items vertically */
+    width: 100%; /* Adjust the width as needed */
+   }
+
+/* .cnamelogo{
+    display: flex;
+    width: 400px;
+} */
+
+.cnamelogo {
+    display: flex;
+    flex-direction: row; /* Align logo and name side by side */
+    align-items: center; /* Center items vertically */
+    justify-content: center; /* Center items horizontally */
+    width: 100%; /* Adjust the width as needed */
+   }
+   .group {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+    justify-content: center; /* Center items vertically */
+    width: 100%; /* Adjust the width as needed */
+    padding: 20px 0; /* Add some padding for better spacing */
+    height: 280px;
+   }
    
+   .cafe-desc-p{
+    height: 3em;
+   }
+
+   .cafe-desc {
+    text-align: left;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; /* Clamp to 1 line initially */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    /* height: 4em; Initial height for collapsed state */
+    margin-top: 15px;
+    width: 80%; /* Set width to 40% */
+    margin-left: auto; /* Center the description */
+    margin-right: auto; /* Center the description */
+    transition: height 0.5s ease-in-out; /* Smooth transition for height change */
+}
+
+
+
+

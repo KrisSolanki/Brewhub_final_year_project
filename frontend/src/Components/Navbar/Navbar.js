@@ -37,7 +37,7 @@ const Navbar = () => {
               <input type="text" placeholder="Search" className='searchtxtSubNav' />
               <button className="btn1SubNav" type="submit"><img src={Search} alt="search img" className='search-img' /></button>
             </div></li>
-            <li><NavLink to='/home'><span><IoIosHome /></span>Home</NavLink></li>
+            <li><NavLink to='/'><span><IoIosHome /></span>Home</NavLink></li>
             <li><NavLink to='/aboutus'><span><MdGroups /></span>About us</NavLink></li>
             {user ? (
               <>

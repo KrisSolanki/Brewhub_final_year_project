@@ -10,7 +10,7 @@ from account.serializers  import *
 class CafeSerializer(serializers.ModelSerializer):
     # Rating = RatingSerializer(many=True, read_only=True)
     # average_rating = serializers.SerializerMethodField()
-    
+    status = StatusSerializer()
 
     class Meta:
         model = Cafe
