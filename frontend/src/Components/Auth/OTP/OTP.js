@@ -44,6 +44,12 @@ const OTP = () => {
       f1(); // This calls the logoutUser function
     }
   };
+  function handlechange(e) {
+    if(e.target.value && e.target.nextSibling)
+    {
+      e.target.nextSibling.focus()
+    }
+  };
 
  
   return (
@@ -62,6 +68,7 @@ const OTP = () => {
                 const newOtp = otp.split("");
                 newOtp[digit - 1] = e.target.value;
                 setOtp(newOtp.join(""));
+                handlechange(e)
               }}
             />
           ))}

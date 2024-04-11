@@ -96,8 +96,11 @@ const Menu = ({ data }) => {
                                     <div className="item-img">
                                         <img src={`http://127.0.0.1:8000/api${item.ItemImage}`} alt="" srcset="" />
                                     </div>
+                                    <div className="namec">
+
                                     <div className="item-name">
                                         <h2 className='item-namep'>{item.ItemName}</h2>
+                                    </div>
                                     </div>
                                     <div className="item-desc">
                                         <p>{item.ItemDescription}</p>
