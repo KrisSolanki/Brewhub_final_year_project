@@ -20,6 +20,7 @@ import {AuthProvider} from './Context/AuthContext';
 import { MenuContextProvider } from './Context/MenuContext';
 import ForgetPasswdPage from './Pages/Auth/ForgetPasswdPage';
 import RegistrationPage from './Pages/Auth/RegistrationPage';
+import UserOrderPage from './Pages/UserOrderPage';
 
 function App() {
   
@@ -60,6 +61,9 @@ function App() {
           <Route path="/otp" element={<OTPPage />} />
           <Route path="/forgotpassword" element={<ForgetPasswdPage />} />
           <Route path="/registration" element={<RegistrationPage />} />
+          
+        {/* User Profile order*/}
+        <Route path="/Userorder" element={<UserOrderPage />} />
 
       </Routes>
         </MenuContextProvider>

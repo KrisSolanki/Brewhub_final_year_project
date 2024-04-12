@@ -113,6 +113,9 @@ useEffect(() => {
                 {showDropdown && (
                  <div className="dropdown-menu">
                      <p className="dropdown-item">{user.username}</p>
+                      <button className="dropdown-item" onClick={() => navigate('/Userorder')}>
+                        Your Orders
+                      </button>
                     <button className="dropdown-item" onClick={logoutUser}>Logout</button>
                     console.log("User Role:", user.Role),
                  </div>
