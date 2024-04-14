@@ -99,7 +99,8 @@ const Menu = ({ data }) => {
                                     <div className="namec">
 
                                     <div className="item-name">
-                                        <h2 className='item-namep'>{item.ItemName}</h2>
+                                        {/* <h2 className='item-namep'>{item.ItemName}</h2> */}
+                                        <p className='item-namep'>{item.ItemName}</p>
                                     </div>
                                     </div>
                                     <div className="item-desc">

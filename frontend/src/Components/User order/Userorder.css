@@ -1,0 +1,29 @@
+.container_order{
+    width: 80%;
+    /* color: black; */
+    background-color: black;
+    color: white;
+    margin: auto;
+    height: 600px;
+    border-radius: 10px;
+    margin-bottom : 20px;
+    margin-top: 20px;
+}
+.order_id{
+    display: inline-block;
+    text-align: left;
+    margin: 20px 20px 20px 20px;
+}
+.orderidcontainer{
+    width: 100%;
+}
+.order_detail{
+    width: 100%;
+    color :red;
+
+}
+.orderidcontainerCafe{
+    width: 100%;
+    
+
+}

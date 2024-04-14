@@ -398,66 +398,45 @@ class OrderCreateView(APIView):
             'RAZORPAY_ORDER_ID':razorpay_order_id
             })
     
+    # def get(self, request, order_id=None, *args, **kwargs):
+    #     if order_id:
+    #         # Retrieve the specific order by ID
+    #         order = get_object_or_404(Order_M, OrderID=order_id)
+    #         serializer = Order_MSerializer(order)
+    #         return Response(serializer.data)
+    #     else:
+    #         # Retrieve a list of all orders
+    #         orders = Order_M.objects.all()
+    #         serializer = Order_MSerializer(orders, many=True)
+    #         serializer_order_d = Order_DetailsSerializer().data
+    #         return Response("Order:",serializer.data,"Details:",serializer_order_d)
+
     def get(self, request, order_id=None, *args, **kwargs):
         if order_id:
             # Retrieve the specific order by ID
             order = get_object_or_404(Order_M, OrderID=order_id)
-            serializer = Order_MSerializer(order)
-            return Response(serializer.data)
+            order_serializer = Order_MSerializer(order)
+            
+            # Retrieve order details associated with the order
+            order_details = Order_Details.objects.filter(Order_ID=order)
+            order_details_serializer = Order_DetailsSerializer(order_details, many=True)
+            
+            response_data = {
+                'order': order_serializer.data,
+                'order_details': order_details_serializer.data
+            }
+            return Response(response_data)
         else:
             # Retrieve a list of all orders
             orders = Order_M.objects.all()
-            serializer = Order_MSerializer(orders, many=True)
-            return Response(serializer.data)
+            order_serializer = Order_MSerializer(orders, many=True)
+            order_details_serializer = Order_DetailsSerializer(Order_Details.objects.all(), many=True) 
 
-#date 6 feb
-# import stripe
-# from django.conf import settings
-# from django.shortcuts import reverse
-# stripe.api_key = settings.STRIPE_SECRET_KEY
-# from django.views.decorators.csrf import csrf_exempt
-# from django.http import HttpResponse
-# class CreateCheckoutSessionView(APIView):
-#     def post(self,*args,**kwargs):
-#         host = self.request.get_host()
-
-        
-#         checkout_session = stripe.checkout.Session.create(
-#             payment_method_types = ['card'],
-#             line_items=[
-#                 {
-#                     # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-#                    'price_data': {
-#                        'currency': 'inr',
-#                        'unit_amount' : 1000,
-#                        'product_data' : {
-#                            'name' : 'codepieporder',
-#                         #    'images'
-#                        },                       
-#                    },
-#                    'quantity' : 1,
-#                 },
-#             ],
-#             mode='payment',
-#             success_url="http://{}{}".format(host,reverse('order:payment-success')),
-#             # cancel_url="http://{}{}".format(host,reverse('order:payment-success')),
-#         )
-        
-#         # return redirect(checkout_session.url, code=303)
-#         return Response({'checkout_session_url': checkout_session.url}, status=status.HTTP_201_CREATED)
-
-# def paymentSuccess(request):
-#     context={
-#             'payment_status':'success'
-
-#     }
-#     return Response(context)
-
-# @csrf_exempt
-# def my_webhook_view(request):
-#     payload = request.body
-#     print(payload)
-#     return HttpResponse(status=200)
+            response_data = {
+                'orders': order_serializer.data,
+                'order_details': order_details_serializer.data
+            }
+            return Response(response_data)
 
 class CompetePaymentView(APIView):
     def post(self, request):
