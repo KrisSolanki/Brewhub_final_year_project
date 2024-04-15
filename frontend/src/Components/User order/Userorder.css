@@ -1,21 +1,57 @@
 .container_order{
     width: 80%;
     /* color: black; */
-    background-color: black;
-    color: white;
+    /* background-color: black; */
+    /* color: white; */
     margin: auto;
-    height: 600px;
+    height: 245px;
     border-radius: 10px;
+    border: 2px solid black;
     margin-bottom : 20px;
     margin-top: 20px;
+    font-family: Geneva, Verdana, sans-serif;
+    font-weight: bolder;
 }
 .order_id{
     display: inline-block;
     text-align: left;
-    margin: 20px 20px 20px 20px;
+    margin: 20px 20px 10px 20px;
 }
+.order_id-M{
+    display: inline-block;
+    text-align: left;
+    margin: 20px 20px 10px 20px;
+    font-size: 20px;
+    font-family: Geneva, Verdana, sans-serif;
+    font-weight: bolder;
+}
+.order_id-V{
+    display: inline-block;
+    text-align: left;
+    margin: 20px 20px 10px 20px;
+    font-size: 18px;
+    font-family: Geneva, Verdana, sans-serif;
+    font-weight: bolder;
+    
+
+}
+.order_id-V a{
+    text-decoration: none;
+    color: inherit;
+}
+.order_id-V a:hover,
+.order_id-V a:active {
+ color: red; /* Change this to your preferred color */
+}
+.order_id-V a {
+    transition: color 0.3s ease;
+   }
 .orderidcontainer{
     width: 100%;
+}
+.orderidcontainer-M{
+    width: 100%;
+    text-align: center;
 }
 .order_detail{
     width: 100%;
@@ -26,4 +62,17 @@
     width: 100%;
     
 
+}
+
+/*Orderlistdetails   */
+.orderdcafeimg{
+    width:100px;
+    height: 100px;
+    margin: 20px 0px 20px 20px;
+}
+.orderidcontainerCafeimg{
+    width:100px;
+    height: 100px;
+    width: 100%;
+    display: flex;
 }

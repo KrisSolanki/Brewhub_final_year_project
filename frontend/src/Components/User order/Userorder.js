@@ -2,9 +2,11 @@ import React from 'react'
 import axios from 'axios'
 import { useState, useEffect } from 'react'
 import './Userorder.css'
+import { NavLink , useNavigate} from 'react-router-dom';
 
 const Userorder = () => {
   const [data, SetData] = useState({ orders: [], order_details: [] });
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,8 +40,8 @@ const Userorder = () => {
     <h1>Your Orders</h1>
     {data.orders && data.orders.map((order) => (
       <div key={order.OrderID} className="container_order">
-        <div className="orderidcontainer">
-        <p className='order_id'>Order ID: {order.OrderID}</p>
+        <div className="orderidcontainer-M">
+        <p className='order_id-M'>Order ID: {order.OrderID}</p>
         </div>
         <div className="orderidcontainer">
         <p className='order_id' >Order Date: {new Date(order.OrderDate).toLocaleString()}</p>
@@ -47,17 +49,20 @@ const Userorder = () => {
         <div className="orderidcontainer">
         <p className='order_id' >Order Total: {order.Total}</p>
         </div>
-        {data.order_details.map((detail) => (
+        <div className="orderidcontainer">
+        <p className='order_id-V' ><NavLink to={`/Orderlistdetails/${order.OrderID}/`}>View details</NavLink></p>
+        </div>
+        {/* {data.order_details.map((detail) => (
           detail.Order_ID === order.OrderID && (
             <div key={detail.OrderDetailsID} className="orderidcontainer">
               <p className='order_id' >Item Name: {detail.Item_ID.ItemName}</p>
-            <>
+            
             <div className="orderidcontainer">
 
               <p className='order_id'>Item Quantity: {detail.ItemQuantity}</p>
             </div>
             
-            </>
+            
               {detail.Item_ID.cafe && (
                <>
                <div className="orderidcontainerCafe">
@@ -71,7 +76,7 @@ const Userorder = () => {
               )}
             </div>
           )
-        ))}
+        ))} */}
       </div>
     ))}
   </div>

@@ -21,6 +21,7 @@ import { MenuContextProvider } from './Context/MenuContext';
 import ForgetPasswdPage from './Pages/Auth/ForgetPasswdPage';
 import RegistrationPage from './Pages/Auth/RegistrationPage';
 import UserOrderPage from './Pages/UserOrderPage';
+import OrderlistdetailsPage from './Pages/OrderlistdetailsPage';
 
 function App() {
   
@@ -64,6 +65,7 @@ function App() {
           
         {/* User Profile order*/}
         <Route path="/Userorder" element={<UserOrderPage />} />
+        <Route path="/Orderlistdetails/:OrderID/" element={<OrderlistdetailsPage />} />
 
       </Routes>
         </MenuContextProvider>
