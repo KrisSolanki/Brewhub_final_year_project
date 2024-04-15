@@ -88,23 +88,28 @@ const Menu = ({ data }) => {
             </div>
             <div className="container-item">
                 {Object.entries(groupedItems).map(([categoryName, items]) => (
-                    <div key={categoryName} className='categoryname'>
+                    <div key={categoryName} className='categoryname'> 
+                    <div className="ctname">
                         <h2 className='categoryname-p'>{categoryName}</h2>
+                        </div> 
                         {items.map((item) => (
                             <div key={item.ItemID} className='menu-card'>
                                 <div className="grp">
                                     <div className="item-img">
                                         <img src={`http://127.0.0.1:8000/api${item.ItemImage}`} alt="" srcset="" />
                                     </div>
+                                    <div className="name_desc">
+
                                     <div className="namec">
 
-                                    <div className="item-name">
+                                    <div className="item_name">
                                         {/* <h2 className='item-namep'>{item.ItemName}</h2> */}
                                         <p className='item-namep'>{item.ItemName}</p>
                                     </div>
                                     </div>
                                     <div className="item-desc">
                                         <p>{item.ItemDescription}</p>
+                                    </div>
                                     </div>
                                 </div>
                                 <div className="grp2">

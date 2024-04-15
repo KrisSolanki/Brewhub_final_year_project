@@ -50,7 +50,7 @@ const Userorder = () => {
         <p className='order_id' >Order Total: {order.Total}</p>
         </div>
         <div className="orderidcontainer">
-        <p className='order_id-V' ><NavLink to={`/Orderlistdetails/${order.OrderID}/`}>View details</NavLink></p>
+        <p className='order_id-V' ><NavLink to={`/Orderlistdetails/${order.OrderID}/`}>View order details</NavLink></p>
         </div>
         {/* {data.order_details.map((detail) => (
           detail.Order_ID === order.OrderID && (

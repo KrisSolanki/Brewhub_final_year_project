@@ -1,4 +1,4 @@
-import React, { useContext, useState , useEffect } from 'react';
+import React, { useContext, useState , useEffect , useRef } from 'react';
 import { NavLink , useNavigate} from 'react-router-dom';
 import { IoIosHome } from "react-icons/io";
 import { MdGroups } from "react-icons/md";
@@ -14,6 +14,8 @@ import AuthContext from '../../Context/AuthContext';
 const Navbar = () => {
  const { user, logoutUser } = useContext(AuthContext);
  const [showDropdown, setShowDropdown] = useState(false);
+
+ const dropdownRef = useRef(null);
  
  const [searchQuery, setSearchQuery] = useState('');
  const [searchResults, setSearchResults] = useState([]);
@@ -24,8 +26,23 @@ const Navbar = () => {
     setShowDropdown(!showDropdown);
  };
 
+ const handleClickOutside = (event) => {
+  if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    setShowDropdown(false);
+  }
+};
+useEffect(() => {
+  // Add the event listener when the component mounts
+  document.addEventListener('mousedown', handleClickOutside);
+  // Clean up the event listener when the component unmounts
+  return () => {
+    document.removeEventListener('mousedown', handleClickOutside);
+  };
+}, []);
+
  const handleAdminPanelClick = () => {
   window.open('http://127.0.0.1:8000/admin/', '_blank');
+  
  };
 
  const debounce = (func, delay) => {
@@ -108,22 +125,27 @@ useEffect(() => {
             <li><NavLink to='/aboutus'><span><MdGroups /></span>About us</NavLink></li>
             {user ? (
               <>
-                <li><NavLink to='/cart'><span><FaShoppingCart /></span>Cart</NavLink></li>
-                <li onClick={toggleDropdown}><span><FaCircleUser /></span>Profile</li>
+                <li><NavLink to='/cart'><span><FaShoppingCart /></span></NavLink></li>
+                <li onClick={toggleDropdown}><span><FaCircleUser /></span></li>
                 {showDropdown && (
-                 <div className="dropdown-menu">
+                 <div className="dropdown-menu" ref={dropdownRef}>
                      <p className="dropdown-item">{user.username}</p>
                       <button className="dropdown-item" onClick={() => navigate('/Userorder')}>
                         Your Orders
                       </button>
+                      {user && user.Role === "Admin" && (
+                      <button className="dropdown-item" onClick={handleAdminPanelClick}>
+                        Admin Panel
+                      </button>
+                        )}
                     <button className="dropdown-item" onClick={logoutUser}>Logout</button>
                     console.log("User Role:", user.Role),
                  </div>
                 )}
-                {user && user.Role === "Admin" && (
-                   console.log("Rendering Admin Panel link"),
-                  <li onClick={handleAdminPanelClick} >Admin Panel</li>
-                )}
+                 {/* {user && user.Role === "Admin" && ( */}
+                    {/* console.log("Rendering Admin Panel link"),
+                   <li onClick={handleAdminPanelClick} >Admin Panel</li>
+                 )} */}
               </>
             ) : (
               <li><NavLink to='/login'><span><RiLoginBoxFill /></span>Sign in</NavLink></li>

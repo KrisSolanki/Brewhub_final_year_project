@@ -8,9 +8,11 @@
     /* border-radius: 8px; */
     /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
     width: 100%; /* Adjust the width as needed */
+    /* border: 1px solid black; */
 }
 
 .cafe-details {
+    border: 1px solid black;
     display: flex;
     align-items: baseline;
     justify-content: center;
@@ -41,38 +43,49 @@
 }
 .grp{
     display: flex;
-    /* align-items: center; */
-    /* width: 150px; */
-    
     width: 1006px;
+    height: 120px;
 }
 .item-img{
     display: flex;
-    width: 100px;
-    height: 100px;
+    width: 130px;
+    height: 130px;
     object-fit: cover;
     border-radius: 8px;
-    margin-right: 20px;
+    margin-right: 17px;
+    margin-left: 10px;
 }
 .namec{
-    display: block;
+    display: inline-block;
+}
+.item_name{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+
 }
 .menu-card {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 1271px;
-    height: 100px;
+    height: 152px;
     margin-bottom: 10px;
+    /* border: 1px solid black; */
 }
+/* .name_desc{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+} */
 
 
 .item-img img {
-    width: 100px;
-    height: 100px;
+    width: 115px;
+    height: 115px;
     object-fit: cover;
     border-radius: 8px;
-    margin-right: 20px;
+    margin-right: 0px;
 }
 
 
@@ -88,6 +101,8 @@
 .item-namep{
     text-align: top; 
     color: #333;
+    font-family: Geneva, Verdana, sans-serif;
+    font-weight: bold;
 }
 
 .item-price{
@@ -105,6 +120,7 @@
     align-items: center;
     display: flex;
     justify-content: center;
+    margin-top: 8px;
 }
 
 
@@ -159,19 +175,23 @@
 
 .cnamelogo {
     display: flex;
-    flex-direction: row; /* Align logo and name side by side */
-    align-items: center; /* Center items vertically */
-    justify-content: center; /* Center items horizontally */
-    width: 100%; /* Adjust the width as needed */
+    flex-direction: row; 
+    align-items: center; 
+    justify-content: center; 
+    width: 100%; 
    }
 .group {
     display: flex;
-    flex-direction: column; /* Stack items vertically */
-    align-items: center; /* Center items horizontally */
-    justify-content: center; /* Center items vertically */
-    width: 100%; /* Adjust the width as needed */
-    padding: 20px 0; /* Add some padding for better spacing */
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    width: 94%; 
+    padding: 20px 0; 
     height: 280px;
+    border-radius: 25px;
+    margin-top: 10px;
+    margin-left: 40px;
+    margin-right: 40px;
    }
    
 .cafe-desc-p{
@@ -181,26 +201,33 @@
 .cafe-desc {
     text-align: left;
     display: -webkit-box;
-    -webkit-line-clamp: 1; /* Clamp to 1 line initially */
+    -webkit-line-clamp: 1; 
     -webkit-box-orient: vertical;
     overflow: hidden;
-    /* height: 4em; Initial height for collapsed state */
     margin-top: 15px;
-    width: 80%; /* Set width to 40% */
-    margin-left: auto; /* Center the description */
-    margin-right: auto; /* Center the description */
-    transition: height 0.5s ease-in-out; /* Smooth transition for height change */
+    width: 80%; 
+    margin-left: auto; 
+    margin-right: auto; 
+    transition: height 0.5s ease-in-out; 
 }
 
-/* .categoryname{
-    height: 10px;
-} */
+.ctname{
+    margin-top: 10px;
+    /* margin: 20px 0px 20px 0px; */
+    border: 1px solid black;
+    border-radius: 0px;
+}
 
 .categoryname-p {
     text-align: center;
     color: #333;
     font-weight: bold;
-    margin: 20px 0px 20px 0px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    /* height: 26px; */
+    justify-content: center;
+    margin-bottom: 10px;    
 }
 
 

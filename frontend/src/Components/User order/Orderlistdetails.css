@@ -25,44 +25,15 @@
     font-family: Geneva, Verdana, sans-serif;
     font-weight: bolder;
 }
-.order_id-V{
-    display: inline-block;
-    text-align: left;
-    margin: 20px 20px 10px 20px;
-    font-size: 18px;
-    font-family: Geneva, Verdana, sans-serif;
-    font-weight: bolder;
-    
 
-}
-.order_id-V a{
-    text-decoration: none;
-    color: inherit;
-}
-.order_id-V a:hover,
-.order_id-V a:active {
- color: red; /* Change this to your preferred color */
-}
-.order_id-V a {
-    transition: color 0.3s ease;
-   }
-.orderidcontainer{
-    width: 100%;
-}
+
+
 .orderidcontainer-M{
     width: 100%;
     text-align: center;
 }
-.order_detail{
-    width: 100%;
-    color :red;
 
-}
-.orderidcontainerCafe{
-    width: 100%;
-    
 
-}
 
 /*Orderlistdetails   */
 .orderdcafeimg{
@@ -86,35 +57,7 @@
     /* align-items: center; */
 
 }
-.order_item_name{
-    /* display: inline-block; */
-    text-align: left;
-    /* width: 100%; */
-    margin: 20px 20px 10px 20px;
-    height: 32px;
-    display: inline-block;
-    width: 86%;
-    vertical-align: top;
-}
-.order_item_name{
-    text-align: left;
-    /* width: 100%; */
-    /* margin: 10px 20px 10px 20px; */
-    height: 32px;
-    display: inline-block;
-    width: 86%;
-    vertical-align: top;
-}
-.order_item_q{
-    text-align: left;
-    width: 100%;
-    /* margin: 20px 20px 10px 20px; */
-    height: 32px;
-    display: inline-block;
-    width: 86%;
-    vertical-align: top;
 
-}
 .order_item_name_q{
     margin: 0px 0px 10px 10px;
     text-align: left;
@@ -134,9 +77,7 @@
     border-radius: 25px;
     display: inline-block;
 }
-.p{
-    width: 86%;
-}
+
 .c{
     display: flex;
     flex-direction: column;
