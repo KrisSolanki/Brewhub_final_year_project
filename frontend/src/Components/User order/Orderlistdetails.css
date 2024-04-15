@@ -3,14 +3,40 @@
     /* color: black; */
     /* background-color: ; */
     /* color: white; */
+    /* margin: auto; */
+    height: 153px;
+    border-radius: 10px;
+    margin-bottom : 5px;
+    margin-top: 5px;
+    /* border: 2px solid black; */
+    font-family: Geneva, Verdana, sans-serif;
+    font-weight: bolder;
+}
+.container_orderC{
+    width: 80%;
     margin: auto;
-    height: 384px;
+    height: 153px;
     border-radius: 10px;
     margin-bottom : 20px;
     margin-top: 20px;
     border: 2px solid black;
     font-family: Geneva, Verdana, sans-serif;
     font-weight: bolder;
+    align-items: center;
+}
+.FullC{
+    width: 80%;
+    margin: auto;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom : 20px;
+    margin-top: 20px;
+    border: 2px solid black;
+    font-family: Geneva, Verdana, sans-serif;
+    font-weight: bolder;
+    align-items: center;
+    /* display: grid;
+    grid-template-columns: 50% 50%; */
 }
 .order_id{
     display: inline-block;
@@ -48,9 +74,10 @@
     width: 100%;
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 .orderidcontainerItemimg{
-    width:100px;
+    /* width:100px; */
     height: 139px;
     width: 100%;
     display: flex;

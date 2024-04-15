@@ -2,11 +2,11 @@ import React from 'react'
 import axios from 'axios'
 import { useState, useEffect } from 'react'
 import './Userorder.css'
-import { NavLink , useNavigate} from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 const Userorder = () => {
   const [data, SetData] = useState({ orders: [], order_details: [] });
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
