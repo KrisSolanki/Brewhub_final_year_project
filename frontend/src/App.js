@@ -67,7 +67,7 @@ function App() {
         {/* User Profile order*/}
         <Route path="/Userorder" element={<UserOrderPage />} />
         <Route path="/Orderlistdetails/:OrderID/" element={<OrderlistdetailsPage />} />
-        <Route path="/OrderSummary" element={<OrderSummaryPage />} />
+        <Route path="/OrderSummary/:PaymentID" element={<OrderSummaryPage />} />
 
       </Routes>
         </MenuContextProvider>

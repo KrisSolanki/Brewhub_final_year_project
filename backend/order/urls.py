@@ -24,5 +24,6 @@ urlpatterns = [
     # path('api/order/<int:order_id>/', OrderCreateView.as_view(), name='order-detail')
 
     path('complete/', CompetePaymentView.as_view(), name='payment-complete'),
+    path('complete/<int:payment_id>', CompetePaymentView.as_view(), name='payments-complete'),
     path('order/<int:order_id>/', OrderCreateView.as_view(), name='order-detail'),    
 ]

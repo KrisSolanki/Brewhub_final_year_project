@@ -88,7 +88,8 @@ class Order_MSerializer(serializers.ModelSerializer):
         }
 
 class Payment_MSerializer(serializers.ModelSerializer):
-    # OrderID = Order_MSerializer(read_only=True)
+    # OrderID = Order_MSerializer()
+    OrderID = serializers.PrimaryKeyRelatedField(queryset=Order_M.objects.all())
     class Meta:
         model = Payment_M
         fields = '__all__'

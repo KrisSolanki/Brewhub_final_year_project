@@ -5,8 +5,7 @@ import './Orderlistdetails.css';
 
 const Orderlistdetails = () => {
     const [data, setData] = useState({ orders: [], order_details: [] });
-    // const navigate = useNavigate();
-    const { OrderID } = useParams(); // Correctly destructure orderId from useParams
+    const { OrderID } = useParams(); 
     console.log("orderid", OrderID)
     useEffect(() => {
         const fetchData = async () => {

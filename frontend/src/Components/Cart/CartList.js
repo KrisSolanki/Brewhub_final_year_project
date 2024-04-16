@@ -178,8 +178,8 @@ const CartList = () => {
         }
       )
       .then((response)=>{
-        console.log(response.data);
-        navigate("/OrderSummary");
+        console.log(response.data.PaymentData.PaymentID);
+        navigate(`/OrderSummary/${response.data.PaymentData.PaymentID}`);
 
       })
       .catch((error) => {

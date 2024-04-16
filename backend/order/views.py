@@ -515,10 +515,14 @@ class CompetePaymentView(APIView):
                 razorpay_signature=validated_data.get("razorpay_signature")
             )
             serializer.save()
+            # order_id = validated_data.get("OrderID")
+            # order_instance = get_object_or_404(Order_M, OrderID=order_id)
+            # order_serializer = Order_MSerializer(order_instance)
             response = {
                 "status_code": status.HTTP_201_CREATED,
                 "message": "transaction created",
-                "Data":serializer.data
+                "PaymentData":serializer.data
+                # "OrderData": order_serializer.data
             }
             return Response(response, status=status.HTTP_201_CREATED)
         else:
@@ -528,3 +532,18 @@ class CompetePaymentView(APIView):
                 "errors": serializer.errors
             }
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        
+
+    def get(self, request, payment_id=None):
+        if payment_id:
+            # Retrieve the specific payment by ID
+            payment = get_object_or_404(Payment_M, PaymentID=payment_id)
+            serializer = Payment_MSerializer(payment)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            # Retrieve all payment data
+            payments = Payment_M.objects.all()
+            serializer = Payment_MSerializer(payments, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+       
