@@ -6,10 +6,12 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import { useContext } from 'react';
 import useRazorpay from 'react-razorpay';
+import { useNavigate } from 'react-router-dom';
 
 
 
 const CartList = () => {
+  const navigate = useNavigate();
   const { addToCart, removeFromCart, cartItems } = useContext(MenuContext);
 
   const [data, setData] = useState({
@@ -167,10 +169,6 @@ const CartList = () => {
       "razorpay_payment_id" : paymentid,
       "razorpay_signature" : sig,
       "OrderID" : oid
-      // pay_Nm0LIsmdIo9mCE
-      // order_Nm0Kwd7Ar65MkD
-      //2aba4691f4649776ba8cbdc4870ded5cf818e98fbacc86f602ff23c8fb0587a5
-
     },
     {
         headers: {
@@ -181,6 +179,8 @@ const CartList = () => {
       )
       .then((response)=>{
         console.log(response.data);
+        navigate("/OrderSummary");
+
       })
       .catch((error) => {
         console.log(error.message)

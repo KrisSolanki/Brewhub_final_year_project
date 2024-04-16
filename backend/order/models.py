@@ -89,7 +89,7 @@ class Payment_M(models.Model):
     PaymentDate = models.DateField(auto_now_add=True)
     PaymentTime = models.TimeField(auto_now_add=True)
     # PaymentModeID = models.ForeignKey('PaymentMode', on_delete=models.CASCADE)
-    OrderID = models.ForeignKey('Order_M', on_delete=models.CASCADE,blank=True)
+    OrderID = models.ForeignKey(Order_M, on_delete=models.CASCADE,blank=True)
     # Razorpay fields
     razorpay_order_id = models.CharField(max_length=255, null=True, blank=True)
     razorpay_payment_id = models.CharField(max_length=255, null=True, blank=True)

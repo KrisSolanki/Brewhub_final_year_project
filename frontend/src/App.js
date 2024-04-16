@@ -22,6 +22,7 @@ import ForgetPasswdPage from './Pages/Auth/ForgetPasswdPage';
 import RegistrationPage from './Pages/Auth/RegistrationPage';
 import UserOrderPage from './Pages/UserOrderPage';
 import OrderlistdetailsPage from './Pages/OrderlistdetailsPage';
+import OrderSummaryPage from './Pages/OrderSummaryPage';
 
 function App() {
   
@@ -66,6 +67,7 @@ function App() {
         {/* User Profile order*/}
         <Route path="/Userorder" element={<UserOrderPage />} />
         <Route path="/Orderlistdetails/:OrderID/" element={<OrderlistdetailsPage />} />
+        <Route path="/OrderSummary" element={<OrderSummaryPage />} />
 
       </Routes>
         </MenuContextProvider>
