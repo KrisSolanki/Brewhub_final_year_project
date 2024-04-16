@@ -381,21 +381,28 @@ class OrderCreateView(APIView):
         #     new_order.Offer_ID = offer
         new_order.save()
         payment = Payment_M.objects.create(OrderID=new_order)
+        print("nnnnnnnnnnnnnnnnnnnnnnnn")
+        print("new order",payment.OrderID)
+        
         razorpay_order_id = create_razorpay_order(new_order)
         print(razorpay_order_id)
         payment.razorpay_order_id = razorpay_order_id
         payment.save()
 
-        # payment = Payment_M.objects.create(OrderID=order)
+        # payment = Payment_M.objects.create(OrderID=new_order)
 
         # Clear the user's cart
-        cart_items.delete()
-        cart.delete()
+        # cart_items.delete()
         # cart.delete()
-
+        
+        payment_serializer = Payment_MSerializer(payment).data
+        print("zzzzzzzzzzzzzzzzzzzzzzzzzzz")
+        print("Z",payment_serializer)
         return Response({
             'message': 'Order created successfully',
-            'RAZORPAY_ORDER_ID':razorpay_order_id
+            # 'payment': payment_serializer.data,
+            'RAZORPAY_ORDER_ID':razorpay_order_id,
+            'ORDERID' : payment_serializer['OrderID']
             })
     
     # def get(self, request, order_id=None, *args, **kwargs):
@@ -438,34 +445,34 @@ class OrderCreateView(APIView):
             }
             return Response(response_data)
 
-class CompetePaymentView(APIView):
-    def post(self, request):
-        # Instantiate the serializer with the request data
-        transaction = Payment_MSerializer(data=request.data)
+# class CompetePaymentView(APIView):
+#     def post(self, request):
+#         # Instantiate the serializer with the request data
+#         transaction = Payment_MSerializer(data=request.data)
         
-        # Check if the serializer is valid
-        if transaction.is_valid():
-            # Assuming verify_payment is a function you've defined elsewhere
-            # that verifies the payment details
-            verify_payment(
-                razorpay_order_id=transaction.validated_data.get("razorpay_order_id"),
-                razorpay_payment_id=transaction.validated_data.get("razorpay_payment_id"),
-                razorpay_signature=transaction.validated_data.get("razorpay_signature")
-            )
-            # Save the transaction
-            transaction.save()
-            response = {
-                "status_code": status.HTTP_201_CREATED,
-                "message": "transaction created"
-            }
-            return Response(response, status=status.HTTP_201_CREATED)
-        else:
-            response = {
-                "status_code": status.HTTP_400_BAD_REQUEST,
-                "message": "bad request",
-                "error": transaction.errors # Corrected from transaction.error to transaction.errors
-            }
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+#         # Check if the serializer is valid
+#         if transaction.is_valid():
+#             # Assuming verify_payment is a function you've defined elsewhere
+#             # that verifies the payment details
+#             verify_payment(
+#                 razorpay_order_id=transaction.validated_data.get("razorpay_order_id"),
+#                 razorpay_payment_id=transaction.validated_data.get("razorpay_payment_id"),
+#                 razorpay_signature=transaction.validated_data.get("razorpay_signature")
+#             )
+#             # Save the transaction
+#             transaction.save()
+#             response = {
+#                 "status_code": status.HTTP_201_CREATED,
+#                 "message": "transaction created"
+#             }
+#             return Response(response, status=status.HTTP_201_CREATED)
+#         else:
+#             response = {
+#                 "status_code": status.HTTP_400_BAD_REQUEST,
+#                 "message": "bad request",
+#                 "error": transaction.errors # Corrected from transaction.error to transaction.errors
+#             }
+#             return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
 
 # class CompetePaymentView(APIView):
@@ -492,3 +499,31 @@ class CompetePaymentView(APIView):
 #             }
 #             return Response(response,status=status.HTTP_400_BAD_REQUEST)
  
+
+class CompetePaymentView(APIView):
+    def post(self, request):
+        serializer = Payment_MSerializer(data=request.data)
+        
+        # print("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")
+        # print("Data",serializer)
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+            # Assuming verify_payment is a function defined elsewhere in your code
+            rapy_client = verify_payment(
+                razorpay_order_id=validated_data.get("razorpay_order_id"),
+                razorpay_payment_id=validated_data.get("razorpay_payment_id"),
+                razorpay_signature=validated_data.get("razorpay_signature")
+            )
+            serializer.save()
+            response = {
+                "status_code": status.HTTP_201_CREATED,
+                "message": "transaction created"
+            }
+            return Response(response, status=status.HTTP_201_CREATED)
+        else:
+            response = {
+                "status_code": status.HTTP_400_BAD_REQUEST,
+                "message": "bad request",
+                "errors": serializer.errors
+            }
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)

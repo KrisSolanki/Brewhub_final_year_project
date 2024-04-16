@@ -52,7 +52,8 @@ const CartList = () => {
     };
 
     fetchData();
-  }, [data]);
+  // }, [data]);
+  }, []);
 
 
 
@@ -84,7 +85,14 @@ const CartList = () => {
           },
         }
       );
-      addToCart(cart_items.Item_ID);
+      const response = await axios.get("http://127.0.0.1:8000/api/cart/", {
+        headers: {
+          Authorization: `Bearer ${access}`,
+          "Content-Type": "application/json",
+        },
+      });
+      setData(response.data);
+      // addToCart(cart_items.Item_ID);
      
       
       
@@ -130,7 +138,14 @@ const CartList = () => {
           }
         }
       );
-      removeFromCart(cart_items.Item_ID)
+      const response = await axios.get("http://127.0.0.1:8000/api/cart/", {
+        headers: {
+          Authorization: `Bearer ${access}`,
+          "Content-Type": "application/json",
+        },
+      });
+      setData(response.data);
+      // removeFromCart(cart_items.Item_ID)
     } catch (error) {
       console.error('Error updating item quantity:', error);
     }
@@ -141,22 +156,36 @@ const CartList = () => {
 
   // Handle order and razorpay---------------------  
 
-  const complete_payment = (orderid,paymentid,sig) => {
+  const complete_payment = (paymentid,orderid,sig,oid) => {
+    console.log("orderid",orderid)
+    console.log("paymentid",paymentid)
+    console.log("sig",sig)
+    const accessToken = localStorage.getItem('authTokens');
+    const { access } = JSON.parse(accessToken);
     axios.post('http://127.0.0.1:8000/api/complete/',{
-      "razorpay_payment_id" : paymentid,
       "razorpay_order_id" : orderid,
-      "razorpay_signature" : sig
+      "razorpay_payment_id" : paymentid,
+      "razorpay_signature" : sig,
+      "OrderID" : oid
       // pay_Nm0LIsmdIo9mCE
       // order_Nm0Kwd7Ar65MkD
       //2aba4691f4649776ba8cbdc4870ded5cf818e98fbacc86f602ff23c8fb0587a5
 
-    })
-    .then((response)=>{
-      console.log(response.data);
-    })
-    .catch((error) => {
-      console.log(error.message)
-    })
+    },
+    {
+        headers: {
+            Authorization: `Bearer ${access}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+      .then((response)=>{
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error.message)
+      })
+      console.log("COMPLETE api called")
   }
   const [Razorpay] = useRazorpay();
 
@@ -179,6 +208,9 @@ const CartList = () => {
       }
     ).then(function (response) {
       console.log("Response", response.data.RAZORPAY_ORDER_ID);
+      console.log("ResponseAAAAA", response.data);
+      console.log("ResponseBBBBB", response.data.ORDERID);
+      const oid = response.data.ORDERID;
       const orderid = response.data.RAZORPAY_ORDER_ID; // Assuming the order ID is in the response data
 
       const options = {
@@ -193,7 +225,8 @@ const CartList = () => {
           complete_payment(
             response.razorpay_payment_id,
             response.razorpay_order_id,
-            response.razorpay_signature
+            response.razorpay_signature,
+            oid
           )
         },
         prefill: {

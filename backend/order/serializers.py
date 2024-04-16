@@ -66,6 +66,13 @@ class Cart_MSerializer(serializers.ModelSerializer):
         model = Cart_M
         fields = '__all__'
 
+class Payment_MSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment_M
+        fields = '__all__'
+        # extra_kwargs = {
+        #     'OrderID': {'required': False},
+        # }
 class Order_DetailsSerializer(serializers.ModelSerializer):
     Item_ID = MenuSerializer()
     class Meta:
@@ -87,8 +94,4 @@ class Order_MSerializer(serializers.ModelSerializer):
             'User_ID': {'required': False},
         }
 
-class Payment_MSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Payment_M
-        fields = '__all__'
 
