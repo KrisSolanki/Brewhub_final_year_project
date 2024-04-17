@@ -297,7 +297,7 @@ const CartList = () => {
 
     <div class="cart-container">
   <div class="cart-items">
-    <h1>Your Cart Items</h1>
+    <h1>Cart</h1>
     {data.cart_items.map((cartItem) => {
       // Find the corresponding menu item for the cart item
       const menuItem = data.menus.find(menu => menu.ItemID === cartItem.Item_ID);
@@ -308,7 +308,7 @@ const CartList = () => {
           <img src={`http://127.0.0.1:8000/api${menuItem.ItemImage}`} alt="" srcset="" />
             <div class="item-info">
               <p><strong>Item Name:</strong> {menuItem.ItemName}</p>
-              <p><strong>Description:</strong> {menuItem.ItemDescription}</p>
+              {/* <p><strong>Description:</strong> {menuItem.ItemDescription}</p> */}
               <p><strong>Price:</strong> {menuItem.ItemPrice}</p>
               <p><strong>Quantity:</strong> {cartCounts1[cartItem.CartDetailsID] || cartItem.ItemQuantity}</p>
               <p><strong>Subtotal:</strong> {cartItem.Subtotal}</p>
@@ -326,7 +326,7 @@ const CartList = () => {
     {data.cart_items.length === 0 && <h1>Your Cart is Empty</h1>}
   <div class="cart-summary">
     <div class="summary-total">
-      <p><strong>Total:</strong> {data.cart.Total}</p>
+      <h3><strong>Total:</strong> {data.cart.Total}</h3>
     </div>
     <div class="checkout-btn">
       <button onClick={handleorder}>Checkout</button>

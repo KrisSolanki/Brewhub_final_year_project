@@ -382,7 +382,7 @@ class OrderCreateView(APIView):
         new_order.save()
         payment = Payment_M.objects.create(OrderID=new_order)
         print("nnnnnnnnnnnnnnnnnnnnnnnn")
-        print("new order",payment.OrderID)
+        print("new order",new_order.Total)
         
         razorpay_order_id = create_razorpay_order(new_order)
         print(razorpay_order_id)

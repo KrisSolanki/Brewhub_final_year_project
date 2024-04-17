@@ -57,9 +57,9 @@ const OrderSummary = () => {
 
     console.log("Order Data", orderData);
     console.log("Order Data", orderData.order_details);
-    console.log("Order Data", orderData.order_details[0].Item_ID);
-    console.log("Order Data", orderData.order_details[0].Item_ID.cafe);
-    console.log("Order Data", orderData.order_details[0].Item_ID.cafe.CafeName);
+    // console.log("Order Data", orderData.order_details[0].Item_ID);
+    // console.log("Order Data", orderData.order_details[0].Item_ID.cafe);
+    // console.log("Order Data", orderData.order_details[0].Item_ID.cafe.CafeName);
     const firstOrderDetail = orderData.order_details && orderData.order_details[0];
     const cafeInfo = firstOrderDetail ? {
         logoImage: firstOrderDetail.Item_ID.cafe.LogoImage,
@@ -69,36 +69,75 @@ const OrderSummary = () => {
     return (
         <div>
             <h1>Order Summary</h1>
+            {/* <div className="main"> */}
+
             {cafeInfo && (
                 <div className="container_orderC">
                     <div className="orderidcontainerCafeimg">
                         <img className='orderdcafeimg' src={`http://127.0.0.1:8000/api${cafeInfo.logoImage}`} alt={cafeInfo.cafeName} />
-                        <p className='order_id'>{cafeInfo.cafeName}</p>
+                        <h2 className='order_id'>{cafeInfo.cafeName}</h2>
                     </div>
                 </div>
             )}
-            <div className="FullC">
-                {orderData.order_details && orderData.order_details.map((detail) => (
-                    <div key={detail.OrderDetailsID} className="container_orderD">
-                        <div className="orderidcontainerItemimg">
-                            <div className="dummyC">
+            <div className="maincon">
 
-                            <img className='orderditemimg' src={`http://127.0.0.1:8000/api${detail.Item_ID.ItemImage}`} alt={detail.Item_ID.cafe.CafeName} />
-                            <div className="c">
-                                <p className='order_item_name_q'>{detail.Item_ID.ItemName}</p>
-                                <p className='order_item_name_q'>Price: {detail.Item_ID.ItemPrice}</p>
-                                <p className='order_item_name_q'>Item Quantity: {detail.ItemQuantity}</p>
+                <div className="FullCa">
+                    <p className='Title'>ITEMS</p>
+                    {orderData.order_details && orderData.order_details.map((detail) => (
+                        <div key={detail.OrderDetailsID} className="container_orderD">
+                            <div className="orderidcontainerItemimg">
+                                {/* <div className="dummyC"> */}
+
+                                <img className='orderditemimg' src={`http://127.0.0.1:8000/api${detail.Item_ID.ItemImage}`} alt={detail.Item_ID.cafe.CafeName} />
+                                <div className="c">
+                                    <p className='order_item_name_q'>{detail.Item_ID.ItemName}</p>
+                                    <p className='order_item_name_q'>Price: {detail.Item_ID.ItemPrice}</p>
+                                    <p className='order_item_name_q'>Item Quantity: {detail.ItemQuantity}</p>
+                                </div>
                             </div>
-                            </div>
-                        <div className="total">
-                            <div className="totalsummary"></div>
+                            {/* </div> */}
                         </div>
-                        </div>
+
+                    ))}
+                </div>
+            <div className="total">
+                <div className="totalsummary">
+                    <h2>Total</h2>
+                </div>
+                <div className="ids">
+                    <div className="x">
+                    {/* <h3>Order Id : {orderData.order.OrderID}</h3> */}
+                    <h3>Order Id : {data.OrderID}</h3>
                     </div>
-                ))}
+                    <div className="x">
+                    <h3>Payment Id : {data.PaymentID}</h3>
+                    </div>
+                    <div className="x">
+                    <h3>Payment time : {data.PaymentTime}</h3>
+                    </div>
+                </div>
+                <div className="jjk">
+                <div className="subtotal">
+                <h3>SubTotal : intotaladd{orderData.order_details.Subtotal}</h3>
+                {/* <h3>500</h3> */}
+                </div>
+                <div className="Maintotal">
+                <h3>Total : {orderData.order.Total}</h3>
+                {/* <h3>500</h3> */}
+                </div>
+
+                </div>
             </div>
+            </div>
+            {/* {orderData.order_details && orderData.order_details.map((detail) => (
+                    <div key={detail.OrderDetailsID} className="div2">
+                        <h4>total</h4>
+
+                    </div>
+                     ))} */}
         </div>
-        
+        //  </div>
+
     );
 }
 
