@@ -1,0 +1,47 @@
+{
+    "message": "Item added to the cart successfully",
+    "cart": {
+        "CartID": 67,
+        "Total": "500.00",
+        "Subtotal": "500.00",
+        "User_ID": 42,
+        "Offer_ID": null
+    }
+}
+without offer response 
+
+Default response =
+{
+    "message": "Offer updated in the cart successfully",
+    "cart": {
+        "CartID": 68,
+        "Total": "2400.00",
+        "Subtotal": "2400.00",
+        "User_ID": 42,
+        "Offer_ID": null
+    }
+}
+then ,request body = {
+    "Offer_ID": 1 
+  }
+  and response i got = {
+    "message": "Offer updated in the cart successfully",
+    "cart": {
+        "CartID": 68,
+        "Total": "2160.00",
+        "Subtotal": "2400.00",
+        "User_ID": 42,
+        "Offer_ID": 1
+    }
+} {
+    "Offer_ID": Null
+  } then resonse = {
+    "message": "Offer updated in the cart successfully",
+    "cart": {
+        "CartID": 68,
+        "Total": "2376.00",
+        "Subtotal": "2400.00",
+        "User_ID": 42,
+        "Offer_ID": null
+    }
+} 

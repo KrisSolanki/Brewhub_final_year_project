@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { useContext } from 'react';
 import useRazorpay from 'react-razorpay';
 import { useNavigate } from 'react-router-dom';
+import PopUp from '../PopUp/PopUp';
 
 
 
@@ -21,7 +22,24 @@ const CartList = () => {
     menus: [],
     message: ''
   });
+
+
   const [cartCounts1, setCartCounts1] = useState({});
+
+  const [offerData, setOfferData] = useState(null);
+  const [btnpopup, setBtnPopUp] = useState(false);
+
+  const fetchOfferData = () => {
+    // Make an API call to fetch offer data using Axios
+    axios.get("http://127.0.0.1:8000/api/offer/")
+      .then(response => {
+        setOfferData(response.data);
+        // Open the popup menu
+        console.log("ffffffffffffffffffffffffffffffffffffff", offerData["0"])
+        setBtnPopUp(true)
+      })
+      .catch(error => console.error('Error fetching offer data:', error));
+  };
   
 
   // const [count,setCount] = useState(); 
@@ -54,7 +72,7 @@ const CartList = () => {
     };
 
     fetchData();
-  // }, [data]);
+    // }, [data]);
   }, []);
 
 
@@ -95,9 +113,9 @@ const CartList = () => {
       });
       setData(response.data);
       // addToCart(cart_items.Item_ID);
-     
-      
-      
+
+
+
     } catch (error) {
       console.error('Error updating item quantity:', error);
     }
@@ -151,33 +169,33 @@ const CartList = () => {
     } catch (error) {
       console.error('Error updating item quantity:', error);
     }
-    
+
   };
   //=============================================================
 
 
   // Handle order and razorpay---------------------  
 
-  const complete_payment = (paymentid,orderid,sig,oid) => {
-    console.log("orderid",orderid)
-    console.log("paymentid",paymentid)
-    console.log("sig",sig)
+  const complete_payment = (paymentid, orderid, sig, oid) => {
+    console.log("orderid", orderid)
+    console.log("paymentid", paymentid)
+    console.log("sig", sig)
     const accessToken = localStorage.getItem('authTokens');
     const { access } = JSON.parse(accessToken);
-    axios.post('http://127.0.0.1:8000/api/complete/',{
-      "razorpay_order_id" : orderid,
-      "razorpay_payment_id" : paymentid,
-      "razorpay_signature" : sig,
-      "OrderID" : oid
+    axios.post('http://127.0.0.1:8000/api/complete/', {
+      "razorpay_order_id": orderid,
+      "razorpay_payment_id": paymentid,
+      "razorpay_signature": sig,
+      "OrderID": oid
     },
-    {
+      {
         headers: {
-            Authorization: `Bearer ${access}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      )
-      .then((response)=>{
+          Authorization: `Bearer ${access}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+      .then((response) => {
         console.log(response.data.PaymentData.PaymentID);
         navigate(`/OrderSummary/${response.data.PaymentData.PaymentID}`);
 
@@ -185,7 +203,7 @@ const CartList = () => {
       .catch((error) => {
         console.log(error.message)
       })
-      console.log("COMPLETE api called")
+    console.log("COMPLETE api called")
   }
   const [Razorpay] = useRazorpay();
 
@@ -292,50 +310,117 @@ const CartList = () => {
   // console.log("zzzz",data.cart.menus.ItemID )
   return (
 
-<>
+    <>
 
 
-    <div class="cart-container">
-  <div class="cart-items">
-    <h1>Cart</h1>
-    {data.cart_items.map((cartItem) => {
-      // Find the corresponding menu item for the cart item
-      const menuItem = data.menus.find(menu => menu.ItemID === cartItem.Item_ID);
+      <div class="cart-container">
+        <div class="cart-items">
+          <h1>Cart</h1>
+          <div className="parent">
 
-      return (
-        <div class="cart-item" key={cartItem.CartDetailsID}>
-          <div class="item-details">
-          <img src={`http://127.0.0.1:8000/api${menuItem.ItemImage}`} alt="" srcset="" />
-            <div class="item-info">
-              <p><strong>Item Name:</strong> {menuItem.ItemName}</p>
-              {/* <p><strong>Description:</strong> {menuItem.ItemDescription}</p> */}
-              <p><strong>Price:</strong> {menuItem.ItemPrice}</p>
-              <p><strong>Quantity:</strong> {cartCounts1[cartItem.CartDetailsID] || cartItem.ItemQuantity}</p>
-              <p><strong>Subtotal:</strong> {cartItem.Subtotal}</p>
+            {data.cart_items.map((cartItem) => {
+              // Find the corresponding menu item for the cart item
+              const menuItem = data.menus.find(menu => menu.ItemID === cartItem.Item_ID);
+
+              return (
+                <div class="cart-item" key={cartItem.CartDetailsID}>
+                  <div class="item-details">
+                    <img src={`http://127.0.0.1:8000/api${menuItem.ItemImage}`} alt="" srcset="" />
+                    <div class="item-info">
+                      <p><strong>Item Name:</strong> {menuItem.ItemName}</p>
+                      {/* <p><strong>Description:</strong> {menuItem.ItemDescription}</p> */}
+                      <p><strong>Price:</strong> {menuItem.ItemPrice}</p>
+                      <p><strong>Quantity:</strong> {cartCounts1[cartItem.CartDetailsID] || cartItem.ItemQuantity}</p>
+                      <p><strong>Subtotal:</strong> {cartItem.Subtotal}</p>
+                    </div>
+                  </div>
+                  <div class="item-actions">
+                    <button class="action-btn" onClick={(event) => handleIncrement(event, cartItem)}>+</button>
+                    <p class="quantityDisplay">{cartCounts1[cartItem.CartDetailsID] || cartItem.ItemQuantity}</p>
+                    <button class="action-btn" onClick={() => handleDecrement(cartItem, cartItem.CartDetailsID)}>-</button>
+                    <button class="delete-btn" onClick={() => handleDelete(cartItem.CartDetailsID)}>DELETE</button>
+                  </div>
+                </div>
+              );
+            })}
+            <div className="totalcart">
+              <div className="totalsummarycart">
+                <h2>Offer</h2>
+                <div className="offerboxcontainer">
+                  <div className="offerbox">
+                    <button onClick={fetchOfferData}>Offers</button>
+
+                    <PopUp trigger={btnpopup} setTrigger={setBtnPopUp}>
+                    <h2>Offers</h2>
+                    
+                          {/* {offerData["0"].map(offer => ( */}
+                            {/* <h3>{offerData["0"].OfferTitle}</h3> */}
+                          {/* ))} */}
+                        
+                        </PopUp>
+                    {/* {btnpopup && offerData && (
+                      <div className="popup-menu">
+                        
+                        
+                        <ul>
+                          {offerData.map(offer => (
+                            <li key={offer.OfferID}>{offer.OfferName}</li>
+                          ))}
+                        </ul>
+                       
+                      </div>
+                    )} */}
+                  </div>
+                </div>
+              </div>
+              <div className="totalsummaryc">
+                <h2>Total</h2>
+              </div>
+              {/* <div className="idscart">
+                    <div className="xc">
+                    
+                    <h3>Order Id : </h3>
+                    </div>
+                    <div className="xc">
+                    <h3>Payment Id : </h3>
+                    </div>
+                    <div className="xc">
+                    <h3>Payment time : </h3>
+                    </div>
+                </div> */}
+              <div className="jjkcart">
+                <div className="subtotalcart">
+                  <h3><strong>SubTotal : </strong>{data.cart.Total}</h3>
+                  {/* <h3>500</h3> */}
+                </div>
+                <div className="Maintotalcart">
+                  <h3>Total : {data.cart.Subtotal} </h3>
+                  {/* <h3>500</h3> */}
+                </div>
+                <div class="checkout-btn">
+                  <center>
+                    <button onClick={handleorder}>Checkout</button>
+                  </center>
+                </div>
+
+              </div>
+
+
             </div>
           </div>
-          <div class="item-actions">
-            <button class="action-btn" onClick={(event) => handleIncrement(event, cartItem)}>+</button>
-            <p class="quantityDisplay">{cartCounts1[cartItem.CartDetailsID] || cartItem.ItemQuantity}</p>
-            <button class="action-btn" onClick={() => handleDecrement(cartItem, cartItem.CartDetailsID)}>-</button>
-            <button class="delete-btn" onClick={() => handleDelete(cartItem.CartDetailsID)}>DELETE</button>
+          {data.cart_items.length === 0 && <h1>Your Cart is Empty</h1>}
+          <div class="cart-summary">
+            <div class="summary-total">
+              <h3><strong>Total:</strong> {data.cart.Total}</h3>
+            </div>
+            <div class="checkout-btn">
+              <button onClick={handleorder}>Checkout</button>
+            </div>
           </div>
         </div>
-      );
-    })}
-    {data.cart_items.length === 0 && <h1>Your Cart is Empty</h1>}
-  <div class="cart-summary">
-    <div class="summary-total">
-      <h3><strong>Total:</strong> {data.cart.Total}</h3>
-    </div>
-    <div class="checkout-btn">
-      <button onClick={handleorder}>Checkout</button>
-    </div>
-  </div>
-  </div>
-</div>
+      </div>
 
-</>
+    </>
 
   );
 };

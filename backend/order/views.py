@@ -304,6 +304,47 @@ class CartDetailsDeleteView(APIView):
 
         return Response({'message': 'Cart item deleted successfully'})
 
+class CartOfferView(APIView):
+    def put(self, request, *args, **kwargs):
+        # Retrieve or create a cart based on the user making the request
+        cart_obj, created = Cart_M.objects.get_or_create(User_ID=request.user)
+        cart_id = cart_obj.CartID
+
+        # Check if an offer is selected or if the offer should be removed
+        selected_offer_id = request.data.get('Offer_ID')
+        selected_offer = None
+        if selected_offer_id:
+            try:
+                selected_offer = Offer.objects.get(pk=selected_offer_id)
+            except:
+                return Response({'message': 'Selected offer does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # If an offer is already applied, remove its discount from the total
+        if cart_obj.Offer_ID:
+            old_offer = cart_obj.Offer_ID
+            cart_obj.Total += cart_obj.Total * (old_offer.DiscountPercentage / 100)  # Add back the discount
+            cart_obj.Offer_ID = None  # Remove the old offer
+
+        # Apply new offer to the entire cart or calculate total without discount
+        if selected_offer:
+            cart_obj.Total -= cart_obj.Subtotal * (selected_offer.DiscountPercentage / 100)  # Subtract discount from subtotal
+            cart_obj.Offer_ID = selected_offer
+
+        # Update the total for the entire cart
+        if not selected_offer:
+            # If no offer is applied, set the total to the subtotal
+            cart_obj.Total = cart_obj.Subtotal
+
+        cart_obj.save()
+
+        response_data = {
+            'message': 'Offer updated in the cart successfully',
+            'cart': Cart_MSerializer(cart_obj).data,
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
+    
+
 
 class OrderCreateView(APIView):
     serializer_class = Order_MSerializer
@@ -405,18 +446,7 @@ class OrderCreateView(APIView):
             'ORDERID' : payment_serializer['OrderID']
             })
     
-    # def get(self, request, order_id=None, *args, **kwargs):
-    #     if order_id:
-    #         # Retrieve the specific order by ID
-    #         order = get_object_or_404(Order_M, OrderID=order_id)
-    #         serializer = Order_MSerializer(order)
-    #         return Response(serializer.data)
-    #     else:
-    #         # Retrieve a list of all orders
-    #         orders = Order_M.objects.all()
-    #         serializer = Order_MSerializer(orders, many=True)
-    #         serializer_order_d = Order_DetailsSerializer().data
-    #         return Response("Order:",serializer.data,"Details:",serializer_order_d)
+    
 
     def get(self, request, order_id=None, *args, **kwargs):
         if order_id:
@@ -445,60 +475,6 @@ class OrderCreateView(APIView):
             }
             return Response(response_data)
 
-# class CompetePaymentView(APIView):
-#     def post(self, request):
-#         # Instantiate the serializer with the request data
-#         transaction = Payment_MSerializer(data=request.data)
-        
-#         # Check if the serializer is valid
-#         if transaction.is_valid():
-#             # Assuming verify_payment is a function you've defined elsewhere
-#             # that verifies the payment details
-#             verify_payment(
-#                 razorpay_order_id=transaction.validated_data.get("razorpay_order_id"),
-#                 razorpay_payment_id=transaction.validated_data.get("razorpay_payment_id"),
-#                 razorpay_signature=transaction.validated_data.get("razorpay_signature")
-#             )
-#             # Save the transaction
-#             transaction.save()
-#             response = {
-#                 "status_code": status.HTTP_201_CREATED,
-#                 "message": "transaction created"
-#             }
-#             return Response(response, status=status.HTTP_201_CREATED)
-#         else:
-#             response = {
-#                 "status_code": status.HTTP_400_BAD_REQUEST,
-#                 "message": "bad request",
-#                 "error": transaction.errors # Corrected from transaction.error to transaction.errors
-#             }
-#             return Response(response, status=status.HTTP_400_BAD_REQUEST)
-
-
-# class CompetePaymentView(APIView):
-#     def post(self,request):
-#         transaction = Payment_MSerializer
-#         data=request.data
-#         if transaction.is_valid():
-#             rapy_client=verify_payment(
-#                 razorpay_order_id= Payment_MSerializer.validated_data.get("razorpay_order_id"),
-#                 razorpay_payment_id= Payment_MSerializer.validated_data.get("razorpay_payment_id"),
-#                 razorpay_signature= Payment_MSerializer.validated_data.get("razorpay_signature")
-#             )
-#             transaction.save()
-#             response = {
-#                 "status_code:":status.HTTP_201_CREATED,
-#                 "message":"transaction created"
-#             }
-#             return Response(response,status=status.HTTP_201_CREATED)
-#         else:
-#             response = {
-#                 "statuc_code:":status.HTTP_201_CREATED,
-#                 "message:":"bad request",
-#                 "error":transaction.error
-#             }
-#             return Response(response,status=status.HTTP_400_BAD_REQUEST)
- 
 
 class CompetePaymentView(APIView):
     def post(self, request):
@@ -547,3 +523,15 @@ class CompetePaymentView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         
        
+class OfferView(APIView):
+    def get(self , request , offer_id=None , *args , **kwarfs):
+        if offer_id:
+            offer_id=get_object_or_404(Offer,OfferID=offer_id)
+            offer_serializer = OfferSerializer(offer_id)
+            
+            return Response(offer_serializer.data)
+        else:
+            offers = Offer.objects.all()
+            offer_serializer = OfferSerializer(offers,many=True)
+            
+            return Response(offer_serializer.data)

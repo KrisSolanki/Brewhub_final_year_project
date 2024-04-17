@@ -15,6 +15,7 @@ urlpatterns = [
 
 
     path('cart1/<int:cart_item_id>/',CartDetailsDeleteView.as_view(),name='cart-details-delete'),
+    path('cart1/',CartOfferView.as_view(),name='cart-details-delete'),
     # path('cartpatch/',CartDetailsDeleteView.as_view(), name='cart-update'),
     # path('create-checkout-session/', CreateCheckoutSessionView.as_view(), name='create-checkout-session'),
     # path('payment-success/', paymentSuccess, name='payment-success'),
@@ -25,5 +26,8 @@ urlpatterns = [
 
     path('complete/', CompetePaymentView.as_view(), name='payment-complete'),
     path('complete/<int:payment_id>', CompetePaymentView.as_view(), name='payments-complete'),
-    path('order/<int:order_id>/', OrderCreateView.as_view(), name='order-detail'),    
+    path('order/<int:order_id>/', OrderCreateView.as_view(), name='order-detail'), 
+
+    path('offer/',OfferView.as_view(),name='offer'),
+    path('offer/<int:offer_id>/',OfferView.as_view(),name='selected-offer'),   
 ]
