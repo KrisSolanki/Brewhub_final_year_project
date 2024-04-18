@@ -117,12 +117,14 @@ const OrderSummary = () => {
                     </div>
                 </div>
                 <div className="jjk">
-                <div className="subtotal">
-                <h3>SubTotal : intotaladd{orderData.order_details.Subtotal}</h3>
+                {/* <div className="subtotal"> */}
+                {/* <h3>SubTotal : intotaladd{orderData.order_details.Subtotal}</h3> */}
+                {/* <h3>SubTotal : intotaladd{orderData.order_details ? orderData.order_details.Subtotal : 'N/A'}</h3> */}
                 {/* <h3>500</h3> */}
-                </div>
+                {/* </div> */}
                 <div className="Maintotal">
-                <h3>Total : {orderData.order.Total}</h3>
+                {/* <h3>Total : {orderData.order.Total}</h3> */}
+                <h3>Total : {orderData.order ? orderData.order.Total : 'N/A'}</h3>
                 {/* <h3>500</h3> */}
                 </div>
 

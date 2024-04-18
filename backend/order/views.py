@@ -157,53 +157,42 @@ class CartDetailView(APIView):
             except Offer.DoesNotExist:
                 return Response({'message': 'Selected offer does not exist'}, status=status.HTTP_400_BAD_REQUEST)
 
-    # If an offer is already applied, remove its discount from the total
-        if cart_obj.Offer_ID:
-            old_offer = cart_obj.Offer_ID
-            cart_obj.Total += cart_obj.Total * (old_offer.DiscountPercentage / 100)
-            cart_obj.Offer_ID = None # Remove the old offer
+    # Retain the applied offer if it exists
+        existing_offer = cart_obj.Offer_ID
 
     # Apply new offer to the entire cart or calculate total without discount
         if selected_offer:
-            cart_obj.Total -= cart_obj.Total * (selected_offer.DiscountPercentage / 100)
             cart_obj.Offer_ID = selected_offer
 
     # Find or create the cart detail for the item
         item = serializer.validated_data['Item_ID']
         quantity = serializer.validated_data['ItemQuantity']
-        # discount_factor = 1 - (selected_offer.DiscountPercentage / 100) if selected_offer else 1
-        # subtotal = item.ItemPrice * quantity * discount_factor
-        subtotal = item.ItemPrice * quantity 
+        subtotal = item.ItemPrice * quantity
 
-        
+    # Recalculate subtotal with offer discount if applied
+        if cart_obj.Offer_ID:
+            subtotal *= (1 - (cart_obj.Offer_ID.DiscountPercentage / 100))
+
     # Try to find an existing cart detail for the item
-        cart_detail = Cart_Details.objects.get(Cart_ID=cart_obj, Item_ID=item)
+        try:
+            cart_detail = Cart_Details.objects.get(Cart_ID=cart_obj, Item_ID=item)
         
         # If the cart detail already exists, update the quantity and subtotal
-        cart_detail.ItemQuantity += 1
-        # cart_detail.Subtotal = item.ItemPrice * cart_detail.ItemQuantity * discount_factor
-        cart_detail.Subtotal = item.ItemPrice * cart_detail.ItemQuantity 
-        print("cart_detail",cart_detail.ItemQuantity)
-        print("cart_detail.Subtotal",cart_detail.Subtotal)
-        cart_detail.save()
+            cart_detail.ItemQuantity += 1
+            cart_detail.Subtotal = item.ItemPrice * cart_detail.ItemQuantity
         
-        # cart_details = Cart_Details.objects.filter(Cart_ID=cart_obj)
-        # cart_obj.Subtotal = sum(cart_item.Subtotal for cart_item in cart_details)
+        # Recalculate subtotal with offer discount if applied
+            if cart_obj.Offer_ID:
+                cart_detail.Subtotal *= (1 - (cart_obj.Offer_ID.DiscountPercentage / 100))
 
-        # # Update the total in the Cart_M model
-        # # cart_obj.Total = cart_detail.Subtotal
-        # # cart_obj.Subtotal = item.ItemPrice * cart_detail.ItemQuantity
-        # # cart_obj.save()
-
-        # # Recalculate the total for the entire cart
-        # cart_details = Cart_Details.objects.filter(Cart_ID=cart_obj)
-        # total = sum(cart_item.Subtotal for cart_item in cart_details)
-        # cart_obj.Total = total
-        # cart_obj.save()
+            cart_detail.save()
+        
+        except Cart_Details.DoesNotExist:
+            pass
+    
+    # Recalculate the total for the entire cart
         cart_details = Cart_Details.objects.filter(Cart_ID=cart_obj)
         cart_obj.Subtotal = sum(cart_item.Subtotal for cart_item in cart_details)
-            
-            # Update the total for the entire cart
         cart_obj.Total = cart_obj.Subtotal  # Assuming there are no additional discounts
         cart_obj.save()
 
@@ -213,6 +202,7 @@ class CartDetailView(APIView):
         }
 
         return Response(response_data, status=status.HTTP_200_OK)
+
     
     def patch(self, request, *args, **kwargs):
     # Retrieve or create a cart based on the user making the request
@@ -305,45 +295,52 @@ class CartDetailsDeleteView(APIView):
         return Response({'message': 'Cart item deleted successfully'})
 
 class CartOfferView(APIView):
-    def put(self, request, *args, **kwargs):
-        # Retrieve or create a cart based on the user making the request
-        cart_obj, created = Cart_M.objects.get_or_create(User_ID=request.user)
-        cart_id = cart_obj.CartID
+   def put(self, request, *args, **kwargs):
+    cart_obj, created = Cart_M.objects.get_or_create(User_ID=request.user)
+    cart_id = cart_obj.CartID
 
-        # Check if an offer is selected or if the offer should be removed
-        selected_offer_id = request.data.get('Offer_ID')
-        selected_offer = None
-        if selected_offer_id:
-            try:
-                selected_offer = Offer.objects.get(pk=selected_offer_id)
-            except:
-                return Response({'message': 'Selected offer does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+    selected_offer_id = request.data.get('Offer_ID')
+    selected_offer = None
+    if selected_offer_id:
+        try:
+            selected_offer = Offer.objects.get(pk=selected_offer_id)
+        except Offer.DoesNotExist:
+            return Response({'message': 'Selected offer does not exist'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # If an offer is already applied, remove its discount from the total
+    if cart_obj.Offer_ID:
+        return Response({'message': 'Another offer is already applied. Remove the existing offer before applying a new one.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    if selected_offer:
+        cart_obj.Total -= cart_obj.Subtotal * (selected_offer.DiscountPercentage / 100)
+        cart_obj.Offer_ID = selected_offer
+
+    if not selected_offer:
+        cart_obj.Total = cart_obj.Subtotal
+
+    cart_obj.save()
+
+    response_data = {
+        'message': 'Offer updated in the cart successfully',
+        'cart': Cart_MSerializer(cart_obj).data,
+    }
+
+    return Response(response_data, status=status.HTTP_200_OK)
+   
+   def delete(self, request, *args, **kwargs):
+        try:
+            cart_obj = Cart_M.objects.get(User_ID=request.user)
+        except Cart_M.DoesNotExist:
+            return Response({'message': 'Cart does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
         if cart_obj.Offer_ID:
-            old_offer = cart_obj.Offer_ID
-            cart_obj.Total += cart_obj.Total * (old_offer.DiscountPercentage / 100)  # Add back the discount
-            cart_obj.Offer_ID = None  # Remove the old offer
-
-        # Apply new offer to the entire cart or calculate total without discount
-        if selected_offer:
-            cart_obj.Total -= cart_obj.Subtotal * (selected_offer.DiscountPercentage / 100)  # Subtract discount from subtotal
-            cart_obj.Offer_ID = selected_offer
-
-        # Update the total for the entire cart
-        if not selected_offer:
-            # If no offer is applied, set the total to the subtotal
+            cart_obj.Offer_ID = None
             cart_obj.Total = cart_obj.Subtotal
+            cart_obj.save()
+            return Response({'message': 'Offer removed from the cart successfully'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'No offer applied to the cart'}, status=status.HTTP_400_BAD_REQUEST)
 
-        cart_obj.save()
 
-        response_data = {
-            'message': 'Offer updated in the cart successfully',
-            'cart': Cart_MSerializer(cart_obj).data,
-        }
-
-        return Response(response_data, status=status.HTTP_200_OK)
-    
 
 
 class OrderCreateView(APIView):

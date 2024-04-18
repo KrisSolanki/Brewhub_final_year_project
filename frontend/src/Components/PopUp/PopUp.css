@@ -1,16 +1,17 @@
 
 .popup{
     position: fixed;
-    top: 0;
+    top: 50px;
     left: 0;
     width: 100%;
     margin: auto;
-    height: auto;
-    background-color: grey;
+    height: 100%;
+    background-color: rgb(137, 133, 133);
     /* color: white; */
     display: flex;
     justify-content: center;
     align-items: center;
+     
 }
 /* .cover{
     display: flex;
@@ -18,7 +19,7 @@
     align-items: center;
     justify-content: center;
 } */
-.pop_inner{
+.popup_inner{
     position: relative;
     padding: 32px;
     width: 100%;

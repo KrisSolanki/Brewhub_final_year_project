@@ -8,6 +8,7 @@ import { useContext } from 'react';
 import useRazorpay from 'react-razorpay';
 import { useNavigate } from 'react-router-dom';
 import PopUp from '../PopUp/PopUp';
+import { FaWindowClose } from "react-icons/fa";
 
 
 
@@ -26,8 +27,24 @@ const CartList = () => {
 
   const [cartCounts1, setCartCounts1] = useState({});
 
-  const [offerData, setOfferData] = useState(null);
+  const [offerData, setOfferData] = useState();
   const [btnpopup, setBtnPopUp] = useState(false);
+  const [offer_id, setOffer_Id] = useState();
+  const [offerresponse, setOfferResponse] = useState();
+  const [removeoffermsg,setRemoveOfferMsg] = useState('');
+  const [appliedOfferName, setAppliedOfferName] = useState('');
+  const [appliedOfferID, setAppliedOfferID] = useState('');
+  const [showCloseButton, setShowCloseButton] = useState(false);
+  useEffect(()=>{
+    const storedOfferID = data.cart.Offer_ID;
+    if(storedOfferID){
+      setAppliedOfferID(storedOfferID);
+      fetchOfferDetails(storedOfferID);
+      setShowCloseButton(true);
+    }
+  },[data.cart])
+  
+// useEffect(() => {},[data])
 
   const fetchOfferData = () => {
     // Make an API call to fetch offer data using Axios
@@ -35,12 +52,85 @@ const CartList = () => {
       .then(response => {
         setOfferData(response.data);
         // Open the popup menu
-        console.log("ffffffffffffffffffffffffffffffffffffff", offerData["0"])
+        console.log("ffffffffffffffffffffffffffffffffffffff", offerData)
         setBtnPopUp(true)
       })
       .catch(error => console.error('Error fetching offer data:', error));
   };
+  const fetchOfferDetails = async (offer_id) => {
+    try{
+      const response = await axios.get(`http://127.0.0.1:8000/api/offer/${offer_id}`);
+      setAppliedOfferName(response.data.OfferTitle);
+    } catch (error) {
+      console.error('Error fetching offer details:',error)
+    }
+  };
   
+  const handleOffers = async (offer_id , offerName) => {
+    try {
+      setAppliedOfferID(offer_id);
+      setShowCloseButton(true);
+      setAppliedOfferName(offerName)
+      const accessToken = localStorage.getItem('authTokens');
+      const { access } = JSON.parse(accessToken);
+      console.log('Access Token:', access);
+      setOffer_Id(prevId => prevId === offer_id ? null : offer_id);
+      setAppliedOfferName(offerName);
+      const response = await axios.put(`http://127.0.0.1:8000/api/cart1/`,
+        {
+          Offer_ID: offer_id
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${access}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      setOfferResponse(response);
+
+      const response1 = await axios.get("http://127.0.0.1:8000/api/cart/", {
+        headers: {
+          Authorization: `Bearer ${access}`,
+          "Content-Type": "application/json",
+        },
+      });
+      setData(response1.data);
+      
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  console.log("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv", offerresponse)
+
+  const handleRemoveOffer = async () => {
+    try{
+      setAppliedOfferName('');
+      setAppliedOfferID('null');
+      setShowCloseButton(false);
+        const accessToken = localStorage.getItem('authTokens');
+        const { access } = JSON.parse(accessToken)
+        const response = await axios.delete('http://127.0.0.1:8000/api/cart1/',
+      {
+        headers:{
+          Authorization: `Bearer ${access}`,
+        'Content-Type': 'application/json'
+        }
+      });
+      setRemoveOfferMsg(response);
+      const response1 = await axios.get("http://127.0.0.1:8000/api/cart/", {
+        headers: {
+          Authorization: `Bearer ${access}`,
+          "Content-Type": "application/json",
+        },
+      });
+      setData(response1.data);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  
+
 
   // const [count,setCount] = useState(); 
   useEffect(() => {
@@ -63,9 +153,7 @@ const CartList = () => {
 
         setData(response.data);
         console.log("adrfs", data)
-
-
-
+        
       } catch (error) {
         console.error('Error:', error);
       }
@@ -77,7 +165,7 @@ const CartList = () => {
 
 
 
-  const handleIncrement = async (event, cart_items) => {
+  const handleIncrement = async (event, cart_items ) => {
     event.preventDefault();
     const updatedCounts = { ...cartCounts1, [cartItems.Cart_Item_ID]: (cartCounts1[cartItems.Cart_Item_ID] || cartItems.ItemQuantity) + 1 };
     setCartCounts1(updatedCounts);
@@ -96,6 +184,7 @@ const CartList = () => {
           ItemQuantity: updatedQuantity,
           Cart_ID: data.cart.CartID,
           Item_ID: cart_items.Item_ID,
+          // Offer_ID : offer_id,
 
         },
         {
@@ -123,7 +212,7 @@ const CartList = () => {
     console.log("cart_items", cart_items)
   };
 
-  const handleDecrement = async (cart_items, itemId) => {
+  const handleDecrement = async (cart_items, itemId,offer_id) => {
 
     setCartCounts1((prevCounts) => {
       const updatedCounts = {
@@ -150,6 +239,7 @@ const CartList = () => {
           ItemQuantity: updatedQuantity,
           Cart_ID: data.cart.CartID,
           Item_ID: cart_items.Item_ID,
+          Offer_ID : offer_id,
         },
         {
           headers: {
@@ -287,6 +377,7 @@ const CartList = () => {
             Authorization: `Bearer ${access}`,
             'Content-Type': 'application/json',
           },
+
         }
       )
         .then(response => {
@@ -304,10 +395,12 @@ const CartList = () => {
 
 
   };
-  console.log("open", useRazorpay());
-  console.log("Type of first element:", typeof useRazorpay()[0]);
-  console.log("cartCounts1", cartCounts1);
-  // console.log("zzzz",data.cart.menus.ItemID )
+  // console.log("open", useRazorpay());
+  // console.log("Type of first element:", typeof useRazorpay()[0]);
+  // console.log("cartCounts1", cartCounts1);
+  // console.log("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq", offer_id)
+  // // console.log("zzzz",data.cart.menus.ItemID )
+  console.log('OFFERID ---------------------------',offer_id)
   return (
 
     <>
@@ -317,84 +410,90 @@ const CartList = () => {
         <div class="cart-items">
           <h1>Cart</h1>
           <div className="parent">
+            <div className="parent2">
 
-            {data.cart_items.map((cartItem) => {
-              // Find the corresponding menu item for the cart item
-              const menuItem = data.menus.find(menu => menu.ItemID === cartItem.Item_ID);
 
-              return (
-                <div class="cart-item" key={cartItem.CartDetailsID}>
-                  <div class="item-details">
-                    <img src={`http://127.0.0.1:8000/api${menuItem.ItemImage}`} alt="" srcset="" />
-                    <div class="item-info">
-                      <p><strong>Item Name:</strong> {menuItem.ItemName}</p>
-                      {/* <p><strong>Description:</strong> {menuItem.ItemDescription}</p> */}
-                      <p><strong>Price:</strong> {menuItem.ItemPrice}</p>
-                      <p><strong>Quantity:</strong> {cartCounts1[cartItem.CartDetailsID] || cartItem.ItemQuantity}</p>
-                      <p><strong>Subtotal:</strong> {cartItem.Subtotal}</p>
+              {data.cart_items.map((cartItem) => {
+                // Find the corresponding menu item for the cart item
+                const menuItem = data.menus.find(menu => menu.ItemID === cartItem.Item_ID);
+
+                return (
+                  <div class="cart-item" key={cartItem.CartDetailsID}>
+                    <div class="item-details">
+                      <img src={`http://127.0.0.1:8000/api${menuItem.ItemImage}`} alt="" srcset="" />
+                      <div class="item-info">
+                        <p><strong>Item Name:</strong> {menuItem.ItemName}</p>
+                        {/* <p><strong>Description:</strong> {menuItem.ItemDescription}</p> */}
+                        <p><strong>Price:</strong> {menuItem.ItemPrice}</p>
+                        <p><strong>Quantity:</strong> {cartCounts1[cartItem.CartDetailsID] || cartItem.ItemQuantity}</p>
+                        <p><strong>Subtotal:</strong> {cartItem.Subtotal}</p>
+                      </div>
+                    </div>
+                    <div class="item-actions">
+                      <button class="action-btn" onClick={(event) => handleIncrement(event, cartItem)}>+</button>
+                      <p class="quantityDisplay">{cartCounts1[cartItem.CartDetailsID] || cartItem.ItemQuantity}</p>
+                      <button class="action-btn" onClick={() => handleDecrement(cartItem, cartItem.CartDetailsID)}>-</button>
+                      <button class="delete-btn" onClick={() => handleDelete(cartItem.CartDetailsID)}>DELETE</button>
                     </div>
                   </div>
-                  <div class="item-actions">
-                    <button class="action-btn" onClick={(event) => handleIncrement(event, cartItem)}>+</button>
-                    <p class="quantityDisplay">{cartCounts1[cartItem.CartDetailsID] || cartItem.ItemQuantity}</p>
-                    <button class="action-btn" onClick={() => handleDecrement(cartItem, cartItem.CartDetailsID)}>-</button>
-                    <button class="delete-btn" onClick={() => handleDelete(cartItem.CartDetailsID)}>DELETE</button>
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
             <div className="totalcart">
               <div className="totalsummarycart">
                 <h2>Offer</h2>
                 <div className="offerboxcontainer">
                   <div className="offerbox">
-                    <button onClick={fetchOfferData}>Offers</button>
+                    <h5 onClick={fetchOfferData}>{appliedOfferName ? appliedOfferName : 'Offers'}</h5>
 
                     <PopUp trigger={btnpopup} setTrigger={setBtnPopUp}>
-                    <h2>Offers</h2>
+                      <center><h2>Offers</h2></center>
+                      <div className="offermain_container">
+
+                        {offerData ? ( // Check if offerData is not null
+                          offerData.map(offer => (
+                            <div key={offer.OfferID} className='offer_container' >
+                              <div className="left">
+
+                                <h3>{offer.OfferTitle}</h3>
+                                <p>{offer.OfferDescription}</p>
+                                <p>Minimum Amount: {offer.MinimumAmount}</p>
+                                <p>Discount Percentage: {offer.DiscountPercentage}</p>
+                              </div>
+                              <div className="right">
+                                <button onClick={() => handleOffers(offer.OfferID , offer.OfferTitle)}>Apply</button>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <p>Loading offer data...</p> // Placeholder while offerData is null
+                        )}                      
+                        </div>
+                    </PopUp>
                     
-                          {/* {offerData["0"].map(offer => ( */}
-                            {/* <h3>{offerData["0"].OfferTitle}</h3> */}
-                          {/* ))} */}
-                        
-                        </PopUp>
-                    {/* {btnpopup && offerData && (
-                      <div className="popup-menu">
-                        
-                        
-                        <ul>
-                          {offerData.map(offer => (
-                            <li key={offer.OfferID}>{offer.OfferName}</li>
-                          ))}
-                        </ul>
-                       
-                      </div>
-                    )} */}
                   </div>
+                        {/* <button><FaWindowClose size={20} /></button> */}
+                        {appliedOfferName && <button onClick={() => {handleRemoveOffer()}}><FaWindowClose size={20} /></button>}
                 </div>
               </div>
               <div className="totalsummaryc">
                 <h2>Total</h2>
               </div>
-              {/* <div className="idscart">
-                    <div className="xc">
-                    
-                    <h3>Order Id : </h3>
-                    </div>
-                    <div className="xc">
-                    <h3>Payment Id : </h3>
-                    </div>
-                    <div className="xc">
-                    <h3>Payment time : </h3>
-                    </div>
-                </div> */}
+              
               <div className="jjkcart">
                 <div className="subtotalcart">
-                  <h3><strong>SubTotal : </strong>{data.cart.Total}</h3>
+                  <h3><strong>SubTotal : </strong>{data.cart.Subtotal}</h3>
+                  
                   {/* <h3>500</h3> */}
                 </div>
                 <div className="Maintotalcart">
-                  <h3>Total : {data.cart.Subtotal} </h3>
+                  {offerData ? (
+                     <div className="Maintotalcartd">
+                     <h3><strong>Discount : </strong>-{data.cart.Subtotal - data.cart.Total }</h3>
+                     </div> 
+                     ) : ( <></>
+                        )}  
+                  <h3>Total : {data.cart.Total} </h3>
                   {/* <h3>500</h3> */}
                 </div>
                 <div class="checkout-btn">
