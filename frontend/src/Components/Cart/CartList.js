@@ -9,6 +9,7 @@ import useRazorpay from 'react-razorpay';
 import { useNavigate } from 'react-router-dom';
 import PopUp from '../PopUp/PopUp';
 import { FaWindowClose } from "react-icons/fa";
+import Notification from '../Notification/Notification';
 
 
 
@@ -35,8 +36,13 @@ const CartList = () => {
   const [appliedOfferName, setAppliedOfferName] = useState('');
   const [appliedOfferID, setAppliedOfferID] = useState('');
   const [showCloseButton, setShowCloseButton] = useState(false);
+
+  const [showNotification, setShowNotification] = useState(false);
+    const [notificationMessage, setNotificationMessage] = useState("");
+    const [notificationColor, setNotificationColor] = useState("");
   useEffect(()=>{
     const storedOfferID = data.cart.Offer_ID;
+    // data
     if(storedOfferID){
       setAppliedOfferID(storedOfferID);
       fetchOfferDetails(storedOfferID);
@@ -88,6 +94,10 @@ const CartList = () => {
         }
       );
       setOfferResponse(response);
+      setNotificationMessage("Offer applied successfully");
+      setNotificationColor("green");
+      setShowNotification(true);
+      setTimeout(() => setShowNotification(false), 3000);
 
       const response1 = await axios.get("http://127.0.0.1:8000/api/cart/", {
         headers: {
@@ -118,6 +128,10 @@ const CartList = () => {
         }
       });
       setRemoveOfferMsg(response);
+      setNotificationMessage("Offer removed successfully");
+      setNotificationColor("green");
+      setShowNotification(true);
+      setTimeout(() => setShowNotification(false), 3000);
       const response1 = await axios.get("http://127.0.0.1:8000/api/cart/", {
         headers: {
           Authorization: `Bearer ${access}`,
@@ -150,6 +164,7 @@ const CartList = () => {
             'Content-Type': 'application/json',
           },
         });
+        
 
         setData(response.data);
         console.log("adrfs", data)
@@ -239,7 +254,7 @@ const CartList = () => {
           ItemQuantity: updatedQuantity,
           Cart_ID: data.cart.CartID,
           Item_ID: cart_items.Item_ID,
-          Offer_ID : offer_id,
+          // Offer_ID : offer_id,
         },
         {
           headers: {
@@ -366,7 +381,7 @@ const CartList = () => {
       console.error('Error updating item quantity:', error);
     });
   }
-  const handleDelete = (itemId) => {
+  const handleDelete = async (itemId) => {
     const accessToken = localStorage.getItem('authTokens');
     const { access } = JSON.parse(accessToken);
     try {
@@ -380,14 +395,21 @@ const CartList = () => {
 
         }
       )
-        .then(response => {
-          console.log('Item deleted successfully:', response.data);
-          // Handle the response, e.g., update the UI to reflect the deletion
-        })
-        .catch(error => {
-          console.error('Error deleting item:', error);
-          // Handle the error, e.g., show an error message to the user
-        });
+        // .then(response => {
+        //   console.log('Item deleted successfully:', response.data);
+        //   // Handle the response, e.g., update the UI to reflect the deletion
+        // })
+        // .catch(error => {
+        //   console.error('Error deleting item:', error);
+        //   // Handle the error, e.g., show an error message to the user
+        // });
+        const response = await axios.get("http://127.0.0.1:8000/api/cart/", {
+        headers: {
+          Authorization: `Bearer ${access}`,
+          "Content-Type": "application/json",
+        },
+      });
+      setData(response.data);
     } catch (error) {
       console.error('Error parsing access token:', error);
       // Handle the error, e.g., show an error message to the user
@@ -404,6 +426,10 @@ const CartList = () => {
   return (
 
     <>
+    {showNotification && (
+                <Notification message={notificationMessage} color={notificationColor} />
+            )}
+    
 
 
       <div class="cart-container">
@@ -447,6 +473,9 @@ const CartList = () => {
                     <h5 onClick={fetchOfferData}>{appliedOfferName ? appliedOfferName : 'Offers'}</h5>
 
                     <PopUp trigger={btnpopup} setTrigger={setBtnPopUp}>
+                    {showNotification && (
+                <Notification message={notificationMessage} color={notificationColor} />
+            )}
                       <center><h2>Offers</h2></center>
                       <div className="offermain_container">
 

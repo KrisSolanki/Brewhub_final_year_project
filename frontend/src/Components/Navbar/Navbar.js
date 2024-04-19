@@ -5,7 +5,7 @@ import { MdGroups } from "react-icons/md";
 import { RiLoginBoxFill } from "react-icons/ri";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaCircleUser } from "react-icons/fa6";
-import Logo from '../../Assets/NavbarImgs/test1.png';
+import Logo from '../../Assets/NavbarImgs/MainLogo.png';
 import Search from '../../Assets/NavbarImgs/search.png';
 import './Navbar.css';
 import AuthContext from '../../Context/AuthContext';

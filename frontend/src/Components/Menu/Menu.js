@@ -39,6 +39,10 @@ const Menu = ({ data }) => {
             setShowNotification(true);
             setTimeout(() => setShowNotification(false), 3000);
         } catch (error) {
+            setNotificationMessage("Some error occur while adding item to cart");
+            setNotificationColor("green");
+            setShowNotification(true);
+            setTimeout(() => setShowNotification(false), 3000);
             console.error('Error adding item to cart:', error);
         }
     };

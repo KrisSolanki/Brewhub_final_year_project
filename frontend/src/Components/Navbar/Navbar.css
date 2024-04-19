@@ -15,7 +15,9 @@
     /* background: #5c4d3c; */
     /* background: #a9845a; */
     /* background: grey; */
+    /* background: rgb(240, 240, 240); */
     background: black;
+
     color: white;
     height: 56px;
     padding: 15px 15px;
@@ -180,15 +182,11 @@
 
 
 .tgl li a{
-    color: black;
-    text-decoration: none;
-    transition: color 0.4s ease-in-out;
-}
-.tgl li a {
     color: white;
     text-decoration: none;
     transition: color 0.4s ease-in-out;
 }
+
 .tgl li a:hover
 {
     color: red;
@@ -277,7 +275,7 @@
     height: 50px;
     /* width: 30%; */
     /* margin: 3px 12px; */
-    margin: 10px 5px 0
+    margin: 17px 5px 0
 }
 .searchboxNavbar input {
     /* padding: 6px; */
@@ -292,6 +290,7 @@
     width: 0;
     border: none;
     padding: 0px;
+    height: 35px;
 }
 .searchboxNavbar:hover > .searchtxtSubNav{
     
