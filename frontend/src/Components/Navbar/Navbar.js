@@ -138,6 +138,9 @@ useEffect(() => {
                         Admin Panel
                       </button>
                         )}
+                        <button className="dropdown-item" onClick={() => navigate('/changepassword')}>
+                        Change password
+                      </button>
                     <button className="dropdown-item" onClick={logoutUser}>Logout</button>
                     console.log("User Role:", user.Role),
                  </div>

@@ -23,6 +23,7 @@ import RegistrationPage from './Pages/Auth/RegistrationPage';
 import UserOrderPage from './Pages/UserOrderPage';
 import OrderlistdetailsPage from './Pages/OrderlistdetailsPage';
 import OrderSummaryPage from './Pages/OrderSummaryPage';
+import ChnagePasswordPage from './Pages/Auth/ChnagePasswordPage';
 
 function App() {
   
@@ -63,6 +64,7 @@ function App() {
           <Route path="/otp" element={<OTPPage />} />
           <Route path="/forgotpassword" element={<ForgetPasswdPage />} />
           <Route path="/registration" element={<RegistrationPage />} />
+          <Route path="/changepassword" element={<ChnagePasswordPage />} />
           
         {/* User Profile order*/}
         <Route path="/Userorder" element={<UserOrderPage />} />
