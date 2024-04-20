@@ -12,6 +12,8 @@ class CustomUserManager(BaseUserManager):
         return user
 
     def create_superuser(self, mobile_no, password=None, **extra_fields):
+        role=Roles.objects.get(Role_Name='Admin')
+        extra_fields.setdefault('Role', role)
         # Ensure the user is created as a superuser
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)

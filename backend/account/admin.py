@@ -2,6 +2,11 @@ from django.contrib import admin
 from .models import *
 from django.utils import timezone
 # Register your models here.
+# class KAdminArea(admin.AdminSite):
+#     login_template = 'http://localhost:3000/login'
+
+# kadmin=KAdminArea(name='k the king')
+# kadmin.register(User, )
 
 class StateAdmin(admin.ModelAdmin):
     list_display = ("StateID", "State")
