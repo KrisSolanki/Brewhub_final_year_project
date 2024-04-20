@@ -104,9 +104,11 @@ class LoginView(APIView):
         
 
         user = User.objects.filter(mobile_no=mobile_no).first()#finding user 
-
+        online_status = Status.objects.get(Status_Name='Online')
         if user is None:
             raise AuthenticationFailed('User not found! ')
+        
+        
         
         if not user.check_password(password):
             raise AuthenticationFailed('Incorrect password! \nPlease enter the correct password.')
@@ -125,6 +127,7 @@ class LoginView(APIView):
                             to = '+91'+mobile_no
                         )
         user.otp = otp
+        user.Status = online_status
         
 
         user.save()

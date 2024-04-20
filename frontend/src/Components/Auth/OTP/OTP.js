@@ -28,6 +28,7 @@ const OTP = () => {
         const token = response.data.token; // Adjust this based on the actual response structure
         // localStorage.setItem("authTokens", JSON.stringify(token));
         navigate("/"); // Navigate to the next page after successful OTP verification
+        // window.location.href = 'http://127.0.0.1:8000//admin/';
         alert("Token Stored");
       } else {
         alert("OTP verification failed. Please try again.");
