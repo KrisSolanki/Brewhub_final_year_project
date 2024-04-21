@@ -119,9 +119,18 @@ useEffect(() => {
               alt="search img" className='search-img' 
               // onClick={handleSearchSubmit}
               /></button>
-            </div>   
+            </div>
             </li>
-            <li><NavLink to='/'><span><IoIosHome /></span>Home</NavLink></li>
+            <div className="home_container">
+            <li><NavLink to='/'><div className="home_container_icon"><span><IoIosHome /></span></div>
+            <div className="home_container_home">
+
+            Home
+            </div>
+            </NavLink>
+            </li>
+            </div>   
+            
             <li><NavLink to='/aboutus'><span><MdGroups /></span>About us</NavLink></li>
             {user ? (
               <>

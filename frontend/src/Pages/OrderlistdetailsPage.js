@@ -3,7 +3,7 @@ import Orderlistdetails from '../Components/User order/Orderlistdetails'
 
 const OrderlistdetailsPage = () => {
   return (
-    <div>
+    <div style={{ background: 'burlywood' }}>
       <Orderlistdetails/>
     </div>
   )

@@ -3,7 +3,7 @@ import OrderSummary from '../Components/User order/OrderSummary'
 
 const OrderSummaryPage = () => {
   return (
-    <div>
+    <div style={{ background: 'burlywood' }}> 
       <OrderSummary/>
     </div>
   )

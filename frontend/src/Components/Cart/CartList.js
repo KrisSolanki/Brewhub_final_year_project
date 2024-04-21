@@ -434,7 +434,7 @@ const CartList = () => {
 
       <div class="cart-container">
         <div class="cart-items">
-          <h1>Cart</h1>
+          <h1>Your itens</h1>
           <div className="parent">
             <div className="parent2">
 
@@ -467,7 +467,7 @@ const CartList = () => {
             </div>
             <div className="totalcart">
               <div className="totalsummarycart">
-                <h2>Offer</h2>
+                <h2>Proceed for payment</h2>
                 <div className="offerboxcontainer">
                   <div className="offerbox">
                     <h5 onClick={fetchOfferData}>{appliedOfferName ? appliedOfferName : 'Offers'}</h5>
@@ -502,7 +502,7 @@ const CartList = () => {
                     
                   </div>
                         {/* <button><FaWindowClose size={20} /></button> */}
-                        {appliedOfferName && <button onClick={() => {handleRemoveOffer()}}><FaWindowClose size={20} /></button>}
+                        {appliedOfferName && <button className='xbutton' onClick={() => {handleRemoveOffer()}}><FaWindowClose size={20} /></button>}
                 </div>
               </div>
               <div className="totalsummaryc">
@@ -538,12 +538,12 @@ const CartList = () => {
           </div>
           {data.cart_items.length === 0 && <h1>Your Cart is Empty</h1>}
           <div class="cart-summary">
-            <div class="summary-total">
+            {/* <div class="summary-total">
               <h3><strong>Total:</strong> {data.cart.Total}</h3>
             </div>
             <div class="checkout-btn">
               <button onClick={handleorder}>Checkout</button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

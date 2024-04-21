@@ -97,7 +97,7 @@ class Address(models.Model):
 
     def __str__(self):
         # return f"AddressID: {self.AddressID}, Address: {self.Address}"
-        return str(self.Address)
+        return str(self.AddressID)
     
 
 

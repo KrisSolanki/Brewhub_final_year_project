@@ -3,7 +3,7 @@ import Userorder from '../Components/User order/Userorder'
 
 const UserOrderPage = () => {
   return (
-    <div>
+    <div style={{ background: 'burlywood' }}> 
       <Userorder/>
     </div>
   )

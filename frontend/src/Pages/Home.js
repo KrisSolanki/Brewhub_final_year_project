@@ -11,7 +11,8 @@ function Home({setProgress}) {
   }, [setProgress])
 
   return (
-    <div>
+    <div style={{ background: 'burlywood' }}>
+
       {/* <h1>HomePage</h1> */}
       <div className=""><CafeList  /></div>
 

@@ -42,7 +42,7 @@ const Cart = () => {
   
   // console.log("data2:",dataM);
   return (
-    <div>
+    <div style={{ background: 'burlywood' }}> 
       <CartList data={data} />
     </div>
   )

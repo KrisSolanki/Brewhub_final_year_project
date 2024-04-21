@@ -41,6 +41,8 @@ const CafeList = () => {
           {data.map((cafe) => (
             
             <div key={cafe.CafeID} className="product">
+              <div className="both">
+
               <NavLink to={`/CafeList/${cafe.CafeID}`} className="nav-linkP">
               <div className="img">
               <img src={`http://127.0.0.1:8000/api${cafe.LogoImage}`} alt={cafe.CafeName} />
@@ -57,6 +59,7 @@ const CafeList = () => {
    
 
           </NavLink>
+              </div>
             </div>
           ))}
         </div>
