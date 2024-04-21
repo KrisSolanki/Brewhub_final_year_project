@@ -192,8 +192,10 @@ class CartDetailView(APIView):
     
     # Recalculate the total for the entire cart
         cart_details = Cart_Details.objects.filter(Cart_ID=cart_obj)
-        cart_obj.Subtotal = sum(cart_item.Subtotal for cart_item in cart_details)
-        cart_obj.Total = cart_obj.Subtotal  # Assuming there are no additional discounts
+        # cart_obj.Subtotal = sum(cart_item.Subtotal for cart_item in cart_details)
+        cart_obj.Subtotal = item.ItemPrice * cart_detail.ItemQuantity
+        # cart_obj.Total = cart_obj.Subtotal  # Assuming there are no additional discounts
+        cart_obj.Total = sum(cart_item.Subtotal for cart_item in cart_details)  # Assuming there are no additional discounts
         cart_obj.save()
 
         response_data = {
@@ -273,12 +275,14 @@ class CartDetailView(APIView):
         
                 cart_details = Cart_Details.objects.filter(Cart_ID=cart_obj)
                 cart_obj.Subtotal = sum(cart_item.Subtotal for cart_item in cart_details)
-                cart_obj.Total = item.ItemPrice * cart_detail.ItemQuantity * discount_factor # Assuming there are no additional discounts
+                # cart_obj.Total = item.ItemPrice * cart_detail.ItemQuantity * discount_factor # Assuming there are no additional discounts
+                cart_obj.Total = cart_obj.Subtotal 
+                print("discount factor",discount_factor) # Assuming there are no additional discounts
                 cart_obj.save()
             else:
                 cart_details = Cart_Details.objects.filter(Cart_ID=cart_obj)
                 cart_obj.Subtotal = sum(cart_item.Subtotal for cart_item in cart_details)
-                cart_obj.Total = item.ItemPrice * cart_detail.ItemQuantity  # Assuming there are no additional discounts
+                cart_obj.Total = sum(cart_item.Subtotal for cart_item in cart_details)  # Assuming there are no additional discounts
                 cart_obj.save()
         
             
@@ -352,10 +356,16 @@ class CartOfferView(APIView):
             cart_obj = Cart_M.objects.get(User_ID=request.user)
         except Cart_M.DoesNotExist:
             return Response({'message': 'Cart does not exist'}, status=status.HTTP_404_NOT_FOUND)
-
+        applied_offer = cart_obj.Offer_ID
+        discount_factor = 1 - (applied_offer.DiscountPercentage / 100)
+        print("discount",discount_factor)
         if cart_obj.Offer_ID:
+            
             cart_obj.Offer_ID = None
-            cart_obj.Total = cart_obj.Subtotal
+            cart_details = Cart_Details.objects.filter(Cart_ID=cart_obj)
+
+            
+             # Assuming there are no additional discounts
             cart_obj.save()
             return Response({'message': 'Offer removed from the cart successfully'}, status=status.HTTP_200_OK)
         else:

@@ -1,16 +1,14 @@
 import React from 'react'
-import "../Menu Slider/MenuSlider.css"
+import "../footer/Footer.css"
 
-
-const MenuSlider = ({}) => {
+const Footer = () => {
   return (
     <footer className="footer">
     <div className="footer-content">
       <p>&copy; 2024 <strong>BREWHUB</strong></p>
     </div>
   </footer>
-  );
-};
-  
+  )
+}
 
-export default MenuSlider
+export default Footer

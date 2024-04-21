@@ -24,6 +24,8 @@ import UserOrderPage from './Pages/UserOrderPage';
 import OrderlistdetailsPage from './Pages/OrderlistdetailsPage';
 import OrderSummaryPage from './Pages/OrderSummaryPage';
 import ChnagePasswordPage from './Pages/Auth/ChnagePasswordPage';
+import AddressPage from './Pages/Auth/AddressPage';
+import Footer from './Components/footer/Footer';
 
 function App() {
   
@@ -65,6 +67,7 @@ function App() {
           <Route path="/forgotpassword" element={<ForgetPasswdPage />} />
           <Route path="/registration" element={<RegistrationPage />} />
           <Route path="/changepassword" element={<ChnagePasswordPage />} />
+          <Route path="/address" element={<AddressPage />} />
           
         {/* User Profile order*/}
         <Route path="/Userorder" element={<UserOrderPage />} />
@@ -73,6 +76,7 @@ function App() {
 
       </Routes>
         </MenuContextProvider>
+        <Footer/>
     </AuthProvider>
   
     </div>

@@ -60,7 +60,7 @@ REST_FRAMEWORK = {
 
 # Django project settings.py
 
-
+# LOGIN_URL = 'login/'
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=20),

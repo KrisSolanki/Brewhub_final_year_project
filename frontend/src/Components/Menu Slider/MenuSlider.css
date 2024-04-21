@@ -1,0 +1,14 @@
+/* Footer.css */
+
+.footer {
+    background-color: Black;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+  }
+  
+  .footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  

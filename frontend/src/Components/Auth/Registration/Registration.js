@@ -69,7 +69,7 @@ const Registration = ({ onNext }) => {
         Role_Name: "Customer",
       },
       Status: {
-        Status_Name: "Online",
+        Status_Name: "Offline",
       },
     };
     console.log("Sending OTP request with body:", requestBody);
@@ -126,8 +126,8 @@ const Registration = ({ onNext }) => {
       if (response.status === 200) {
         // Registration successful
         
-        
-        navigate("/login")
+        navigate("/address")
+        // navigate("/login")
       } else {
         // Registration failed
         setNotificationMessage("Registration failed. Please try again.");

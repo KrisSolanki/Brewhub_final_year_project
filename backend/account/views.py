@@ -39,8 +39,8 @@ class RegisterView(APIView):
         print(mobile_no)
         # -------------- using 2factor --------------
         # Generate and send OTP
-        # otp = send_otp_to_mobile(mobile_no)
-        # user.otp = otp
+        otp = send_otp_to_mobile(mobile_no)
+        user.otp = otp
         #--------------- using twilio --------------
         # otp = send_sms(mobile_no)
         # message = client.messages \
@@ -53,7 +53,7 @@ class RegisterView(APIView):
         #
         
 
-        self.send_welcome_email(user.email, user.first_name, user.last_name)
+        # self.send_welcome_email(user.email, user.first_name, user.last_name)
 
         # return Response(serializer.data)
         return Response({
@@ -61,17 +61,17 @@ class RegisterView(APIView):
             'message': 'Registration succesfully '
         })
     
-    def send_welcome_email(self, email , first_name, last_name ):
-        subject = 'Welcome to Your App!'
-        message = (
-            f'Dear {first_name} {last_name},\n\n'
-            f'Thank you for registering with our App! We are excited to have you on board.\n'
-            f'Explore our platform and let us know if you have any questions or need assistance.\n\n'
-            f' Regards,\n -Shadow '
-        )
-        from_email = EMAIL_HOST_USER  # Update with your email
+    # def send_welcome_email(self, email , first_name, last_name ):
+    #     subject = 'Welcome to Your App!'
+    #     message = (
+    #         f'Dear {first_name} {last_name},\n\n'
+    #         f'Thank you for registering with our App! We are excited to have you on board.\n'
+    #         f'Explore our platform and let us know if you have any questions or need assistance.\n\n'
+    #         f' Regards,\n -Shadow '
+    #     )
+    #     from_email = EMAIL_HOST_USER  # Update with your email
         
-        send_mail(subject, message, from_email, [email])
+    #     send_mail(subject, message, from_email, [email])
 
 class AddressView(APIView):
     def post(self, request, *args, **kwargs):
@@ -243,7 +243,7 @@ def send_otp_to_mobile_view(request):
                             to = '+91'+mobile_no
                         )
         
-        # serializer.data.otp = otp  # Store the OTP in the serializer
+        serializer.data.otp = otp  # Store the OTP in the serializer
 
         if otp is not None:
             return Response({'otp': otp}, status=status.HTTP_200_OK)
@@ -402,6 +402,65 @@ class ForgetPasswordView(APIView):
 
             user.set_password(serializer.validated_data['new_password'])
             user.save()
-            return Response({"message": "Password (forget)changed successfully"})
+            return Response({"message": "Password (forget)changed successfully"}, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors)
+        
+class StateList(APIView):
+    def get(self, request):
+        states = State.objects.all()
+        serializer = StateSerializer(states, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = StateSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class StateDetail(APIView):
+    def get_object(self, pk):
+        try:
+            return State.objects.get(pk=pk)
+        except State.DoesNotExist:
+            return Response("State does not exist", status=status.HTTP_400_BAD_REQUEST)
+            
+
+    def get(self, request, pk):
+        state = self.get_object(pk)
+        serializer = StateSerializer(state)
+        return Response(serializer.data)
+
+    def patch(self, request, pk):
+        state = self.get_object(pk)
+        serializer = StateSerializer(state, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        state = self.get_object(pk)
+        state.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+# class CityList(viewsets.ModelViewSet):
+#     queryset = City.objects.all()
+#     serializer_class = CitySerializer
+
+class CityList(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = CitySerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({
+            'status': status.HTTP_200_OK,
+            'message': 'City added successfully'
+        })
+
+    def get(self, request, *args, **kwargs):
+        # Assuming you want to retrieve all cities
+        cities = City.objects.all()
+        serializer = CityGetSerializer(cities, many=True)
+        return Response(serializer.data)

@@ -59,6 +59,8 @@ const Login = ({ onNext }) => {
 
  
 return (
+  <div className="container_login">
+
   <div className='loginForm'>
      <h2 className='logintext'>Login</h2>
      <form onSubmit={loginUser}>
@@ -98,12 +100,13 @@ return (
        <label className="custom-label">
        <span className="login-span">
        <Link to="/Registration" className="custom-link">
-         Don't Have an account? Sing-up
+         Don't Have an account? Sign-up
        </Link>
        </span>
      </label>
  
      </form>
+  </div>
   </div>
  );
  

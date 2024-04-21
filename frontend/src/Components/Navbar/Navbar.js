@@ -97,7 +97,7 @@ useEffect(() => {
 
  return (
     <>
-      <div className='container'>
+      <div className='container scrolled'>
         <div className="logo">
           <div className="logostl">
             <img src={Logo} alt="Logoimg" className="logo-img" />

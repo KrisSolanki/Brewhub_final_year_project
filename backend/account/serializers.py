@@ -28,6 +28,12 @@ class CitySerializer(serializers.ModelSerializer):
         model = City
         fields = '__all__'
 
+class CityGetSerializer(serializers.ModelSerializer):
+    State = StateSerializer()
+    class Meta:
+        model = City
+        fields = '__all__'
+
 
 
 class UserSerializer(serializers.ModelSerializer):

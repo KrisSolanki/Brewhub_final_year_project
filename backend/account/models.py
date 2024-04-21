@@ -87,7 +87,10 @@ class User(AbstractUser):
     
 class Address(models.Model):
     AddressID = models.AutoField(primary_key=True) 
-    Address = models.CharField(max_length=255,null=True)
+    # Address = models.CharField(max_length=255,null=True)
+    Home = models.CharField(max_length=50,null=True)
+    Street = models.CharField(max_length=150,null=True)
+    Landmark = models.CharField(max_length=50,null=True)
     Pincode = models.CharField(max_length=6,null=True)
     City = models.ForeignKey(City,on_delete=models.CASCADE,null=True) 
     User = models.ForeignKey(User,on_delete=models.CASCADE,null=True) 

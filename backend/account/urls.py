@@ -5,6 +5,7 @@ from account.views import * #----------- date : 3/01/2024------------
 from django.contrib.auth import views as auth_views #----------------------date : 5/01/2024 for reset_password , * related to password
 from django.core.mail.backends.smtp import EmailBackend #------------date : 5/01/2024 for reset_password
 from django.conf import settings
+# from django.contrib import admin
 from rest_framework_simplejwt.views import (
     TokenRefreshView
 )#date : 7/01/2024
@@ -34,6 +35,12 @@ urlpatterns = [
 
     path('change_password/', ChangePasswordView.as_view(), name='change_password'),
     path('forget_password/', ForgetPasswordView.as_view(), name='forget_password'),
+
+    path('states/', StateList.as_view(), name='state-list'),
+    path('states/<int:pk>/', StateDetail.as_view(), name='state-detail'),
+
+    path('cities/', CityList.as_view(), name='CityList'),
+    path('city/<int:pk>/', CityList.as_view(), name='CityList'),
 ]
 from django.conf.urls.static import static
 if settings.DEBUG:

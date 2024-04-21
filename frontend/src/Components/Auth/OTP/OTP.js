@@ -59,29 +59,22 @@ const OTP = () => {
       <form>
         {/* <div className="otpWrapper"> */}
         <div className="otpDigit">
-          {[1, 2, 3, 4].map((digit) => (
-            <input
-              key={digit}
-              type="text"
-              maxLength="1" 
-              value={otp[digit - 1]}
-              onChange={(e) => {
-                const newOtp = otp.split("");
-                newOtp[digit - 1] = e.target.value;
-                setOtp(newOtp.join(""));
-                handlechange(e)
-              }}
-            />
-          ))}
+          <input
+          type="text"
+          maxLength="4"
+          value={otp}
+          onChange={(e) => setOtp(e.target.value)}
+          className="otpInput"
+        />
         </div>
 
         <button type="button" className="buttonverify" onClick={handleVerify}>
           Verify
         </button>
 
-        <button type="button" className="buttonnext" onClick={() => navigate("/")}>
+        {/* <button type="button" className="buttonnext" onClick={() => navigate("/")}>
           Next
-        </button>
+        </button> */}
       </form>
     </div>
   );

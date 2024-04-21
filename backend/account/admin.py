@@ -31,7 +31,7 @@ class RoleAdmin(admin.ModelAdmin):
     list_display = ("RoleID", "Role_Name")
 
 class AddressAdmin(admin.ModelAdmin):
-    list_display = ("AddressID", "Address", "Pincode", "City", "User")
+    list_display = ("AddressID", "Home","Street","Landmark", "Pincode", "City", "User")
 
 
 admin.site.register(User, UserAdmin)
