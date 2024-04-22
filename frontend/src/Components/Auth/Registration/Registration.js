@@ -25,15 +25,16 @@ const Registration = ({ onNext }) => {
   const [isLastNameEmpty, setIsLastNameEmpty] = useState(false);
 
   const [isMobileNumberValid, setIsMobileNumberValid] = useState(true);
-
   const [isMobileNumberEmpty, setIsMobileNumberEmpty] = useState(false);
 
   const [isEmailValid, setIsEmailValid] = useState(true);
+  const [isEmailEmpty, setIsEmailEmpty] = useState(true);
+
   const [isPasswordValid, setIsPasswordValid] = useState(true);
   const [isDobValid, setIsDobValid] = useState(true);
   const [isGenderValid, setIsGenderValid] = useState(true);
 
-  const [otp, setOtp] = useState(["", "", "", ""]); // OTP input state
+  const [otp, setOtp] = useState(""); // OTP input state
   const [showOtpInput, setShowOtpInput] = useState(false); // State to control OTP input visibility
   const [serverOtp, setServerOtp] = useState(""); // OTP received from the server
 
@@ -49,51 +50,79 @@ const Registration = ({ onNext }) => {
   };
 
   const handleOtpChange = (index, value) => {
-    otp[index] = value;
-    setOtp([...otp]);
+    if (value.length <= 4) { // Ensure OTP length doesn't exceed 4 digits
+      setOtp(value);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Construct the request body
-    const requestBody = {
-      first_name: firstName,
-      last_name: lastName,
-      mobile_no: mobileNumber,
-      password: password,
-      email: email,
-      dob: dob,
-      Gender: gender,
-      Role: {
-        Role_Name: "Customer",
-      },
-      Status: {
-        Status_Name: "Offline",
-      },
-    };
-    console.log("Sending OTP request with body:", requestBody);
-    // Send OTP to the user's mobile number
-    try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/send-otp/",
-        { mobile_no: mobileNumber }
-      );
-      if (response.status === 200) {
-        setServerOtp(response.data.otp.toString()); // Store the received OTP
-        console.log("Received OTP:", response.data.otp); // Log the received OTP
-        setShowOtpInput(true);
-      } else {
-        alert("An error occurred while sending the OTP.");
-      }
-    } catch (error) {
-      console.error("Error sending OTP:", error.message);
-      alert("An error occurred while sending the OTP.");
+   
+    const isFirstNameValid = validateFirstName();
+    const isLastNameValid = validateLastName();
+    const isMobileValid = validateMobileNumber();
+    const isEmailValid = validateEmail();
+    const isPasswordValid = validatePassword();
+    const isDobValid = validateDob();
+    const isGenderValid = validateGender();
+   
+    // Check if all validations pass
+    if (
+       isFirstNameValid &&
+       isLastNameValid &&
+       isMobileValid &&
+       isEmailValid &&
+       isPasswordValid &&
+       isDobValid &&
+       isGenderValid
+    ) {
+       // Construct the request body
+       const requestBody = {
+         first_name: firstName,
+         last_name: lastName,
+         mobile_no: mobileNumber,
+         password: password,
+         email: email,
+         dob: dob,
+         Gender: gender,
+         Role: {
+           Role_Name: "Customer",
+         },
+         Status: {
+           Status_Name: "Offline",
+         },
+       };
+       console.log("Sending OTP request with body:", requestBody);
+       // Send OTP to the user's mobile number
+       try {
+         const response = await axios.post(
+           "http://127.0.0.1:8000/api/send-otp/",
+           { mobile_no: mobileNumber }
+         );
+         if (response.status === 200) {
+           setServerOtp(response.data.otp.toString()); // Store the received OTP
+           console.log("Received OTP:", response.data.otp); // Log the received OTP
+           setShowOtpInput(true);
+         } else {
+           alert("An error occurred while sending the OTP.");
+         }
+       } catch (error) {
+         console.error("Error sending OTP:", error.message);
+         alert("An error occurred while sending the OTP.");
+       }
+    } else {
+       setNotificationMessage("Please correct the errors in the form.");
+       setNotificationColor("red");
+       setShowNotification(true);
+       // Optionally, hide the notification after a delay
+       setTimeout(() => {
+         setShowNotification(false);
+       }, 3000);
     }
-  };
-
+   };
+   
   const handleOtpSubmit = async () => {
-    const otpValue = otp.join("");
+    const otpValue = otp;
     if (otpValue === serverOtp) {
       // OTP verified, proceed with registration
       await registerUser();
@@ -126,7 +155,10 @@ const Registration = ({ onNext }) => {
       if (response.status === 200) {
         // Registration successful
         
-        navigate("/address")
+        // navigate("/address")
+        const userId = response.data.user_id
+        navigate(`/address/${userId}/`)
+
         // navigate("/login")
       } else {
         // Registration failed
@@ -182,10 +214,14 @@ const Registration = ({ onNext }) => {
   };
 
   const validateEmail = () => {
-    const isValid = email === "" || /\S+@\S+\.\S+/.test(email);
-    setIsEmailValid(isValid);
-    return isValid;
-  };
+    const isEmptymail = email === "";  
+  setIsEmailEmpty(isEmptymail);
+  const isValidmail = /\S+@\S+\.\S+/.test(email);
+  
+  setIsEmailValid(isValidmail);
+
+  return !isEmptymail && isValidmail;
+   };
 
   const validatePassword = () => {
     const isValid = password !== "" && password.length >= 6;
@@ -232,14 +268,16 @@ const Registration = ({ onNext }) => {
         dob,
         gender,
         profilePicture,
-      });
+      }
+    
+    );
+    onNext && onNext();
+    navigate("/otp");
+
+    // Use navigate to go to the "/otp" route
+  } else {
 
       // Call the parent component's onNext function to navigate to the next page
-      onNext && onNext();
-
-      // Use navigate to go to the "/otp" route
-      navigate("/otp");
-    } else {
       console.log("Form has errors. Please check your inputs.");
     }
   };
@@ -249,9 +287,14 @@ const Registration = ({ onNext }) => {
      {/* {showNotification && (
       <Notification message={notificationMessage} color={notificationColor} />
     )} */}
+    <div className="container_registration">
+    {showNotification && (
+  <Notification message={notificationMessage} color={notificationColor} />
+)}
     
     <div className="registration-container">
       <h2>Registration</h2>
+
       {!showOtpInput ? (
         <form onSubmit={handleSubmit}>
           <label>
@@ -262,7 +305,7 @@ const Registration = ({ onNext }) => {
               onChange={(e) => setFirstName(e.target.value)}
               onBlur={validateFirstName}
               className={!isFirstNameValid ? "invalid" : ""}
-            />
+              />
             {!isFirstNameValid && !isFirstNameEmpty && (
               <span className="error">Invalid first name</span>
             )}
@@ -295,7 +338,7 @@ const Registration = ({ onNext }) => {
               onChange={(e) => setMobileNumber(e.target.value)}
               onBlur={validateMobileNumber}
               className={!isMobileNumberValid ? "invalid" : ""}
-            />
+              />
             {!isMobileNumberValid && !isMobileNumberEmpty && (
               <span className="error">Invalid mobile number</span>
             )}
@@ -313,7 +356,13 @@ const Registration = ({ onNext }) => {
               onBlur={validateEmail}
               className={!isEmailValid ? "invalid" : ""}
             />
-            {!isEmailValid && <span className="error">Invalid email</span>}
+            {!isEmailValid && !isEmailEmpty && (
+              <span className="error">Email cannot be emptyInvalid email</span>
+            )}
+            {!isEmailValid && isEmailEmpty && (
+              <span className="error">Email cannot be empty</span>
+            )}
+            
           </label>
           {/* Password */}
           <label>
@@ -378,34 +427,14 @@ const Registration = ({ onNext }) => {
       ) : (
         <div className="OTPcontainerFP">
         <div className="OTPitems">
+        <label><strong>OTP</strong></label>
         <input
-          className="OTPItem"
-          type="text"
-          maxLength="1"
-          value={otp[0]}
-          onChange={(e) => handleOtpChange(0, e.target.value)}
-        />
-        <input
-          className="OTPItem"
-          type="text"
-          maxLength="1"
-          value={otp[1]}
-          onChange={(e) => handleOtpChange(1, e.target.value)}
-        />
-        <input
-          className="OTPItem"
-          type="text"
-          maxLength="1"
-          value={otp[2]}
-          onChange={(e) => handleOtpChange(2, e.target.value)}
-        />
-        <input
-          className="OTPItem"
-          type="text"
-          maxLength="1"
-          value={otp[3]}
-          onChange={(e) => handleOtpChange(3, e.target.value)}
-        />
+  className="OTPItem"
+  type="text"
+  maxLength="4"
+  value={otp} // Join the OTP array into a single string
+  onChange={(e) => setOtp(e.target.value)} // Pass the entire input value
+/>
 </div>
       <button className="OTPbtn" onClick={handleOtpSubmit}>
       Submit OTP
@@ -415,7 +444,9 @@ const Registration = ({ onNext }) => {
       )}
       
     </div>
+      </div>
     </>
+
   );
 };
 

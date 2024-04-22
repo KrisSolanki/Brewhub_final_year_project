@@ -2,7 +2,7 @@
 import './App.css';
 import Navbar from './Components/Navbar/Navbar';
 // import SubNavbar from './Components/SubNavbar/SubNavbar';
-import { BrowserRouter as Router,Routes,Route } from "react-router-dom";
+import { BrowserRouter as Router,Routes,Route , useLocation } from "react-router-dom";
 import React , { useState } from 'react';
 import Home from './Pages/Home';
 import Aboutus from './Pages/Aboutus';
@@ -30,10 +30,15 @@ import Footer from './Components/footer/Footer';
 function App() {
   
   const [ progress,setProgress] = useState(0)
+  // const location = useLocation();
+//   const shouldHideNavbar = () => {
+//     return location.pathname === '/login';
+//  };
   
   return (
-    <>
+    
     <Router>
+      
     <div className="App">
 
 
@@ -47,7 +52,8 @@ function App() {
       <AuthProvider>
 
       
-      <Navbar/>
+      {/* {!shouldHideNavbar() && <Navbar />} */}
+      <Navbar />
       {/* <SubNavbar/> */}
         <MenuContextProvider>
       <Routes>
@@ -67,7 +73,8 @@ function App() {
           <Route path="/forgotpassword" element={<ForgetPasswdPage />} />
           <Route path="/registration" element={<RegistrationPage />} />
           <Route path="/changepassword" element={<ChnagePasswordPage />} />
-          <Route path="/address" element={<AddressPage />} />
+          {/* <Route path="/address" element={<AddressPage />} /> */}
+          <Route path="/address/:userId/" element={<AddressPage />} />
           
         {/* User Profile order*/}
         <Route path="/Userorder" element={<UserOrderPage />} />
@@ -81,7 +88,7 @@ function App() {
   
     </div>
     </Router>
-    </>
+    
   );
 }
 

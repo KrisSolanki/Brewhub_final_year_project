@@ -34,12 +34,28 @@
     font-family: sans-serif,Arial, Helvetica;
     color: #484e58;
     text-align: center;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
     
 }
+/* cafe-desc {
+    text-align: left;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-top: 15px;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    transition: height 0.5s ease-in-out;
+} */
 .desc{
         
         padding: 7px 0px 4px 0px;
         font-size: 14px;
+        display: -webkit-box;
+    -webkit-line-clamp: 1;
 }
 .ratings{
     
@@ -64,7 +80,7 @@ h1{
     transition: transform 0.3s ease;
 }
 .product:hover .img {
-    transform: scale(1.05); /*to scale up the image */
+    transform: scale(1.0); /*to scale up the image */
 }
 img{
     /* width: 100%; */
@@ -80,10 +96,17 @@ img{
     text-decoration: none; 
     color: inherit; 
    } */
-
-   .both:hover{
+.both{
+    width: 203px;
+    background: white;
+    border-radius: 25px;
+    height: 321px;
+}
+.both:hover{
     transform: scale(1.05);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    
     z-index: 1; /* Ensure hovered elements appear on top */
    
    }

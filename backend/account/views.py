@@ -58,7 +58,8 @@ class RegisterView(APIView):
         # return Response(serializer.data)
         return Response({
             'status': 200,
-            'message': 'Registration succesfully '
+            'message': 'Registration succesfully ',
+             'user_id': user.id
         })
     
     # def send_welcome_email(self, email , first_name, last_name ):
@@ -145,7 +146,7 @@ class LoginView(APIView):
         # token = token_response.data['token']['access']
 
         return Response({
-            'status': 200,
+            'status': status.HTTP_200_OK,
             'message': 'Login successful. OTP sent for verification.',
             'otp_status': 'sent',
             'otp': otp

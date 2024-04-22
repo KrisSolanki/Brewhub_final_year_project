@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import "./Address.css";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 const Address = ({ onNext, onSkip }) => {
+
+  const { userId } = useParams();
   const [home, setHome] = useState("");
   const [street, setStreet] = useState("");
   const [landmark, setLandmark] = useState("");
@@ -36,8 +39,9 @@ const Address = ({ onNext, onSkip }) => {
       .then(
         axios.spread((statesResponse, citiesResponse) => {
           setStates(statesResponse.data);
+          const filteredCities = citiesResponse.data.filter(city => city && city.State);
           setCities(citiesResponse.data);
-          setFilteredCities(citiesResponse.data); // Initialize filteredCities with all cities
+          setFilteredCities(filteredCities); // Initialize filteredCities with all cities
         })
       )
       .catch((error) => {
@@ -47,7 +51,7 @@ const Address = ({ onNext, onSkip }) => {
   useEffect(() => {
     if (state) {
       const filtered = cities.filter(
-        (city) => city.State.StateID === parseInt(state, 10)
+        (city) => city && city.State && city.State.StateID === parseInt(state, 10)
       );
       setFilteredCities(filtered);
     } else {
@@ -76,44 +80,37 @@ const Address = ({ onNext, onSkip }) => {
     if (!landmark.trim()) {
       errors.landmark = "Landmark is required";
     }
-
+  
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
       return;
     }
-
+  
     setValidationErrors({});
-
+  
     // API call to register address
     const accessToken = localStorage.getItem('authTokens');
     const { access } = JSON.parse(accessToken);
     axios.post("http://127.0.0.1:8000/api/register/address/", {
-      Home: home,
-      Street: street,
-      Landmark: landmark,
-      Pincode: pincode,
-      City: city,
-    //   User: userId, // Assuming the backend expects the user ID here
-    },
-    {
-        headers: {
-          Authorization: `Bearer ${access}`,
-          'Content-Type': 'application/json',
-        },
-    }
-)
-    .then(response => {
-      // Handle successful response
-      console.log("Address registered successfully:", response.data);
-      navigate("/");
-      onNext && onNext(); // Proceed to the next step if onNext is provided
-    })
-    .catch(error => {
-      // Handle error
-      console.error("Error registering address:", error);
-      // Optionally, set an error message in the state to display to the user
-    });
- };
+        Home: home,
+        Street: street,
+        Landmark: landmark,
+        Pincode: pincode,
+        City: city,
+        User: userId, // Pass the userId obtained from useParams
+      },
+    )
+      .then(response => {
+        console.log("Address registered successfully:", response.data);
+        navigate("/"); // Navigate to the desired route
+        onNext && onNext(); // Proceed to the next step if onNext is provided
+      })
+      .catch(error => {
+        // Handle error
+        console.error("Error registering address:", error);
+        // Optionally, set an error message in the state to display to the user
+      });
+  };
 
   const handleSkip = () => {
     navigate("/");

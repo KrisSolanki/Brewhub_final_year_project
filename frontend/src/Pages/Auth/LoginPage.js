@@ -4,7 +4,7 @@ import Login from '../../Components/Auth/Login/Login'
 
 const LoginPage = () => {
   return (
-    <div style={{ marginTop: '100px' }}>
+    <div style={{ background: 'burlywood' }} >
       <Login/>
     </div>
   )

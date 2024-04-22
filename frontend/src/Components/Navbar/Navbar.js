@@ -166,6 +166,8 @@ useEffect(() => {
         </div>
       </div>
       {searchResults.length > 0 && (
+        <div className="search_resultsContainer">
+
         <div className="search_results">
           {searchResults.map((cafe, index) => (
             <div
@@ -190,6 +192,7 @@ useEffect(() => {
             </div>
           </div>
         ))}
+        </div>
       </div>
     )}
       

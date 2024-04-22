@@ -3,6 +3,7 @@ import "./OTP.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import AuthContext from "../../../Context/AuthContext";
+
 const OTP = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -11,6 +12,9 @@ const OTP = () => {
   let { logoutUser } = useContext(AuthContext);
   
   const [otp, setOtp] = useState("");
+
+
+  
 
   const handleVerify = async () => {
     try {
@@ -27,16 +31,19 @@ const OTP = () => {
       if (response.data.status === 200) {
         const token = response.data.token; // Adjust this based on the actual response structure
         // localStorage.setItem("authTokens", JSON.stringify(token));
+       
         navigate("/"); // Navigate to the next page after successful OTP verification
         // window.location.href = 'http://127.0.0.1:8000//admin/';
-        alert("Token Stored");
+        alert("OTP verified successfully ");
       } else {
-        alert("OTP verification failed. Please try again.");
+        
+        // alert("OTP verification failed. Please try again.");
         console.log("Calling logoutUser");
         const f1 = logoutUser;
         f1(); // This calls the logoutUser functio
       }
     } catch (error) {
+      
       console.error("Error verifying OTP:", error.message);
       alert("An error occurred while verifying OTP.");
       // f1 = () =>{logoutUser}
@@ -54,6 +61,11 @@ const OTP = () => {
 
  
   return (
+    <div className="main_containerOTP">
+
+
+    <div className="container_otp">
+
     <div className="OTP">
       <h2 className="OTPtext">OTP Verification</h2>
       <form>
@@ -77,6 +89,9 @@ const OTP = () => {
         </button> */}
       </form>
     </div>
+    </div>
+
+          </div>
   );
 };
 

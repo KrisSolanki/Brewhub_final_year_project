@@ -1,25 +1,38 @@
+.container_registration{
+  height: 1085px;
+  display: flex;
+  justify-content: center;
 
+}
 .registration-container {
-    max-width: 450px;
+    /* max-width: 450px; */
+    height: auto;
     margin: auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     background-color: #fff;
-    margin-top: 100px;
+    /* margin-top: 100px; */
   }
  
   
   .registration-container h2 {
     text-align: center;
     color: #333;
+    margin-bottom: 29px;
   }
   
   .OTPitems{
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50x;
    }
-
+.OTPitems label {
+  font-size: 28px;
+  /* font-weight:; */
+}
   .error {
     color: red;
   }
@@ -47,11 +60,11 @@
   }
   
   .registration-container button {
-    background-color: #007bff;
+    background-color: black;
     color: #fff;
     padding: 10px;
-    border: none;
-    border-radius: 4px;
+    border: 2px solid black;
+    border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s ease;
     margin: 10px;
@@ -69,7 +82,10 @@
   
   
   .registration-container button:hover {
-    background-color: #0056b3;
+    background-color: white;
+    color :black;
+    border: 2px solid black;
+    border-radius: 10px;
   }
   
   .registration-container span {

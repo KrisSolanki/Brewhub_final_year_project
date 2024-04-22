@@ -3,7 +3,7 @@ import Registration from '../../Components/Auth/Registration/Registration'
 
 const RegistrationPage = () => {
   return (
-    <div>
+    <div style={{ background: 'burlywood' }}> 
       <Registration/>
     </div>
   )

@@ -3,6 +3,7 @@ import './Login.css';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
+import Notification from '../../Notification/Notification';
 
 const Login = ({ onNext }) => {
 
@@ -16,10 +17,33 @@ const Login = ({ onNext }) => {
   const [password, setPassword] = useState('');
   const [isMobileNumberValid, setIsMobileNumberValid] = useState(true);
   const [isPasswordValid, setIsPasswordValid] = useState(true);
+  const [loginError, setLoginError] = useState("");
+
+  const [showNotification, setShowNotification] = useState(false);
+    const [notificationMessage, setNotificationMessage] = useState("");
+    const [notificationColor, setNotificationColor] = useState("");
+
+  // const validateMobileNumber = () => {
+  //   const isValid = /^\d{10}$/.test(mobileNumber);
+  //   setIsMobileNumberValid(isValid);
+  //   return isValid;
+  // };
 
   const validateMobileNumber = () => {
-    const isValid = /^\d{10}$/.test(mobileNumber);
+    let isValid = true;
+    let errorMessage = "";
+
+    // Check if the mobile number is empty
+    if (mobileNumber.trim() === "") {
+      isValid = false;
+      errorMessage = "Mobile number is required";
+    } else if (!/^\d{10}$/.test(mobileNumber)) {
+      // Check if the mobile number has exactly 10 digits
+      isValid = false;
+      errorMessage = "Mobile number must be exactly 10 digits";
+    }
     setIsMobileNumberValid(isValid);
+    setLoginError(errorMessage); // Set the error message
     return isValid;
   };
 
@@ -31,6 +55,8 @@ const Login = ({ onNext }) => {
 
   const handleNext = async() => {
     const isMobileValid = validateMobileNumber();
+    
+
     // const isPasswordValid = validatePassword();
    
     if (isMobileValid ) {
@@ -40,17 +66,29 @@ const Login = ({ onNext }) => {
            password: password,
          });
    
-         if (response.status === 200) {
+         if (response.status === 200 ) {
            // Assuming the response contains the OTP or a message indicating success
-           alert("OTP sent successfully");
+          //  alert("OTP sent successfully");
+          setNotificationMessage("OTP sent successfully");
+     setNotificationColor("green");
+     setShowNotification(true);
+     setTimeout(() => setShowNotification(false), 3000);
            console.log("OTP sent successfully", response.data.otp);
            navigate("/otp", { state: { mobileNumber } });
          } else {
-           alert("Failed to send OTP. Please try again.");
+          setNotificationMessage("Failed to send OTP. Please try again.");
+          setNotificationColor("red");
+          setShowNotification(true);
+          setTimeout(() => setShowNotification(false), 3000);
+          //  alert("Failed to send OTP. Please try again.");
          }
        } catch (error) {
          console.error("Error sending OTP:", error.message);
-         alert("An error occurred while sending OTP.");
+         setNotificationMessage("Failed to send OTP. Please try again later.");
+          setNotificationColor("red");
+          setShowNotification(true);
+          setTimeout(() => setShowNotification(false), 3000);
+        //  alert("An error occurred while sending OTP.");
        }
     } else {
        console.log('Form has errors. Please check your inputs.');
@@ -59,9 +97,16 @@ const Login = ({ onNext }) => {
 
  
 return (
+  <>
+  
   <div className="container_login">
+    <div className="container_loginchilde">
+
 
   <div className='loginForm'>
+    {showNotification && (
+      <Notification message={notificationMessage} color={notificationColor} />
+    )}
      <h2 className='logintext'>Login</h2>
      <form onSubmit={loginUser}>
        <label>
@@ -70,6 +115,8 @@ return (
            type="text"
            value={mobileNumber}
            name='mobile'
+           maxLength={10}
+           
            onChange={(e) => setMobileNumber(e.target.value)}
            onBlur={validateMobileNumber}
            className={!isMobileNumberValid ? 'invalid' : ''}
@@ -84,6 +131,7 @@ return (
            name='password'
            onChange={(e) => setPassword(e.target.value)}
            onBlur={validatePassword}
+           
            className={!isPasswordValid ? 'invalid' : ''}
          />
          {!isPasswordValid && <span className="error login-span">Password must be at least 6 characters</span>}
@@ -106,8 +154,10 @@ return (
      </label>
  
      </form>
+    </div>
   </div>
   </div>
+  </>
  );
  
 };
