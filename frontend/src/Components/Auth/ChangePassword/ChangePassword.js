@@ -70,7 +70,7 @@ const ChangePassword = () => {
   };
 
   const handleOtpSubmit = async () => {
-    const otpValue = otp.join("");
+    const otpValue = otp
     if (otpValue === serverOtp) {
       // OTP verified, proceed with password change
       await changePassword();

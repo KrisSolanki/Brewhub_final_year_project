@@ -52,12 +52,12 @@
        /* color: #007bff; */
        cursor: pointer;
        text-align: center;
-       color: black;
+       color: #007bff;
     }
-    .login-span:hover {
+    /* .login-span:hover {
         color:#007bff;
 
-    }
+    } */
    
    /* Input field styling */
    input {

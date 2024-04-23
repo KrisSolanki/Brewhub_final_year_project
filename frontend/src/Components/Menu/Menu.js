@@ -114,6 +114,10 @@ const Menu = ({ data }) => {
                                     <div className="item-desc">
                                         <p>{item.ItemDescription}</p>
                                     </div>
+                                    <div className="item_size">
+                                        {/* <h2 className='item-namep'>{item.ItemName}</h2> */}
+                                        <p className='item_size'>{item.ItemSize}</p>
+                                    </div>
                                     </div>
                                 </div>
                                 <div className="grp2">

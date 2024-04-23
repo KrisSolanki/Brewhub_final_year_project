@@ -430,6 +430,7 @@ class OrderCreateView(APIView):
                 )
             total=subtotal
             new_order.Total = subtotal
+            print('****************************',new_order)
 
 
         # if offer_applied:
@@ -449,6 +450,7 @@ class OrderCreateView(APIView):
 
 
         # Update the total price of the order
+        new_order.Total = cart.Total
         # new_order.Total = sum(cart_item.Subtotal for cart_item in cart_items)
         # new_order.Offer_ID=cart_item.Offer_ID if cart_item.Offer_ID else None,
         # new_order.save()

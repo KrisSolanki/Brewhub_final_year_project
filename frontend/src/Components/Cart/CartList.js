@@ -499,12 +499,12 @@ const CartList = () => {
               )}                      
             </div>
           </PopUp>
+        </div>
           <div className="xbtncontainer">
             <div className="xbtncontainer2">
               {appliedOfferName && <button className='xbutton' onClick={() => {handleRemoveOffer()}}><FaWindowClose size={20} /></button>}
             </div>
           </div>
-        </div>
       </div>
     </div>
     <div className="totalsummaryc">
@@ -517,7 +517,7 @@ const CartList = () => {
       <div className="Maintotalcart">
         {offerData ? (
           <div className="Maintotalcartd">
-            <h3><strong>Discount : </strong>-{data.cart.Subtotal - data.cart.Total }</h3>
+            {/* <h3><strong>Discount : </strong>-{data.cart.Subtotal - data.cart.Total }</h3> */}
           </div> 
         ) : (
           <></>
