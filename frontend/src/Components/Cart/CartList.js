@@ -467,83 +467,71 @@ const CartList = () => {
                 );
               })}
             </div>
-            <div className="totalcart">
-              <div className="totalsummarycart">
-                <h2>Proceed for payment</h2>
-                <div className="offerboxcontainer">
-                  <div className="offerbox">
-                    <h5 onClick={fetchOfferData}>{appliedOfferName ? appliedOfferName : 'Offers'}</h5>
+           
 
-                    <PopUp trigger={btnpopup} setTrigger={setBtnPopUp}>
-                    {showNotification && (
-                <Notification message={notificationMessage} color={notificationColor} />
+{data.cart_items.length > 0 && (
+  <div className="totalcart">
+    <div className="totalsummarycart">
+      <h2>Proceed for payment</h2>
+      <div className="offerboxcontainer">
+        <div className="offerbox">
+          <h5 onClick={fetchOfferData}>{appliedOfferName ? appliedOfferName : 'Offers'}</h5>
+          <PopUp trigger={btnpopup} setTrigger={setBtnPopUp}>
+            {showNotification && (
+              <Notification message={notificationMessage} color={notificationColor} />
             )}
-                      <center><h2>Offers</h2></center>
-                      <div className="offermain_container">
-
-                        {offerData ? ( // Check if offerData is not null
-                          offerData.map(offer => (
-                            <div key={offer.OfferID} className='offer_container' >
-                              <div className="left">
-
-                                <h3>{offer.OfferTitle}</h3>
-                                <p>{offer.OfferDescription}</p>
-                                {/* <p>Minimum Amount: {offer.MinimumAmount}</p> */}
-                                {/* <p>Discount Percentage: {offer.DiscountPercentage}</p> */}
-                              </div>
-                              <div className="right">
-                                <button onClick={() => handleOffers(offer.OfferID , offer.OfferTitle)}>Apply</button>
-                              </div>
-                            </div>
-                          ))
-                        ) : (
-                          <p>Loading offer data...</p> // Placeholder while offerData is null
-                        )}                      
-                        </div>
-                    </PopUp>
-                    
+            <center><h2>Offers</h2></center>
+            <div className="offermain_container">
+              {offerData ? ( // Check if offerData is not null
+                offerData.map(offer => (
+                  <div key={offer.OfferID} className='offer_container' >
+                    <div className="left">
+                      <h3>{offer.OfferTitle}</h3>
+                      <p>{offer.OfferDescription}</p>
+                    </div>
+                    <div className="right">
+                      <button onClick={() => handleOffers(offer.OfferID , offer.OfferTitle)}>Apply</button>
+                    </div>
                   </div>
-                        {/* <button><FaWindowClose size={20} /></button> */}
-                        <div className="xbtncontainer">
-
-                          <div className="xbtncontainer2">
-
-                
-                        {appliedOfferName && <button className='xbutton' onClick={() => {handleRemoveOffer()}}><FaWindowClose size={20} /></button>}
-                          </div>
-                        </div>
-                </div>
-              </div>
-              <div className="totalsummaryc">
-                <h2>Total</h2>
-              </div>
-              
-              <div className="jjkcart">
-                <div className="subtotalcart">
-                  <h3><strong>SubTotal : </strong>{data.cart.Subtotal}</h3>
-                  
-                  {/* <h3>500</h3> */}
-                </div>
-                <div className="Maintotalcart">
-                  {offerData ? (
-                    <div className="Maintotalcartd">
-                     <h3><strong>Discount : </strong>-{data.cart.Subtotal - data.cart.Total }</h3>
-                     </div> 
-                     ) : ( <></>
-                        )}  
-                  <h3>Total : {data.cart.Total} </h3>
-                  {/* <h3>500</h3> */}
-                </div>
-                <div class="checkout-btn">
-                  <center>
-                    <button onClick={handleorder}>Checkout</button>
-                  </center>
-                </div>
-
-              </div>
-
-
+                ))
+              ) : (
+                <p>Loading offer data...</p> // Placeholder while offerData is null
+              )}                      
             </div>
+          </PopUp>
+          <div className="xbtncontainer">
+            <div className="xbtncontainer2">
+              {appliedOfferName && <button className='xbutton' onClick={() => {handleRemoveOffer()}}><FaWindowClose size={20} /></button>}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div className="totalsummaryc">
+      <h2>Total</h2>
+    </div>
+    <div className="jjkcart">
+      <div className="subtotalcart">
+        <h3><strong>SubTotal : </strong>{data.cart.Subtotal}</h3>
+      </div>
+      <div className="Maintotalcart">
+        {offerData ? (
+          <div className="Maintotalcartd">
+            <h3><strong>Discount : </strong>-{data.cart.Subtotal - data.cart.Total }</h3>
+          </div> 
+        ) : (
+          <></>
+        )}  
+        <h3>Total : {data.cart.Total} </h3>
+      </div>
+      <div class="checkout-btn">
+        <center>
+          <button onClick={handleorder}>Checkout</button>
+        </center>
+      </div>
+    </div>
+  </div>
+)}
           </div>
           {data.cart_items.length === 0 && <h1>Your Cart is Empty</h1>}
           <div class="cart-summary">

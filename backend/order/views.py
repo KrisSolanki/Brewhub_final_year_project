@@ -120,7 +120,7 @@ class CartDetailView(APIView):
         # ** If the cart detail exists, update the quantity and recalculate the subtotal based on the new quantity and discount factor
             cart_detail = cart_details.first()
             cart_detail.ItemQuantity += quantity
-            cart_detail.Subtotal = cart_detail.ItemQuantity * cart_detail.Item_ID.ItemPrice * discount_factor
+            cart_detail.Subtotal = cart_detail.ItemQuantity * cart_detail.Item_ID.ItemPrice
             cart_detail.save()
         else:
         # ** If the cart detail does not exist, create a new one
