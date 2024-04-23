@@ -5,7 +5,7 @@ import ForgotPassword from '../../Components/Auth/ForgetPassword/ForgetPassword'
 const ForgetPasswdPage = () => {
   return (
     // <div style={{"margin-top":"100px"}}>
-    <div>
+    <div style={{ background: 'burlywood' }} >
       <ForgotPassword/>
     </div>
   )

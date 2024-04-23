@@ -132,8 +132,10 @@ const MenuList = ({ setProgress }) => {
               {/* {data.map((Items) => (
 
               ))} */}
-          <div>
-            <Menu data={data}/></div>
+          <div style={{ background: 'burlywood' }} >
+            <Menu data={data}/>
+            </div>
+            
 
     </>
   )

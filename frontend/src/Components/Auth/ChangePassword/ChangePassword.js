@@ -11,7 +11,7 @@ const ChangePassword = () => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [otp, setOtp] = useState(["", "", "", ""]); // OTP input state
+  const [otp, setOtp] = useState(""); // OTP input state
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [showOtpInput, setShowOtpInput] = useState(false); // State to control OTP input visibility
@@ -112,6 +112,7 @@ const ChangePassword = () => {
   };
 
   return (
+    <div className="container_changepassword">
     <div className="change-password-container">
       <h2>Change Password</h2>
 
@@ -153,40 +154,24 @@ const ChangePassword = () => {
           {successMessage && (
             <p className="success-message">{successMessage}</p>
           )}
+          <div className="subbtn">
 
           <button type="submit">Submit</button>
+          </div>
         </form>
       ) : (
         <div className="OTPcontainer">
           <div className="OTPitems">
-          <input
-            className="OTPItem"
-            type="text"
-            maxLength="1"
-            value={otp[0]}
-            onChange={(e) => handleOtpChange(0, e.target.value)}
-          />
-          <input
-            className="OTPItem"
-            type="text"
-            maxLength="1"
-            value={otp[1]}
-            onChange={(e) => handleOtpChange(1, e.target.value)}
-          />
-          <input
-            className="OTPItem"
-            type="text"
-            maxLength="1"
-            value={otp[2]}
-            onChange={(e) => handleOtpChange(2, e.target.value)}
-          />
-          <input
-            className="OTPItem"
-            type="text"
-            maxLength="1"
-            value={otp[3]}
-            onChange={(e) => handleOtpChange(3, e.target.value)}
-          />
+          <div>
+            <label>Enter OTP:</label>
+            <input
+              type="text"
+              name="otp"
+              maxLength="4"
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
+            />
+          </div>
 </div>
         <button className="OTPbtn" onClick={handleOtpSubmit}>
         Submit OTP
@@ -194,7 +179,7 @@ const ChangePassword = () => {
 
         </div>
       )}
-      
+      </div>
     </div>
   );
 };

@@ -73,8 +73,8 @@ function App() {
           <Route path="/forgotpassword" element={<ForgetPasswdPage />} />
           <Route path="/registration" element={<RegistrationPage />} />
           <Route path="/changepassword" element={<ChnagePasswordPage />} />
-          {/* <Route path="/address" element={<AddressPage />} /> */}
-          <Route path="/address/:userId/" element={<AddressPage />} />
+          <Route path="/address" element={<AddressPage />} />
+          {/* <Route path="/address/:userId/" element={<AddressPage />} /> */}
           
         {/* User Profile order*/}
         <Route path="/Userorder" element={<UserOrderPage />} />

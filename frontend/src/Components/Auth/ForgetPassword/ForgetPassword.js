@@ -112,6 +112,8 @@ const handleSubmit = async (e) => {
  };
 
  return (
+  <div className="conatainer_forgetpassword">
+
     <div className="change-password-container">
       <h2>Forgot Password</h2>
       <form onSubmit={handleSubmit}>
@@ -121,7 +123,7 @@ const handleSubmit = async (e) => {
           name="mobileNo"
           value={mobileNo}
           onChange={handleChange}
-        />
+          />
         {error && <p className="error-message">{error}</p>}
         <button className="OTPbtn" type="submit">Send OTP</button>
       </form>
@@ -165,6 +167,7 @@ const handleSubmit = async (e) => {
         <p className="success-message">{successMessage}</p>
       )}
     </div>
+      </div>
  );
 };
 

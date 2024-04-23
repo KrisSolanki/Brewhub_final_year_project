@@ -3,7 +3,7 @@ import Address from '../../Components/Auth/Address/Address'
 
 const AddressPage = () => {
   return (
-    <div>
+    <div style={{ background: 'burlywood' }}>
       <Address/>
     </div>
   )

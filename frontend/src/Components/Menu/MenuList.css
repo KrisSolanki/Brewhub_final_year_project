@@ -1,5 +1,6 @@
 .container-item {
     display: flex;
+    background-color: white;
     flex-direction: column; /* Stack cafe details and menu cards vertically */
     align-items: center; /* Center items horizontally */
     margin: 10px auto; /* Center the container */

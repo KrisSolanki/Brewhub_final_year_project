@@ -426,15 +426,17 @@ const CartList = () => {
   return (
 
     <>
+    <div className="container_cart">
+
     {showNotification && (
-                <Notification message={notificationMessage} color={notificationColor} />
-            )}
+      <Notification message={notificationMessage} color={notificationColor} />
+    )}
     
 
 
       <div class="cart-container">
         <div class="cart-items">
-          <h1>Your itens</h1>
+          <h1>Your items</h1>
           <div className="parent">
             <div className="parent2">
 
@@ -452,7 +454,7 @@ const CartList = () => {
                         {/* <p><strong>Description:</strong> {menuItem.ItemDescription}</p> */}
                         <p><strong>Price:</strong> {menuItem.ItemPrice}</p>
                         <p><strong>Quantity:</strong> {cartCounts1[cartItem.CartDetailsID] || cartItem.ItemQuantity}</p>
-                        <p><strong>Subtotal:</strong> {cartItem.Subtotal}</p>
+                        {/* <p><strong>Subtotal:</strong> {cartItem.Subtotal}</p> */}
                       </div>
                     </div>
                     <div class="item-actions">
@@ -486,8 +488,8 @@ const CartList = () => {
 
                                 <h3>{offer.OfferTitle}</h3>
                                 <p>{offer.OfferDescription}</p>
-                                <p>Minimum Amount: {offer.MinimumAmount}</p>
-                                <p>Discount Percentage: {offer.DiscountPercentage}</p>
+                                {/* <p>Minimum Amount: {offer.MinimumAmount}</p> */}
+                                {/* <p>Discount Percentage: {offer.DiscountPercentage}</p> */}
                               </div>
                               <div className="right">
                                 <button onClick={() => handleOffers(offer.OfferID , offer.OfferTitle)}>Apply</button>
@@ -523,12 +525,12 @@ const CartList = () => {
                   {/* <h3>500</h3> */}
                 </div>
                 <div className="Maintotalcart">
-                  {/* {offerData ? (
-                     <div className="Maintotalcartd">
+                  {offerData ? (
+                    <div className="Maintotalcartd">
                      <h3><strong>Discount : </strong>-{data.cart.Subtotal - data.cart.Total }</h3>
                      </div> 
-                     ) : ( 
-                        )}   */}
+                     ) : ( <></>
+                        )}  
                   <h3>Total : {data.cart.Total} </h3>
                   {/* <h3>500</h3> */}
                 </div>
@@ -555,6 +557,7 @@ const CartList = () => {
         </div>
       </div>
 
+                       </div>
     </>
 
   );

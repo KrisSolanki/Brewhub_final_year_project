@@ -76,6 +76,7 @@ class RegisterView(APIView):
 
 class AddressView(APIView):
     def post(self, request, *args, **kwargs):
+        print("API CALLED")
         serializer = AddressSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()

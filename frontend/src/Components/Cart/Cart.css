@@ -70,6 +70,9 @@
   display: flex;
   flex-direction: column;
  }
+ .container_cart{
+  height: 537px;
+ }
  
  .cart-items {
   margin-bottom: 20px; 
@@ -77,6 +80,7 @@
  
  .cart-item {
   display: flex;
+  background: white;
     justify-content: space-between;
     align-items: center;
     margin: 20px 20px 20px 20px;
@@ -191,6 +195,7 @@
  }
  .totalcart{
   display: flex;
+  background: white;
   /* flex-direction: row; */
   flex-direction: column;
   border: 2px solid black;

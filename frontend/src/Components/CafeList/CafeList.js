@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import './CafeList.css';
+// import { useLocation  } from "react-router-dom";
+
 import { NavLink } from 'react-router-dom';
 
 // const CafeList = ({ setFilteredData }) => {
 const CafeList = () => {
 
+
+  console.log("ENTERED CAFE")
   const [data, setData] = useState([])
   
   useEffect(() => {

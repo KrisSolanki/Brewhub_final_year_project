@@ -156,8 +156,15 @@ const Registration = ({ onNext }) => {
         // Registration successful
         
         // navigate("/address")
-        const userId = response.data.user_id
-        navigate(`/address/${userId}/`)
+        // const userId = response.data.user_id
+        // navigate(`/address/${userId}/`)
+        // navigate("/address", { state: { user_Id: response.data.user_id } });
+        // alert("User ID ADRESS",userId)
+        // alert("user",response.user_id)
+        // navigate("/address", { state: { user_Id: response.data.user_id } });
+
+        console.log("User ID:", response.data.user_id); // Log the user ID
+        navigate("/address", { state: { user_Id: response.data.user_id } });
 
         // navigate("/login")
       } else {

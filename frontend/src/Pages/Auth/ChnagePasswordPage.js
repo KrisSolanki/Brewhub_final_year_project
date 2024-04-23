@@ -3,7 +3,7 @@ import ChangePassword from '../../Components/Auth/ChangePassword/ChangePassword'
 
 const ChnagePasswordPage = () => {
   return (
-    <div>
+    <div style={{ background: 'burlywood' }}>
       <ChangePassword/>
     </div>
   )
