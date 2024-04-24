@@ -16,7 +16,8 @@ const CafeList = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get("http://127.0.0.1:8000/api/cafelist/");
-        setData(response.data)
+        const onlineCafes = response.data.filter(cafe => cafe.status.Status_Name === 'Online');
+        setData(onlineCafes)
 
         // const deliveryCafes = response.data.filter(cafe => cafe.Delivery === true);
         // console.log("deliveryCafes",deliveryCafes)

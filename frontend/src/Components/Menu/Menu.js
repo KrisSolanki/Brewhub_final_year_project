@@ -57,7 +57,10 @@ const Menu = ({ data }) => {
         if (!acc[key]) {
             acc[key] = [];
         }
-        acc[key].push(item);
+        // Check if the cafe's status is 'online' before adding the item
+        if (item.status.Status_Name === 'Online') {
+            acc[key].push(item);
+        }
         return acc;
     }, {});
 
