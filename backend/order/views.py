@@ -450,8 +450,8 @@ class OrderCreateView(APIView):
 
 
         # Update the total price of the order
-        new_order.Total = cart.Total
-        # new_order.Total = sum(cart_item.Subtotal for cart_item in cart_items)
+        # new_order.Total = cart.Total
+        new_order.Total = sum(cart_item.Subtotal for cart_item in cart_items)
         # new_order.Offer_ID=cart_item.Offer_ID if cart_item.Offer_ID else None,
         # new_order.save()
 
@@ -486,6 +486,8 @@ class OrderCreateView(APIView):
     
 
     def get(self, request, order_id=None, *args, **kwargs):
+        #  user = request.user
+        user_id = self.request.user
         if order_id:
             # Retrieve the specific order by ID
             order = get_object_or_404(Order_M, OrderID=order_id)
@@ -501,8 +503,9 @@ class OrderCreateView(APIView):
             }
             return Response(response_data)
         else:
+            
             # Retrieve a list of all orders
-            orders = Order_M.objects.all()
+            orders = Order_M.objects.filter(user_id=user_id)
             order_serializer = Order_MSerializer(orders, many=True)
             order_details_serializer = Order_DetailsSerializer(Order_Details.objects.all(), many=True) 
 
@@ -516,7 +519,8 @@ class OrderCreateView(APIView):
 class CompetePaymentView(APIView):
     def post(self, request):
         serializer = Payment_MSerializer(data=request.data)
-        
+        user = self.request.user
+        cart = Cart_M.objects.filter(User_ID=user)
         # print("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")
         # print("Data",serializer)
         if serializer.is_valid():
@@ -528,6 +532,8 @@ class CompetePaymentView(APIView):
                 razorpay_signature=validated_data.get("razorpay_signature")
             )
             serializer.save()
+            cart.delete()
+
             # order_id = validated_data.get("OrderID")
             # order_instance = get_object_or_404(Order_M, OrderID=order_id)
             # order_serializer = Order_MSerializer(order_instance)

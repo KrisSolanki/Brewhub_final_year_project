@@ -131,7 +131,7 @@ useEffect(() => {
             </li>
             </div>   
             
-            <li><NavLink to='/aboutus'><span><MdGroups /></span>About us</NavLink></li>
+            {/* <li><NavLink to='/aboutus'><span><MdGroups /></span>About us</NavLink></li> */}
             {user ? (
               <>
                 <li><NavLink to='/cart'><span><FaShoppingCart /></span></NavLink></li>
