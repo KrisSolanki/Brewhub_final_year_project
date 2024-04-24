@@ -505,7 +505,7 @@ class OrderCreateView(APIView):
         else:
             
             # Retrieve a list of all orders
-            orders = Order_M.objects.filter(user_id=user_id)
+            orders = Order_M.objects.filter(User_ID=user_id)
             order_serializer = Order_MSerializer(orders, many=True)
             order_details_serializer = Order_DetailsSerializer(Order_Details.objects.all(), many=True) 
 
