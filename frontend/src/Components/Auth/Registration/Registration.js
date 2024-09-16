@@ -340,7 +340,8 @@ const Registration = ({ onNext }) => {
           <label>
             Mobile Number:
             <input
-              type="text"
+              type="number"
+              maxLength={11}
               value={mobileNumber}
               onChange={(e) => setMobileNumber(e.target.value)}
               onBlur={validateMobileNumber}
