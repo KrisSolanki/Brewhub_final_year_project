@@ -6,162 +6,138 @@ import axios from 'axios';
 import Notification from '../../Notification/Notification';
 
 const Login = ({ onNext }) => {
-
-
-
-  let { loginUser } = useContext(AuthContext)
-
+  const { loginUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const [mobileNumber, setMobileNumber] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isMobileNumberValid, setIsMobileNumberValid] = useState(true);
+  const [isEmailValid, setIsEmailValid] = useState(true);
   const [isPasswordValid, setIsPasswordValid] = useState(true);
-  const [loginError, setLoginError] = useState("");
+  const [loginError, setLoginError] = useState('');
 
   const [showNotification, setShowNotification] = useState(false);
-  const [notificationMessage, setNotificationMessage] = useState("");
-  const [notificationColor, setNotificationColor] = useState("");
+  const [notificationMessage, setNotificationMessage] = useState('');
+  const [notificationColor, setNotificationColor] = useState('');
 
-  // const validateMobileNumber = () => {
-  //   const isValid = /^\d{10}$/.test(mobileNumber);
-  //   setIsMobileNumberValid(isValid);
-  //   return isValid;
-  // };
-
-  const validateMobileNumber = () => {
+  // Validate email format
+  const validateEmail = () => {
     let isValid = true;
-    let errorMessage = "";
+    let errorMessage = '';
 
-    // Check if the mobile number is empty
-    if (mobileNumber.trim() === "") {
+    if (email.trim() === '') {
       isValid = false;
-      errorMessage = "Mobile number is required";
-    } else if (!/^\d{10}$/.test(mobileNumber)) {
-      // Check if the mobile number has exactly 10 digits
+      errorMessage = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       isValid = false;
-      errorMessage = "Mobile number must be exactly 10 digits";
+      errorMessage = 'Invalid email format';
     }
-    setIsMobileNumberValid(isValid);
-    setLoginError(errorMessage); // Set the error message
+
+    setIsEmailValid(isValid);
+    setLoginError(errorMessage);
     return isValid;
   };
 
+  // Validate password length
   const validatePassword = () => {
     const isValid = password.length >= 6;
     setIsPasswordValid(isValid);
     return isValid;
   };
 
+  // Handle form submission
   const handleNext = async () => {
-    const isMobileValid = validateMobileNumber();
+    const isEmailValid = validateEmail();
+    const isPasswordValid = validatePassword();
 
-
-    // const isPasswordValid = validatePassword();
-
-    if (isMobileValid) {
+    if (isEmailValid && isPasswordValid) {
       try {
-        const response = await axios.post("http://127.0.0.1:8000/api/login/", {
-          mobile_no: mobileNumber,
+        const response = await axios.post('http://127.0.0.1:8000/api/login/', {
+          email: email,
           password: password,
         });
 
         if (response.status === 200) {
-          // Assuming the response contains the OTP or a message indicating success
-          alert("OTP sent successfully");
-          setNotificationMessage("OTP sent successfully");
-          setNotificationColor("green");
+          alert('OTP sent successfully');
+          setNotificationMessage('OTP sent successfully');
+          setNotificationColor('green');
           setShowNotification(true);
           setTimeout(() => setShowNotification(false), 3000);
-          console.log("OTP sent successfully", response.data.otp);
-          navigate("/otp", { state: { mobileNumber } });
+          navigate('/otp', { state: { email } });
         } else {
-          setNotificationMessage("Failed to send OTP. Please try again.");
-          setNotificationColor("red");
+          setNotificationMessage('Failed to send OTP. Please try again.');
+          setNotificationColor('red');
           setShowNotification(true);
           setTimeout(() => setShowNotification(false), 3000);
-          //  alert("Failed to send OTP. Please try again.");
         }
       } catch (error) {
-        console.error("Error sending OTP:", error.message);
-        setNotificationMessage("Failed to send OTP. Please try again later.");
-        setNotificationColor("red");
+        console.error('Error sending OTP:', error.message);
+        setNotificationMessage('Failed to send OTP. Please try again later.');
+        setNotificationColor('red');
         setShowNotification(true);
         setTimeout(() => setShowNotification(false), 3000);
-        //  alert("An error occurred while sending OTP.");
       }
     } else {
       console.log('Form has errors. Please check your inputs.');
     }
   };
 
-
   return (
     <>
-
       <div className="container_login">
-            {showNotification && (
-              <Notification message={notificationMessage} color={notificationColor} />
-            )}
+        {showNotification && (
+          <Notification message={notificationMessage} color={notificationColor} />
+        )}
         <div className="container_loginchilde">
-
-
-          <div className='loginForm'>
-            <h2 className='logintext'>Login</h2>
+          <div className="loginForm">
+            <h2 className="logintext">Login</h2>
             <form onSubmit={loginUser}>
               <label>
-                Mobile Number:
+                Email:
                 <input
-                  type="text"
-                  value={mobileNumber}
-                  name='mobile'
-                  maxLength={10}
-
-                  onChange={(e) => setMobileNumber(e.target.value)}
-                  onBlur={validateMobileNumber}
-                  className={!isMobileNumberValid ? 'invalid' : ''}
+                  type="email"
+                  value={email}
+                  name="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  onBlur={validateEmail}
+                  className={!isEmailValid ? 'invalid' : ''}
                 />
-                {!isMobileNumberValid && <span className="error login-span">Mobile number is required</span>}
+                {!isEmailValid && <span className="error login-span">{loginError}</span>}
               </label>
               <label>
                 Password:
                 <input
                   type="password"
                   value={password}
-                  name='password'
+                  name="password"
                   onChange={(e) => setPassword(e.target.value)}
                   onBlur={validatePassword}
-
                   className={!isPasswordValid ? 'invalid' : ''}
                 />
-                {!isPasswordValid && <span className="error login-span">Password must be at least 6 characters</span>}
+                {!isPasswordValid && (
+                  <span className="error login-span">Password must be at least 6 characters</span>
+                )}
               </label>
-              <label className='forgotPass'>
-                <Link to="/forgotpassword" className='forgotPassLink'>
-                  <span className="login-span">Forget Password?</span>
+              <label className="forgotPass">
+                <Link to="/forgotpassword" className="forgotPassLink">
+                  <span className="login-span">Forgot Password?</span>
                 </Link>
               </label>
               <button type="submit" onClick={handleNext} className="login-button">
                 Next
               </button>
-
               <label className="custom-label">
                 <span className="login-span">
                   <Link to="/Registration" className="custom-link">
-                    Don't Have an account? Sign-up
+                    Don't have an account? Sign up
                   </Link>
                 </span>
               </label>
-
             </form>
           </div>
         </div>
       </div>
     </>
   );
-
 };
 
 export default Login;
-
-

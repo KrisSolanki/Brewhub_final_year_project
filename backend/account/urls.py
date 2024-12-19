@@ -23,7 +23,7 @@ urlpatterns = [
     path('resend_otp/',resend_otp),
 
     path('verify-otp/', verify_otp_view_register, name='verify_otp'),
-    path('send-otp/', send_otp_to_mobile_view, name='send-otp'),
+    path('send-otp/', send_otp_to_email_view, name='send-otp'),
 
     
     #-------------- date : 5/01/2024 ---- reset password -----

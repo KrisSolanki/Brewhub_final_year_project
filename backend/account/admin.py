@@ -28,7 +28,7 @@ class CityAdmin(admin.ModelAdmin):
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 class CustomUserAdmin(BaseUserAdmin):
     model = User
-    list_display = ('mobile_no', 'email', 'first_name', 'last_name', 'is_staff')  # Adjusted to use 'mobile_no' instead of 'username'
+    list_display = ('email', 'mobile_no', 'first_name', 'last_name', 'is_staff')  # Adjusted to use 'mobile_no' instead of 'username'
     fieldsets = (
         (None, {'fields': ('mobile_no', 'password')}),
         ('Personal info', {'fields': ('first_name', 'last_name', 'email', 'dob', 'Profile_Picture', 'Gender', 'Role', 'Status', 'groups')}),  # Changed 'profile_picture' to 'Profile_Picture' and 'gender' to 'Gender'

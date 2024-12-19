@@ -3,15 +3,15 @@ from django.contrib.auth.models import AbstractUser,BaseUserManager
 
 # Create your models here.
 class CustomUserManager(BaseUserManager):
-    def create_user(self, mobile_no, password=None, **extra_fields):
-        if not mobile_no:           #----if mobile_no is not recieved ------
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:           #----if mobile_no is not recieved ------
             raise ValueError('The mobile number must be set')
-        user = self.model(mobile_no=mobile_no, **extra_fields)
+        user = self.model(email=email, **extra_fields)
         user.set_password(password) #-----------password encryption using inbuilt set_password method
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, mobile_no, password=None, **extra_fields):
+    def create_superuser(self, email, password=None, **extra_fields):
         role=Roles.objects.get(Role_Name='Admin')
         extra_fields.setdefault('Role', role)
         # Ensure the user is created as a superuser
@@ -21,7 +21,7 @@ class CustomUserManager(BaseUserManager):
        
 
 
-        return self.create_user(mobile_no, password, **extra_fields)
+        return self.create_user(email, password, **extra_fields)
     
 #other models role date:9/01***********
 
@@ -63,12 +63,12 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=30)
     username = None
 
-    mobile_no = models.CharField(max_length=10,unique=True)
+    mobile_no = models.CharField(max_length=10,blank=True,null=True)
     is_mobile_verified = models.BooleanField(default=False)
     otp = models.CharField(max_length=6,null=True)#, blank=True, )
     
     password = models.CharField(max_length=100)
-    email = models.CharField(max_length=50,blank=True,null=True) 
+    email = models.CharField(max_length=50,unique=True,default='johndae@gmail.com') 
     dob = models.DateField(null=True, blank=True)
 
     #Date : 9/01
@@ -78,7 +78,7 @@ class User(AbstractUser):
     Status = models.ForeignKey(Status,on_delete=models.CASCADE,null=True)
     
     
-    USERNAME_FIELD = 'mobile_no'
+    USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()

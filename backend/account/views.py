@@ -7,7 +7,7 @@ from backend.settings import EMAIL_HOST_USER
 from .serializers import *
 from .models import User, Roles, Status, Address, City, State
 from rest_framework.decorators import api_view # date:3/01 for otp
-from .otpapi import send_otp_to_mobile # date:3/01
+from .otpapi import send_otp_to_email # date:3/01
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.core.mail import send_mail
 from rest_framework import status
@@ -34,12 +34,12 @@ class RegisterView(APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         
-        mobile_no = request.data['mobile_no']
+        email = request.data['email']
         print("*******************************")
-        print(mobile_no)
+        print(email)
         # -------------- using 2factor --------------
         # Generate and send OTP
-        otp = send_otp_to_mobile(mobile_no)
+        otp = send_otp_to_email(email)
         user.otp = otp
         #--------------- using twilio --------------
         # otp = send_sms(mobile_no)
@@ -100,12 +100,12 @@ from .otpapi import *
 #===================== LOGIN ====================
 class LoginView(APIView): 
     def post(self,request):
-        mobile_no = request.data['mobile_no']
+        email = request.data['email']
         # mobile_no = request.data['mobile_no']
         password = request.data['password']
         
 
-        user = User.objects.filter(mobile_no=mobile_no).first()#finding user 
+        user = User.objects.filter(email=email).first()#finding user 
         online_status = Status.objects.get(Status_Name='Online')
         if user is None:
             raise AuthenticationFailed('User not found! ')
@@ -116,7 +116,7 @@ class LoginView(APIView):
             raise AuthenticationFailed('Incorrect password! \nPlease enter the correct password.')
         #-------------- using 2factor --------------
         # Generate and send OTP
-        otp = send_otp_to_mobile(mobile_no)
+        otp = send_otp_to_email(email)
         user.otp = otp
         #--------------- using twilio --------------
         # otp = send_sms(mobile_no)
@@ -229,23 +229,12 @@ class MyTokenObtainPairView(TokenObtainPairView): #date : 7/01/2024
 #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
 
 @api_view(['POST'])
-def send_otp_to_mobile_view(request):
+def send_otp_to_email_view(request):
     serializer = MobileNumberSerializer(data=request.data)
 
     if serializer.is_valid():
-        mobile_no = serializer.validated_data['mobile_no']
-        otp = send_otp_to_mobile(mobile_no)
-        # otp = send_sms(mobile_no)
-        # message = client.messages \
-        #                 .create(
-        #                     from_ = '+15169732425',
-        #                     body = f"Your OTP is {otp} .",
-        #                     # body = f"Hello , to reset password click this link http://127.0.0.1:8000/api/register/ ",
-        #                     # to = '+91 90543 95987'
-        #                     to = '+91'+mobile_no
-        #                 )
-        
-        # serializer.data.otp = otp  # Store the OTP in the serializer
+        email = serializer.validated_data['email']
+        otp = send_otp_to_email(email)
 
         if otp is not None:
             return Response({'otp': otp}, status=status.HTTP_200_OK)
@@ -274,7 +263,7 @@ def verify_otp_view_register(request):
     serializer = MobileNumberSerializer(data=request.data)
 
     if serializer.is_valid():
-        mobile_no = serializer.validated_data['mobile_no']
+        email = serializer.validated_data['email']
         # stored_otp = get_stored_otp_for_mobile(mobile_no)  # Implement this function to retrieve stored OTP
         otp = serializer.validated_data['otp']
         entered_otp = serializer.validated_data['otp']
@@ -290,10 +279,10 @@ def verify_otp_view_register(request):
 def verify_otp(request):
     data = request.data
 
-    if data.get('mobile_no') is None:   #---------if mobile_no is not received 
+    if data.get('email') is None:   #---------if mobile_no is not received 
         return Response({
             'status':400,
-            'message':'key mobile_no is required'
+            'message':'key email is required'
         })
     if data.get('otp') is None:    #---------if otp is not received
         return Response({
@@ -302,19 +291,20 @@ def verify_otp(request):
         })
     
     try:
-        user_obj = User.objects.get(mobile_no = data.get('mobile_no'))
+        user_obj = User.objects.get(email = data.get('email'))
 
     except Exception as e:
         return Response({
             'status' : 400,
-            'message' : 'invalid mobile no '
+            'message' : 'invalid email '
         }) 
     if user_obj.otp == data.get('otp'):
         user_obj.is_mobile_verified = True
         user_obj.save()
         return Response({
             'status' : 200,
-            'message' : 'otp matched'
+            'message' : 'otp matched',
+            
         })
 
     return Response({
@@ -330,18 +320,18 @@ def verify_otp(request):
 def resend_otp(request):
     data = request.data
 
-    if data.get('mobile_no') is None:
+    if data.get('email') is None:
         return Response({
             'status': 400,
-            'message': 'key mobile_no is required'
+            'message': 'key email is required'
         })
 
     try:
-        user_obj = User.objects.get(mobile_no=data.get('mobile_no'))
+        user_obj = User.objects.get(email=data.get('email'))
     except User.DoesNotExist:
         return Response({
             'status': 400,
-            'message': 'Invalid mobile no'
+            'message': 'Invalid email '
         })
             
     
@@ -362,7 +352,7 @@ def resend_otp(request):
     #---------------------------------------------------------------------------------------------
 
     # send_otp_to_mobile is a function that sends OTP and returns it
-    otp = send_otp_to_mobile(data.get('mobile_no'))
+    otp = send_otp_to_email(data.get('email'))
 
     # Update the existing user's OTP
     user_obj.otp = otp
