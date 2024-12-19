@@ -14,14 +14,14 @@ const ForgotPassword = () => {
  const [successMessage, setSuccessMessage] = useState("");
  const [showOtpInput, setShowOtpInput] = useState(false); // State to control OTP input visibility
  const [showInput, setShowInput] = useState(false); // State to control OTP input visibility
- const [mobileNo, setMobileNo] = useState(""); // Mobile number for OTP
+ const [email, setEmail] = useState(""); // Mobile number for OTP
  const [serverOtp, setServerOtp] = useState(""); // OTP received from the server
 
  const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "newPassword") setNewPassword(value);
     else if (name === "confirmPassword") setConfirmPassword(value);
-    else if (name === "mobileNo") setMobileNo(value);
+    else if (name === "email") setEmail(value);
  };
 
 //  const handleSubmit = async (e) => {
@@ -37,7 +37,7 @@ const handleSubmit = async (e) => {
   e.preventDefault();
 
   // Validation
-  if ( !mobileNo) {
+  if ( !email) {
     setError("All fields are required");
     return;
   }
@@ -46,7 +46,7 @@ const handleSubmit = async (e) => {
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/api/send-otp/",
-        { mobile_no: mobileNo }
+        { email: email }
       );
       if (response.status === 200) {
         setServerOtp(response.data.otp.toString()); // Store the received OTP
@@ -74,7 +74,7 @@ const handleSubmit = async (e) => {
 
  const changePassword = async (e) => {
   e.preventDefault(); // Ensure form submission is prevented
-  console.log("Mobile_no", mobileNo);
+  console.log("email", email);
   if (!newPassword || !confirmPassword) {
      setError("New password and confirm password are required");
      return;
@@ -89,7 +89,7 @@ const handleSubmit = async (e) => {
      const response = await axios.post(
        "http://127.0.0.1:8000/api/forget_password/",
        {
-         mobileno: mobileNo,
+         email: email,
          new_password: newPassword,
          confirm_password: confirmPassword,
        }
@@ -117,11 +117,11 @@ const handleSubmit = async (e) => {
     <div className="change-password-container">
       <h2>Forgot Password</h2>
       <form onSubmit={handleSubmit}>
-        <label>Mobile Number:</label>
+        <label>Email:</label>
         <input
           type="text"
-          name="mobileNo"
-          value={mobileNo}
+          name="email"
+          value={email}
           onChange={handleChange}
           />
         {error && <p className="error-message">{error}</p>}

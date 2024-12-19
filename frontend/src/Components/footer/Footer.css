@@ -1,13 +1,14 @@
 /* Footer.css */
 
 .footer {
-  position: relative; /* Changed to relative */
+  position: relative;
   background-color: black;
   color: #fff;
   padding: 20px 0;
   text-align: center;
   width: 100%;
   bottom: 0;
+  z-index: 1;
 }
 
 .footer-content {

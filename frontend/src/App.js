@@ -31,13 +31,17 @@ function App() {
   
   const [ progress,setProgress] = useState(0)
   // const location = useLocation();
-//   const shouldHideNavbar = () => {
-//     return location.pathname === '/login';
+  const location = useLocation();
+  // const shouldHideNavbar = () => {
+    // return location.pathname === '/login';
 //  };
+// const isOtpRoute = location.pathname === "/otp" || "/login";
+const isOtpRoute = location.pathname === "/otp" || location.pathname === "/login";
+
   
   return (
     
-    <Router>
+    // <Router>
       
     <div className="App">
 
@@ -51,12 +55,14 @@ function App() {
         />
       <AuthProvider>
 
-      
       {/* {!shouldHideNavbar() && <Navbar />} */}
-      <Navbar />
+      {/* <Navbar />
+       */}
       {/* <SubNavbar/> */}
+      {!isOtpRoute && <Navbar />}
         <MenuContextProvider>
       <Routes>
+          <Route path="/otp" element={<OTPPage />} />
         
         {/* <Route path='/' element={<Cart setProgress = {setProgress} />} /> */}
         <Route path='/cart' element={<Cart setProgress = {setProgress} />} />
@@ -69,7 +75,6 @@ function App() {
         {/* <Route path='/TypeDelivery' element={<FiltDelivery />} /> */}
 
         <Route path="/login" element={<LoginPage/>} />
-          <Route path="/otp" element={<OTPPage />} />
           <Route path="/forgotpassword" element={<ForgetPasswdPage />} />
           <Route path="/registration" element={<RegistrationPage />} />
           <Route path="/changepassword" element={<ChnagePasswordPage />} />
@@ -83,11 +88,12 @@ function App() {
 
       </Routes>
         </MenuContextProvider>
-        <Footer/>
+        {/* <Footer/> */}
+    {!isOtpRoute && <Footer />}
     </AuthProvider>
   
     </div>
-    </Router>
+    // </Router>
     
   );
 }
