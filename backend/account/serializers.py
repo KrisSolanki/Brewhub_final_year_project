@@ -5,7 +5,9 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer #date
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 class MobileNumberSerializer(serializers.Serializer):
-    mobile_no = serializers.CharField(max_length=15)
+    # mobile_no = serializers.CharField(max_length=15)
+    email = serializers.EmailField()
+
     # otp = serializers.CharField(max_length=6)
 class RolesSerializer(serializers.ModelSerializer):
     class Meta:

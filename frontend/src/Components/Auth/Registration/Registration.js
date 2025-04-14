@@ -97,11 +97,14 @@ const Registration = ({ onNext }) => {
        try {
          const response = await axios.post(
            "http://127.0.0.1:8000/api/send-otp/",
-           { mobile_no: mobileNumber }
+           { email: email }
          );
          if (response.status === 200) {
-           setServerOtp(response.data.otp.toString()); // Store the received OTP
+          setServerOtp(response.data.otp.toString());
+            // Store the received OTP
+           console.log(response.data.otp.toString()); // Log the received OTP
            console.log("Received OTP:", response.data.otp); // Log the received OTP
+           console.log("Server OTP:", serverOtp); // Log the received OTP
            setShowOtpInput(true);
          } else {
            alert("An error occurred while sending the OTP.");
@@ -122,8 +125,8 @@ const Registration = ({ onNext }) => {
    };
    
   const handleOtpSubmit = async () => {
-    const otpValue = otp;
-    if (otpValue === serverOtp) {
+    // const otpValue = otp;
+    if (otp === serverOtp) {
       // OTP verified, proceed with registration
       await registerUser();
     } else {

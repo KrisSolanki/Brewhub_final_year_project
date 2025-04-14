@@ -1,8 +1,9 @@
 .container_registration{
-  height: 1085px;
+  /* height: auto; */
   display: flex;
   justify-content: center;
-
+  height: auto;           /* Default height behavior */
+  min-height: 100vh;
 }
 .registration-container {
     max-width: 450px;

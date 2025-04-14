@@ -36,7 +36,7 @@ function App() {
     // return location.pathname === '/login';
 //  };
 // const isOtpRoute = location.pathname === "/otp" || "/login";
-const isOtpRoute = location.pathname === "/otp" || location.pathname === "/login";
+const isAuth = location.pathname === "/otp" || location.pathname === "/login" || location.pathname === "/Registration" || location.pathname === "/address"; 
 
   
   return (
@@ -59,7 +59,7 @@ const isOtpRoute = location.pathname === "/otp" || location.pathname === "/login
       {/* <Navbar />
        */}
       {/* <SubNavbar/> */}
-      {!isOtpRoute && <Navbar />}
+      {!isAuth && <Navbar />}
         <MenuContextProvider>
       <Routes>
           <Route path="/otp" element={<OTPPage />} />
@@ -89,7 +89,7 @@ const isOtpRoute = location.pathname === "/otp" || location.pathname === "/login
       </Routes>
         </MenuContextProvider>
         {/* <Footer/> */}
-    {!isOtpRoute && <Footer />}
+    {!isAuth && <Footer />}
     </AuthProvider>
   
     </div>
